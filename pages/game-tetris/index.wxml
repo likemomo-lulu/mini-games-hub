@@ -29,6 +29,7 @@
           type="2d"
           id="gameCanvas"
           class="game-canvas"
+          style="width: {{gameCanvasWidth}}px; height: {{gameCanvasHeight}}px;"
         ></canvas>
         <view class="pause-overlay" wx:if="{{isPaused}}">暂停中</view>
       </view>

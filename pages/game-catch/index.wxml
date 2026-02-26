@@ -26,7 +26,7 @@
       id="gameCanvas"
       type="2d"
       class="game-canvas"
-      style="width: 100%; height: 800rpx; border-radius: 20rpx;"
+      style="width: 100%; height: {{boardHeight}}px; border-radius: 20rpx;"
       bindtouchstart="onTouchStart"
       bindtouchmove="onTouchMove"
       bindtouchend="onTouchEnd"

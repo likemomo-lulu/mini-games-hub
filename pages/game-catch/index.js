@@ -9,6 +9,8 @@ Page({
     gameOver: false, // 游戏结束
     paused: false,   // 暂停状态
     gameReady: false,// 游戏是否准备好
+    // 画布在视图层的高度（px），用于根据机型自适应
+    boardHeight: 400,
   },
 
   onLoad() {
@@ -96,6 +98,24 @@ Page({
       paused: false,
       gameReady: false,
     });
+
+    // 根据屏幕尺寸计算一个适合的画布高度（保持在不同机型上占据大致相似的区域）
+    const info = wx.getSystemInfoSync();
+    const windowWidth = info.windowWidth || 375;
+    const windowHeight = info.windowHeight || 667;
+
+    // 以宽度为基准控制纵横比，例如 1.6:1（可以略高一点，玩起来更舒服）
+    let boardHeight = windowWidth * 1.6;
+    // 不能比屏幕高太多，预留头部和按钮区域
+    const maxBoardHeight = windowHeight - 220; // 预留一些空间给头部、按钮和上下间距
+    if (boardHeight > maxBoardHeight) {
+      boardHeight = maxBoardHeight;
+    }
+    if (boardHeight < 300) {
+      boardHeight = 300;
+    }
+
+    this.setData({ boardHeight });
   },
 
   /**
@@ -131,9 +151,23 @@ Page({
         this.canvasHeight = height;
         this.dpr = dpr;
 
-        // 初始化玩家位置
+        // 基于画布宽度的比例（参考设计宽度 375px），让篮子和物品随屏幕大小自适应
+        const baseWidth = 375;
+        const scale = this.canvasWidth / baseWidth;
+        this.scale = scale;
+
+        // 按比例调整玩家（篮子）尺寸和移动速度（更扁更宽一点）
+        this.player.width = 90 * scale;   // 宽一些
+        this.player.height = 35 * scale;  // 矮一些
+        this.player.speed = 6 * scale;
+
+        // 物品基础尺寸也按比例缩放
+        this.itemSize = 28 * scale;
+
+        // 初始化玩家位置（更贴近底部一点，同样使用比例）
         this.player.x = width / 2 - this.player.width / 2;
-        this.player.y = height - 60;
+        // 距离底部预留约 10 * scale 的间隙
+        this.player.y = height - this.player.height - 10 * scale;
 
         // 标记游戏准备好
         this.setData({ gameReady: true });
@@ -257,11 +291,12 @@ Page({
    */
   spawnItem() {
     const itemType = this.selectRandomItemType();
+    const size = this.itemSize || 28;
     const item = {
       ...itemType,
-      x: Math.random() * (this.canvasWidth - 30),
-      y: -30,
-      size: 28,
+      x: Math.random() * (this.canvasWidth - size),
+      y: -size,
+      size,
       rotation: 0,
     };
     this.items.push(item);
@@ -361,6 +396,10 @@ Page({
     // 清空画布
     ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
+    // 应用圆角裁剪，让实际绘制区域也有圆角效果
+    ctx.save();
+    this.applyGameCanvasClip(ctx);
+
     // 绘制背景（半透明黑色）
     ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
     ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
@@ -377,9 +416,37 @@ Page({
       this.drawItem(item);
     });
 
+    ctx.restore();
+
     // 真机兼容：显式触发绘制
     // Canvas 2D 一般不需要，但某些真机可能需要
     // wx.canvasToTempFilePath 在真机上会触发渲染
+  },
+
+  /**
+   * 为接物品主画布应用圆角剪裁（与 .game-canvas 的圆角视觉保持一致）
+   */
+  applyGameCanvasClip(ctx) {
+    const w = this.canvasWidth;
+    const h = this.canvasHeight;
+    if (!w || !h) return;
+
+    // 圆角半径适中即可，避免在小屏幕上过大
+    const radius = 16;
+    const r = Math.min(radius, w / 2, h / 2);
+
+    ctx.beginPath();
+    ctx.moveTo(r, 0);
+    ctx.lineTo(w - r, 0);
+    ctx.quadraticCurveTo(w, 0, w, r);
+    ctx.lineTo(w, h - r);
+    ctx.quadraticCurveTo(w, h, w - r, h);
+    ctx.lineTo(r, h);
+    ctx.quadraticCurveTo(0, h, 0, h - r);
+    ctx.lineTo(0, r);
+    ctx.quadraticCurveTo(0, 0, r, 0);
+    ctx.closePath();
+    ctx.clip();
   },
 
   /**

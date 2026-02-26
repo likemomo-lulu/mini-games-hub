@@ -1,19 +1,20 @@
 /* 俄罗斯方块样式 */
 .container {
   padding: 20rpx;
-  min-height: 100vh;
+  height: 100vh;
   max-height: 100vh;
-  overflow-y: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
 }
 
-/* 头部 */
+/* 头部：不参与收缩 */
 .header {
   width: 100%;
   margin-bottom: 30rpx;
+  flex-shrink: 0;
 }
 
 .title {
@@ -52,14 +53,14 @@
   color: #667eea;
 }
 
-/* 游戏区域 */
+/* 游戏区域：宽度自适应整行（最大 580rpx），高度由内容（画布）撑开 */
 .game-area {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 24rpx;
   padding: 12rpx;
   box-shadow: 0 20rpx 80rpx rgba(0, 0, 0, 0.3);
   width: 100%;
-  max-width: 580rpx;
+  max-width: 600rpx;
   box-sizing: border-box;
   margin-bottom: 20rpx;
 }
@@ -83,8 +84,6 @@
   border-radius: 20rpx;
   background: #2d3436;
   box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.2);
-  width: 420rpx;
-  height: 840rpx;
   flex-shrink: 0;
 }
 
@@ -123,7 +122,7 @@
   height: 80rpx;
 }
 
-/* 控制按钮 */
+/* 控制按钮：不参与收缩 */
 .controls {
   display: flex;
   align-items: center;
@@ -132,6 +131,7 @@
   padding: 20rpx;
   width: 100%;
   max-width: 580rpx;
+  flex-shrink: 0;
 }
 
 .btn {
@@ -177,6 +177,7 @@
   width: 100%;
   max-width: 580rpx;
   margin-bottom: 12rpx;
+  flex-shrink: 0;
 }
 
 /* 游戏结束 */

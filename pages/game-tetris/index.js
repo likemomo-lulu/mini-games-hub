@@ -56,6 +56,9 @@ Page({
     lines: 0,
     gameOver: false,
     isPaused: false,
+    // 画布在视图层的尺寸（px），用于自适应不同机型
+    gameCanvasWidth: 0,
+    gameCanvasHeight: 0,
   },
 
   // 游戏状态
@@ -80,8 +83,61 @@ Page({
   longPressTimer: null,
 
   onLoad() {
-    // 初始化 Canvas
-    this.initCanvases();
+    // 先根据屏幕宽高计算画布尺寸，保证一屏内放下（canvas 是原生组件，不会随页面滚动，所以必须不出现滚动）
+    const info = wx.getSystemInfoSync();
+    const windowWidth = info.windowWidth || 375;
+    const windowHeight = info.windowHeight || 667;
+
+    // 1 rpx 对应的 px（小程序里 750rpx = windowWidth px）
+    const rpxToPx = windowWidth / 750;
+
+    // .game-area padding: 12rpx，两侧一共 24rpx
+    const gameAreaPaddingPx = 24 * rpxToPx;
+    // 右侧面板宽度 80rpx
+    const rightPanelWidthPx = 80 * rpxToPx;
+    // 画布与右侧面板之间的间距 12rpx
+    const canvasGapPx = 12 * rpxToPx;
+
+    // 画布在屏幕中可用的最大宽度（保证画布 + 间距 + 右侧面板 不会超出屏幕）
+    let gameCanvasWidth = windowWidth - gameAreaPaddingPx - rightPanelWidthPx - canvasGapPx;
+    gameCanvasWidth = gameCanvasWidth * 0.9;
+    if (gameCanvasWidth < 160) gameCanvasWidth = 160;
+
+    // 再根据白色游戏区域的最大宽度（max-width: 580rpx）做一次收紧，避免大屏下内容超出卡片
+    const maxGameAreaWidthPx = windowWidth * (580 / 750); // 580rpx 对应的 px
+    const maxCanvasWidthInGameArea = maxGameAreaWidthPx - gameAreaPaddingPx - rightPanelWidthPx - canvasGapPx;
+    if (maxCanvasWidthInGameArea > 0 && gameCanvasWidth > maxCanvasWidthInGameArea) {
+      gameCanvasWidth = maxCanvasWidthInGameArea;
+    }
+
+    // 按列行比例保持 10:20 的棋盘长宽比先算一版高度
+    let gameCanvasHeight = gameCanvasWidth * (ROWS / COLS);
+
+    // 一屏内可用高度：减去头部、统计、游戏区外边距、控制按钮、底部边距等（用 rpx 换算）
+    const headerStatsHeight = (40 + 20 + 60 + 30) * rpxToPx;   // 标题+统计区约 150px
+    const controlsHeight = (80 + 20 + 80 + 12 + 20) * rpxToPx; // 控制按钮+下落按钮+边距约 212px
+    const containerPadding = 40 * rpxToPx;
+    const gameAreaPadding = 24 * rpxToPx;
+    const maxCanvasHeight = windowHeight - headerStatsHeight - controlsHeight - containerPadding - gameAreaPadding;
+
+    // 若按宽度算出的高度超出一屏，则按高度反算宽度，保证不出现滚动
+    if (gameCanvasHeight > maxCanvasHeight && maxCanvasHeight > 0) {
+      gameCanvasHeight = maxCanvasHeight;
+      gameCanvasWidth = gameCanvasHeight * (COLS / ROWS);
+      if (gameCanvasWidth < 160) {
+        gameCanvasWidth = 160;
+        gameCanvasHeight = gameCanvasWidth * (ROWS / COLS);
+      }
+    }
+
+    this.setData({
+      gameCanvasWidth,
+      gameCanvasHeight,
+    });
+
+    wx.nextTick(() => {
+      this.initCanvases();
+    });
   },
 
   onUnload() {
@@ -345,9 +401,44 @@ Page({
    */
   render() {
     if (!this.gameCtx) return;
+
+    const ctx = this.gameCtx;
+    ctx.save();
+    this.applyGameCanvasClip(ctx);
+
     this.drawBoard();
     this.drawCurrentPiece();
+
+    ctx.restore();
+
+    // 预览下一个方块使用的是单独的 canvas，不受剪裁影响
     this.drawNextPiece();
+  },
+
+  /**
+   * 为游戏主画布应用圆角剪裁（与 CSS 的 border-radius 视觉保持一致）
+   */
+  applyGameCanvasClip(ctx) {
+    const w = this.canvasWidth;
+    const h = this.canvasHeight;
+    if (!w || !h) return;
+
+    // 圆角半径可以稍微大一点，视觉上接近 .game-canvas 的 20rpx
+    const radius = 16;
+    const r = Math.min(radius, w / 2, h / 2);
+
+    ctx.beginPath();
+    ctx.moveTo(r, 0);
+    ctx.lineTo(w - r, 0);
+    ctx.quadraticCurveTo(w, 0, w, r);
+    ctx.lineTo(w, h - r);
+    ctx.quadraticCurveTo(w, h, w - r, h);
+    ctx.lineTo(r, h);
+    ctx.quadraticCurveTo(0, h, 0, h - r);
+    ctx.lineTo(0, r);
+    ctx.quadraticCurveTo(0, 0, r, 0);
+    ctx.closePath();
+    ctx.clip();
   },
 
   /**
