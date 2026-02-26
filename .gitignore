@@ -1,0 +1,25 @@
+# 依赖
+node_modules/
+
+# 私钥文件 - 不要提交到git
+.keys/
+*.key
+private.key
+
+# 微信开发者工具
+.DS_Store
+miniprogram_npm/
+
+# 构建产物
+dist/
+*.zip
+
+# 日志
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

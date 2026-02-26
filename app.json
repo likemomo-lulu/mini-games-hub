@@ -1,0 +1,19 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/game-2048/index",
+    "pages/game-tetris/index",
+    "pages/game-catch/index",
+    "pages/game-memory/index",
+    "pages/game-minesweeper/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#667eea",
+    "navigationBarTitleText": "Games",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#667eea"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

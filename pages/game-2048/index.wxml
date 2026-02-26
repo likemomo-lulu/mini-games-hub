@@ -1,0 +1,36 @@
+<!-- 2048 游戏页 -->
+<view class="container">
+  <view class="header">
+    <text class="title">2048</text>
+    <view class="score-box">
+      <text class="score-label">分数</text>
+      <text class="score-value">{{score}}</text>
+    </view>
+  </view>
+
+  <view class="controls">
+    <button class="btn btn-restart" bindtap="restart">重新开始</button>
+  </view>
+
+  <view class="game-board">
+    <canvas
+      type="2d"
+      id="gameCanvas"
+      class="game-canvas"
+      style="width: 552rpx; height: 552rpx;"
+      bindtouchstart="onTouchStart"
+      catchtouchmove="onTouchMove"
+      bindtouchend="onTouchEnd"
+    ></canvas>
+
+    <view class="game-over {{gameOver ? 'show' : ''}}">
+      <text class="game-over-title">游戏结束</text>
+      <text class="game-over-score">得分: {{score}}</text>
+      <button class="btn btn-restart" bindtap="restart">再来一局</button>
+    </view>
+  </view>
+
+  <view class="tips">
+    💡 滑动移动方块
+  </view>
+</view>

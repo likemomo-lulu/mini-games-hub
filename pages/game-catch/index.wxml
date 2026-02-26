@@ -1,0 +1,80 @@
+<!-- 接物品游戏页面 -->
+<view class="container">
+  <!-- 头部信息栏 -->
+  <view class="header">
+    <view class="title">🎯 接物品</view>
+    <view class="stats">
+      <view class="stat-box">
+        <view class="stat-label">分数</view>
+        <view class="stat-value">{{score}}</view>
+      </view>
+      <view class="stat-box">
+        <view class="stat-label">生命</view>
+        <view class="stat-value">{{livesDisplay}}</view>
+      </view>
+      <view class="stat-box">
+        <view class="stat-label">难度</view>
+        <view class="stat-value">{{level}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 游戏区域 -->
+  <view class="game-board">
+    <!-- Canvas 画布 - 写死尺寸（和俄罗斯方块一样） -->
+    <canvas
+      id="gameCanvas"
+      type="2d"
+      class="game-canvas"
+      style="width: 100%; height: 800rpx; border-radius: 20rpx;"
+      bindtouchstart="onTouchStart"
+      bindtouchmove="onTouchMove"
+      bindtouchend="onTouchEnd"
+    ></canvas>
+
+    <!-- Canvas加载中提示 -->
+    <view class="loading" wx:if="{{!gameReady}}">
+      <text>游戏加载中...</text>
+    </view>
+
+    <!-- 游戏结束覆盖层 -->
+    <view class="overlay game-over" wx:if="{{gameOver}}">
+      <view class="overlay-content">
+        <view class="overlay-title">💥 游戏结束</view>
+        <view class="overlay-info">得分: {{score}}</view>
+        <view class="overlay-info">难度: {{level}}</view>
+        <button class="btn-restart" bindtap="restart">再来一局</button>
+      </view>
+    </view>
+
+    <!-- 暂停覆盖层 -->
+    <view class="overlay paused" wx:if="{{paused && !gameOver}}">
+      <view class="overlay-content">
+        <view class="overlay-title">⏸️ 暂停中</view>
+        <view class="overlay-info">点击继续按钮恢复游戏</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="controls">
+    <button
+      class="btn btn-move"
+      bindtouchstart="onLeftStart"
+      bindtouchend="onLeftEnd"
+      catchtouchmove
+    >左移</button>
+    <button class="btn" bindtap="togglePause">{{paused ? '继续' : '暂停'}}</button>
+    <button
+      class="btn btn-move"
+      bindtouchstart="onRightStart"
+      bindtouchend="onRightEnd"
+      catchtouchmove
+    >右移</button>
+  </view>
+
+  <!-- 操作提示 -->
+  <view class="tips">
+    💡 滑动屏幕或点击按钮移动 | 接住水果，避开炸弹
+  </view>
+</view>

@@ -1,0 +1,126 @@
+.container {
+  padding: 40rpx;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #667eea;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+
+.title {
+  font-size: 80rpx;
+  font-weight: bold;
+  background: linear-gradient(45deg, #FFA500, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.score-box {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 20rpx 40rpx;
+  border-radius: 30rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.2);
+}
+
+.score-label {
+  display: block;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.score-value {
+  display: block;
+  font-size: 48rpx;
+  font-weight: bold;
+  color: white;
+}
+
+.controls {
+  width: 100%;
+  margin-bottom: 40rpx;
+}
+
+.btn {
+  width: 100%;
+  padding: 30rpx;
+  border: none;
+  border-radius: 24rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.2);
+}
+
+.btn-restart {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.game-board {
+  position: relative;
+  width: 552rpx;
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 40rpx;
+  padding: 24rpx;
+  box-shadow: 0 16rpx 60rpx rgba(0, 0, 0, 0.3);
+}
+
+.game-canvas {
+  width: 552rpx;
+  height: 552rpx;
+  border-radius: 24rpx;
+}
+
+.game-over {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 40rpx;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.game-over.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.game-over-title {
+  font-size: 80rpx;
+  color: #ff6b6b;
+  margin-bottom: 30rpx;
+  text-shadow: 0 0 40rpx rgba(255, 107, 107, 0.5);
+  font-weight: bold;
+}
+
+.game-over-score {
+  font-size: 40rpx;
+  color: white;
+  margin-bottom: 50rpx;
+}
+
+.tips {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 40rpx;
+  font-size: 28rpx;
+}

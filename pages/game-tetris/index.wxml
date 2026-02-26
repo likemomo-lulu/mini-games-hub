@@ -1,0 +1,70 @@
+<!-- 俄罗斯方块游戏页 -->
+<view class="container">
+  <!-- 头部信息 -->
+  <view class="header">
+    <text class="title">🍬 俄罗斯方块 🍬</text>
+    <view class="stats">
+      <view class="stat-box">
+        <text class="label">分数</text>
+        <text class="value">{{score}}</text>
+      </view>
+      <view class="stat-box">
+        <text class="label">等级</text>
+        <text class="value">{{level}}</text>
+      </view>
+      <view class="stat-box">
+        <text class="label">消除行</text>
+        <text class="value">{{lines}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 游戏区域 -->
+  <view class="game-area">
+    <!-- 游戏画布和右侧面板容器 -->
+    <view class="canvas-area">
+      <!-- 游戏画布 -->
+      <view class="canvas-wrapper">
+        <canvas
+          type="2d"
+          id="gameCanvas"
+          class="game-canvas"
+        ></canvas>
+        <view class="pause-overlay" wx:if="{{isPaused}}">暂停中</view>
+      </view>
+
+      <!-- 右侧面板 -->
+      <view class="right-panel">
+        <!-- 下一个方块预览 -->
+        <view class="next-wrapper">
+          <canvas
+            type="2d"
+            id="nextCanvas"
+            class="next-canvas"
+          ></canvas>
+        </view>
+        <!-- 暂停按钮 -->
+        <view class="btn-pause" bindtap="togglePause">{{isPaused ? '▶' : '⏸'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="controls">
+    <button class="btn btn-left" catchtouchstart="onBtnLeft" catchtouchend="onBtnEnd">◀</button>
+    <button class="btn btn-rotate" catchtouchstart="onBtnRotate" catchtouchend="onBtnEnd">旋转</button>
+    <button class="btn btn-right" catchtouchstart="onBtnRight" catchtouchend="onBtnEnd">▶</button>
+  </view>
+  <view class="btn-down-wrapper">
+    <button class="btn btn-full" catchtouchstart="onBtnDown" catchtouchend="onBtnEnd">下落</button>
+  </view>
+</view>
+
+<!-- 游戏结束弹窗 -->
+<view class="game-over" wx:if="{{gameOver}}">
+  <view class="game-over-content">
+    <text class="game-over-title">游戏结束！</text>
+    <text class="game-over-score">最终分数: {{score}}</text>
+    <button class="restart-btn" bindtap="restart">再来一局</button>
+  </view>
+</view>

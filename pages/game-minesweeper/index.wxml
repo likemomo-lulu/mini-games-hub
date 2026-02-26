@@ -1,0 +1,83 @@
+<!-- 扫雷游戏 -->
+<view class="container">
+  <!-- 头部信息栏 -->
+  <view class="header">
+    <view class="title">💣 扫雷</view>
+    <view class="stats">
+      <view class="stat-box">
+        <view class="stat-label">剩余地雷</view>
+        <view class="stat-value">{{remainingMines}}</view>
+      </view>
+      <view class="stat-box">
+        <view class="stat-label">时间</view>
+        <view class="stat-value">{{timeDisplay}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="controls">
+    <button class="btn" bindtap="restart">重新开始</button>
+  </view>
+
+  <!-- 游戏棋盘 -->
+  <view class="game-board">
+    <!-- 9x9 网格 -->
+    <view class="grid">
+      <view
+        class="cell {{item.revealed ? 'revealed' : 'covered'}} {{item.flagged ? 'flagged' : ''}} {{item.value === -1 && item.revealed ? 'mine' : ''}}"
+        style="grid-column: {{item.col + 1}}; grid-row: {{item.row + 1}};"
+        wx:for="{{grid}}"
+        wx:key="index"
+      >
+        <!-- 未揭开的格子 -->
+        <view
+          wx:if="{{!item.revealed}}"
+          class="cell-content"
+          bindtap="onCellTap"
+          bindlongpress="onCellLongPress"
+          data-row="{{item.row}}"
+          data-col="{{item.col}}"
+        >
+          <text wx:if="{{item.flagged}}" class="flag">🚩</text>
+        </view>
+
+        <!-- 已揭开的格子 -->
+        <view
+          wx:else
+          class="cell-content revealed-cell cell-{{item.value}}"
+          bindtap="onRevealedCellTap"
+          data-row="{{item.row}}"
+          data-col="{{item.col}}"
+        >
+          <text wx:if="{{item.value === -1}}">💣</text>
+          <text wx:elif="{{item.value > 0}}">{{item.value}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 游戏失败覆盖层 -->
+    <view class="overlay game-over {{gameOver ? 'show' : ''}}">
+      <view class="overlay-content">
+        <view class="overlay-title">💥 踩到地雷了!</view>
+        <view class="overlay-info">用时: {{timeDisplay}}</view>
+        <button class="btn-restart" bindtap="restart">再来一局</button>
+      </view>
+    </view>
+
+    <!-- 游戏胜利覆盖层 -->
+    <view class="overlay game-win {{gameWon ? 'show' : ''}}">
+      <view class="overlay-content">
+        <view class="overlay-title">🎉 恭喜通关!</view>
+        <view class="overlay-text">太棒了老大！</view>
+        <view class="overlay-info">用时: {{timeDisplay}}</view>
+        <button class="btn-restart" bindtap="restart">再来一局</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作提示 -->
+  <view class="tips">
+    💡 单击：揭开 | 长按：插旗🚩 | 点数字：快速揭开周围
+  </view>
+</view>

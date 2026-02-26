@@ -1,0 +1,21 @@
+{
+  "name": "minigames",
+  "version": "1.0.0",
+  "description": "小游戏集合 - 微信小程序",
+  "scripts": {
+    "build": "node build.js",
+    "build:prod": "node build.js --prod",
+    "upload": "node build.js --upload",
+    "preview": "node build.js --preview"
+  },
+  "keywords": [
+    "miniprogram",
+    "game",
+    "minigames"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "miniprogram-ci": "^1.6.0"
+  }
+}

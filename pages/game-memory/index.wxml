@@ -1,0 +1,59 @@
+<!-- 记忆翻牌游戏 -->
+<view class="container">
+  <!-- 头部信息栏 -->
+  <view class="header">
+    <view class="title">🎮 记忆翻牌</view>
+    <view class="stats">
+      <view class="stat-box">
+        <view class="stat-label">步数</view>
+        <view class="stat-value">{{moves}}</view>
+      </view>
+      <view class="stat-box">
+        <view class="stat-label">时间</view>
+        <view class="stat-value">{{timeDisplay}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="controls">
+    <button class="btn" bindtap="restart">重新开始</button>
+  </view>
+
+  <!-- 游戏棋盘 -->
+  <view class="game-board">
+    <!-- 卡片网格 4x4 -->
+    <view class="grid">
+      <view
+        class="card-container"
+        wx:for="{{cards}}"
+        wx:key="id"
+        bindtap="onCardTap"
+        data-index="{{index}}"
+      >
+        <view class="card {{item.isFlipped ? 'flipped' : ''}} {{item.isMatched ? 'matched' : ''}}">
+          <!-- 卡片正面（背面图案） -->
+          <view class="card-front"></view>
+          <!-- 卡片背面（emoji） -->
+          <view class="card-back">{{item.emoji}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 胜利覆盖层 -->
+    <view class="overlay game-win {{gameWin ? 'show' : ''}}">
+      <view class="overlay-content">
+        <view class="overlay-title">🎉 恭喜通关!</view>
+        <view class="overlay-text">太棒了！</view>
+        <view class="overlay-info">步数: {{moves}}</view>
+        <view class="overlay-info">用时: {{timeDisplay}}</view>
+        <button class="btn-restart" bindtap="restart">再来一局</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作提示 -->
+  <view class="tips">
+    💡 点击卡片翻牌，找到相同图案配对
+  </view>
+</view>

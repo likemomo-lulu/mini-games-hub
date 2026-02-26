@@ -1,0 +1,251 @@
+/* 记忆翻牌游戏样式 */
+
+/* 容器 */
+.container {
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 30rpx 20rpx;
+}
+
+/* 头部信息栏 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+  padding: 0 10rpx;
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+  text-shadow: 4rpx 4rpx 8rpx rgba(0, 0, 0, 0.3);
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 统计信息 */
+.stats {
+  display: flex;
+  gap: 15rpx;
+}
+
+.stat-box {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 15rpx 25rpx;
+  border-radius: 20rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
+}
+
+.stat-label {
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.stat-value {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: white;
+}
+
+/* 控制按钮 */
+.controls {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.btn {
+  flex: 1;
+  padding: 25rpx;
+  border: none;
+  border-radius: 25rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
+  height: 80rpx;
+  line-height: 80rpx;
+  padding: 0;
+}
+
+.btn::after {
+  border: none;
+}
+
+.btn:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+/* 游戏棋盘 */
+.game-board {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 30rpx;
+  padding: 20rpx;
+  box-shadow: 0 15rpx 50rpx rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+/* 卡片网格 4x4 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15rpx;
+  aspect-ratio: 1;
+}
+
+/* 卡片容器 */
+.card-container {
+  perspective: 1000rpx;
+  cursor: pointer;
+}
+
+/* 卡片主体 */
+.card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+/* 翻牌状态 */
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+/* 配对成功动画 */
+.card.matched {
+  animation: matched 0.5s ease;
+}
+
+@keyframes matched {
+  0% {
+    transform: rotateY(180deg) scale(1);
+  }
+  50% {
+    transform: rotateY(180deg) scale(1.1);
+    box-shadow: 0 0 50rpx rgba(255, 215, 0, 0.8);
+  }
+  100% {
+    transform: rotateY(180deg) scale(1);
+  }
+}
+
+/* 卡片正反面 */
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 20rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50rpx;
+  box-shadow: 0 8rpx 15rpx rgba(0, 0, 0, 0.2);
+}
+
+/* 卡片背面（emoji面） */
+.card-back {
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  transform: rotateY(180deg);
+}
+
+/* 卡片正面（问号面） */
+.card-front {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+.card-front::after {
+  content: '?';
+  font-size: 60rpx;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* 胜利覆盖层 */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30rpx;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  z-index: 10;
+}
+
+.overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overlay-content {
+  text-align: center;
+  color: white;
+}
+
+.overlay-title {
+  font-size: 80rpx;
+  margin-bottom: 30rpx;
+}
+
+.overlay.game-win .overlay-title {
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.overlay-text {
+  font-size: 36rpx;
+  margin-bottom: 30rpx;
+  color: white;
+}
+
+.overlay-info {
+  font-size: 32rpx;
+  margin-bottom: 15rpx;
+  color: white;
+}
+
+/* 重新开始按钮 */
+.btn-restart {
+  margin-top: 40rpx;
+  padding: 25rpx 60rpx;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border: none;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.3);
+}
+
+.btn-restart::after {
+  border: none;
+}
+
+/* 操作提示 */
+.tips {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 30rpx;
+  font-size: 24rpx;
+}

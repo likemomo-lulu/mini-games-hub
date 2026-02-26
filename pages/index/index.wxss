@@ -1,0 +1,72 @@
+/* 首页样式 */
+.container {
+  padding: 40rpx;
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 60rpx;
+}
+
+.title {
+  display: block;
+  font-size: 64rpx;
+  font-weight: bold;
+  color: #667eea;
+  text-shadow: 0 4rpx 20rpx rgba(234, 232, 232, 0.9);
+}
+
+.game-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.game-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15rpx;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+  border: 4rpx solid #667eea;
+}
+
+.game-card:active {
+  transform: scale(0.98);
+}
+
+.game-icon {
+  width: 130rpx;
+  height: 130rpx;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 60rpx;
+  border-radius: 18rpx;
+}
+
+.game-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  align-items: center;
+  text-align: center;
+}
+
+.game-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.game-desc {
+  font-size: 24rpx;
+  color: #636e72;
+}
