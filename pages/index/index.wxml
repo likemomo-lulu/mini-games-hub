@@ -6,7 +6,7 @@
 
   <view class="game-list">
     <navigator class="game-card" url="/pages/game-2048/index">
-      <view class="game-icon">🔢</view>
+      <view class="game-icon">🧩</view>
       <view class="game-info">
         <text class="game-name">2048</text>
         <text class="game-desc">滑动合并数字，挑战2048！</text>

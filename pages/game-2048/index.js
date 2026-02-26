@@ -71,6 +71,7 @@ Page({
     score: 0,
     gameOver: false,
     showWin: false,
+    steps: 0, // 已操作步数
   },
 
   // 游戏状态
@@ -113,7 +114,7 @@ Page({
 
   initGame() {
     this.grid = Array(GAME_SIZE).fill(null).map(() => Array(GAME_SIZE).fill(0));
-    this.setData({ score: 0, gameOver: false, showWin: false });
+    this.setData({ score: 0, gameOver: false, showWin: false, steps: 0 });
     this.addRandomTile();
     this.addRandomTile();
     this.render();
@@ -202,6 +203,8 @@ Page({
 
     if (moved) {
       this.grid = newGrid;
+      // 有实际移动才算一步
+      this.setData({ steps: this.data.steps + 1 });
       this.addRandomTile();
       this.render();
       this.checkGameOver();

@@ -2,9 +2,15 @@
 <view class="container">
   <view class="header">
     <text class="title">2048</text>
-    <view class="score-box">
-      <text class="score-label">分数</text>
-      <text class="score-value">{{score}}</text>
+    <view class="header-right">
+      <view class="step-box">
+        <text class="score-label">步数</text>
+        <text class="score-value">{{steps}}</text>
+      </view>
+      <view class="score-box">
+        <text class="score-label">分数</text>
+        <text class="score-value">{{score}}</text>
+      </view>
     </view>
   </view>
 
