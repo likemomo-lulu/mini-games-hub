@@ -1,13 +1,13 @@
 <!-- 2048 游戏页 -->
-<view class="container">
+<view class="container" style="background: {{theme.pageBg}};">
   <view class="header">
-    <text class="title">2048</text>
+    <text class="title" style="color: {{theme.primary}};">2048</text>
     <view class="header-right">
-      <view class="step-box">
+      <view class="step-box" style="background: {{theme.darkPrimary}};">
         <text class="score-label">步数</text>
         <text class="score-value">{{steps}}</text>
       </view>
-      <view class="score-box">
+      <view class="score-box" style="background: {{theme.darkPrimary}};">
         <text class="score-label">分数</text>
         <text class="score-value">{{score}}</text>
       </view>
@@ -15,7 +15,11 @@
   </view>
 
   <view class="controls">
-    <button class="btn btn-restart" bindtap="restart">重新开始</button>
+    <button
+      class="btn btn-restart"
+      bindtap="restart"
+      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
+    >重新开始</button>
   </view>
 
   <view class="game-board">
@@ -30,7 +34,7 @@
     ></canvas>
 
     <view class="game-over {{gameOver ? 'show' : ''}}">
-      <text class="game-over-title">游戏结束</text>
+      <text class="game-over-title" style="color: {{theme.danger}};">游戏结束</text>
       <text class="game-over-score">得分: {{score}}</text>
       <button class="btn btn-restart" bindtap="restart">再来一局</button>
     </view>

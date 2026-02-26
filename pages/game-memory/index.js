@@ -1,4 +1,6 @@
 // 记忆翻牌游戏
+const app = getApp();
+
 Page({
   data: {
     // 游戏状态
@@ -7,10 +9,19 @@ Page({
     timeDisplay: '00:00', // 时间显示
     gameWin: false,      // 是否胜利
     canFlip: true,       // 是否可以翻牌
+    // 主题（从全局获取，支持切换）
+    theme: app.globalData.theme,
   },
 
   onLoad() {
     this.initGame();
+  },
+
+  onShow() {
+    // 同步最新主题
+    this.setData({
+      theme: app.globalData.theme,
+    });
   },
 
   onUnload() {

@@ -1,46 +1,52 @@
 <!-- 游戏列表页 -->
 <view class="container">
   <view class="header">
-    <text class="title">欢迎来到盖姆小院</text>
+    <text class="title" style="color: {{theme.primary}};">欢迎来到盖姆小院</text>
+    <button
+      class="theme-toggle"
+      size="mini"
+      bindtap="onSwitchTheme"
+      style="color: {{theme.primary}};"
+    >切换主题</button>
   </view>
 
   <view class="game-list">
-    <navigator class="game-card" url="/pages/game-2048/index">
+    <navigator class="game-card" url="/pages/game-2048/index" style="border-color: {{theme.primary}};">
       <view class="game-icon">🧩</view>
       <view class="game-info">
-        <text class="game-name">2048</text>
+        <text class="game-name" style="color: {{theme.primary}};">2048</text>
         <text class="game-desc">滑动合并数字，挑战2048！</text>
       </view>
     </navigator>
 
-    <navigator class="game-card" url="/pages/game-tetris/index">
+    <navigator class="game-card" url="/pages/game-tetris/index" style="border-color: {{theme.primary}};">
       <view class="game-icon">🧱</view>
       <view class="game-info">
-        <text class="game-name">俄罗斯方块</text>
+        <text class="game-name" style="color: {{theme.primary}};">俄罗斯方块</text>
         <text class="game-desc">经典方块消除游戏</text>
       </view>
     </navigator>
 
-    <navigator class="game-card" url="/pages/game-catch/index">
+    <navigator class="game-card" url="/pages/game-catch/index" style="border-color: {{theme.primary}};">
       <view class="game-icon">🎯</view>
       <view class="game-info">
-        <text class="game-name">接物品</text>
+        <text class="game-name" style="color: {{theme.primary}};">接物品</text>
         <text class="game-desc">左右移动接住掉落物品</text>
       </view>
     </navigator>
 
-    <navigator class="game-card" url="/pages/game-memory/index">
+    <navigator class="game-card" url="/pages/game-memory/index" style="border-color: {{theme.primary}};">
       <view class="game-icon">🎴</view>
       <view class="game-info">
-        <text class="game-name">记忆翻牌</text>
+        <text class="game-name" style="color: {{theme.primary}};">记忆翻牌</text>
         <text class="game-desc">考验记忆力的配对游戏</text>
       </view>
     </navigator>
 
-    <navigator class="game-card" url="/pages/game-minesweeper/index">
+    <navigator class="game-card" url="/pages/game-minesweeper/index" style="border-color: {{theme.primary}};">
       <view class="game-icon">💣</view>
       <view class="game-info">
-        <text class="game-name">扫雷</text>
+        <text class="game-name" style="color: {{theme.primary}};">扫雷</text>
         <text class="game-desc">经典扫雷游戏</text>
       </view>
     </navigator>

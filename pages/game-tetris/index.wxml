@@ -2,17 +2,17 @@
 <view class="container">
   <!-- 头部信息 -->
   <view class="header">
-    <text class="title">🍬 俄罗斯方块 🍬</text>
+    <text class="title" style="color: {{theme.primary}};">🍬 俄罗斯方块 🍬</text>
     <view class="stats">
-      <view class="stat-box">
+      <view class="stat-box" style="background: {{theme.cardBg}};">
         <text class="label">分数</text>
         <text class="value">{{score}}</text>
       </view>
-      <view class="stat-box">
+      <view class="stat-box" style="background: {{theme.cardBg}};">
         <text class="label">等级</text>
         <text class="value">{{level}}</text>
       </view>
-      <view class="stat-box">
+      <view class="stat-box" style="background: {{theme.cardBg}};">
         <text class="label">消除行</text>
         <text class="value">{{lines}}</text>
       </view>
@@ -52,12 +52,32 @@
 
   <!-- 控制按钮 -->
   <view class="controls">
-    <button class="btn btn-left" catchtouchstart="onBtnLeft" catchtouchend="onBtnEnd">◀</button>
-    <button class="btn btn-rotate" catchtouchstart="onBtnRotate" catchtouchend="onBtnEnd">旋转</button>
-    <button class="btn btn-right" catchtouchstart="onBtnRight" catchtouchend="onBtnEnd">▶</button>
+    <button
+      class="btn btn-left"
+      catchtouchstart="onBtnLeft"
+      catchtouchend="onBtnEnd"
+      style="background: linear-gradient(135deg, {{theme.primary}}, {{theme.primaryDark}});"
+    >◀</button>
+    <button
+      class="btn btn-rotate"
+      catchtouchstart="onBtnRotate"
+      catchtouchend="onBtnEnd"
+      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
+    >旋转</button>
+    <button
+      class="btn btn-right"
+      catchtouchstart="onBtnRight"
+      catchtouchend="onBtnEnd"
+      style="background: linear-gradient(135deg, {{theme.primary}}, {{theme.primaryDark}});"
+    >▶</button>
   </view>
   <view class="btn-down-wrapper">
-    <button class="btn btn-full" catchtouchstart="onBtnDown" catchtouchend="onBtnEnd">下落</button>
+    <button
+      class="btn btn-full"
+      catchtouchstart="onBtnDown"
+      catchtouchend="onBtnEnd"
+      style="background: linear-gradient(135deg, {{theme.warning}}, {{theme.goldTo}});"
+    >下落</button>
   </view>
 </view>
 

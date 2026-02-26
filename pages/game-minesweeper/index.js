@@ -1,4 +1,6 @@
 // 扫雷游戏
+const app = getApp();
+
 Page({
   data: {
     // 游戏配置
@@ -15,10 +17,19 @@ Page({
     gameOver: false,   // 游戏结束
     gameWon: false,    // 游戏胜利
     firstClick: true,  // 第一次点击
+    // 主题（从全局获取，支持切换）
+    theme: app.globalData.theme,
   },
 
   onLoad() {
     this.initGame();
+  },
+
+  onShow() {
+    // 同步最新主题
+    this.setData({
+      theme: app.globalData.theme,
+    });
   },
 
   onUnload() {

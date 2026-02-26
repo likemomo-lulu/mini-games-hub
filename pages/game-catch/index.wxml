@@ -1,5 +1,5 @@
 <!-- 接物品游戏页面 -->
-<view class="container">
+<view class="container" style="background: linear-gradient(135deg, {{theme.primary}} 0%, {{theme.primaryDark}} 100%);">
   <!-- 头部信息栏 -->
   <view class="header">
     <view class="title">🎯 接物品</view>
@@ -40,7 +40,7 @@
     <!-- 游戏结束覆盖层 -->
     <view class="overlay game-over" wx:if="{{gameOver}}">
       <view class="overlay-content">
-        <view class="overlay-title">💥 游戏结束</view>
+        <view class="overlay-title" style="color: {{theme.danger}};">💥 游戏结束</view>
         <view class="overlay-info">得分: {{score}}</view>
         <view class="overlay-info">难度: {{level}}</view>
         <button class="btn-restart" bindtap="restart">再来一局</button>
@@ -63,13 +63,19 @@
       bindtouchstart="onLeftStart"
       bindtouchend="onLeftEnd"
       catchtouchmove
+      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
     >左移</button>
-    <button class="btn" bindtap="togglePause">{{paused ? '继续' : '暂停'}}</button>
+    <button
+      class="btn"
+      bindtap="togglePause"
+      style="background: linear-gradient(135deg, {{theme.primary}}, {{theme.primaryDark}});"
+    >{{paused ? '继续' : '暂停'}}</button>
     <button
       class="btn btn-move"
       bindtouchstart="onRightStart"
       bindtouchend="onRightEnd"
       catchtouchmove
+      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
     >右移</button>
   </view>
 

@@ -1,4 +1,5 @@
 // 俄罗斯方块游戏页
+const app = getApp();
 // ==================== 配置 ====================
 const COLS = 10;
 const ROWS = 20;
@@ -59,6 +60,8 @@ Page({
     // 画布在视图层的尺寸（px），用于自适应不同机型
     gameCanvasWidth: 0,
     gameCanvasHeight: 0,
+    // 主题（从全局获取，支持切换）
+    theme: app.globalData.theme,
   },
 
   // 游戏状态
@@ -137,6 +140,13 @@ Page({
 
     wx.nextTick(() => {
       this.initCanvases();
+    });
+  },
+
+  onShow() {
+    // 同步最新主题
+    this.setData({
+      theme: app.globalData.theme,
     });
   },
 

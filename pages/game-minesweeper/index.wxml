@@ -1,5 +1,5 @@
 <!-- 扫雷游戏 -->
-<view class="container">
+<view class="container" style="background: linear-gradient(135deg, {{theme.primary}} 0%, {{theme.primaryDark}} 100%);">
   <!-- 头部信息栏 -->
   <view class="header">
     <view class="title">💣 扫雷</view>
@@ -17,7 +17,11 @@
 
   <!-- 控制按钮 -->
   <view class="controls">
-    <button class="btn" bindtap="restart">重新开始</button>
+    <button
+      class="btn"
+      bindtap="restart"
+      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
+    >重新开始</button>
   </view>
 
   <!-- 游戏棋盘 -->

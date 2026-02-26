@@ -66,12 +66,16 @@ const TEXT_COLORS = {
   0: '#ffffff'
 };
 
+const app = getApp();
+
 Page({
   data: {
     score: 0,
     gameOver: false,
     showWin: false,
     steps: 0, // 已操作步数
+    // 主题（从全局获取，支持切换）
+    theme: app.globalData.theme,
   },
 
   // 游戏状态
@@ -87,6 +91,13 @@ Page({
   onLoad() {
     this.initCanvas();
     this.initGame();
+  },
+
+  onShow() {
+    // 同步最新主题
+    this.setData({
+      theme: app.globalData.theme,
+    });
   },
 
   initCanvas() {

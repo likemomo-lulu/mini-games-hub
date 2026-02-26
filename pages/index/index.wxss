@@ -17,6 +17,15 @@
   text-shadow: 0 4rpx 20rpx rgba(234, 232, 232, 0.9);
 }
 
+.theme-toggle {
+  margin-top: 20rpx;
+  font-size: 24rpx;
+}
+
+.theme-toggle::after {
+  border: none;
+}
+
 .game-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
