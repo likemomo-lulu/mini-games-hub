@@ -117,7 +117,7 @@ Page({
     let gameCanvasHeight = gameCanvasWidth * (ROWS / COLS);
 
     // 一屏内可用高度：减去头部、统计、游戏区外边距、控制按钮、底部边距等（用 rpx 换算）
-    const headerStatsHeight = (40 + 20 + 60 + 30) * rpxToPx;   // 标题+统计区约 150px
+    const headerStatsHeight = (50 + 20 + 60 + 30) * rpxToPx;   // 标题+统计区约 150px
     const controlsHeight = (80 + 20 + 80 + 12 + 20) * rpxToPx; // 控制按钮+下落按钮+边距约 212px
     const containerPadding = 40 * rpxToPx;
     const gameAreaPadding = 24 * rpxToPx;

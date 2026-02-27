@@ -1,20 +1,19 @@
 <!-- 俄罗斯方块游戏页 -->
-<view class="container">
+<view class="container" style="background: {{theme.pageBg}};">
   <!-- 头部信息 -->
   <view class="header">
-    <text class="title" style="color: {{theme.primary}};">🍬 俄罗斯方块 🍬</text>
     <view class="stats">
-      <view class="stat-box" style="background: {{theme.cardBg}};">
-        <text class="label">分数</text>
-        <text class="value">{{score}}</text>
+      <view class="stat-box">
+        <text class="stat-label">分数</text>
+        <text class="stat-value">{{score}}</text>
       </view>
-      <view class="stat-box" style="background: {{theme.cardBg}};">
-        <text class="label">等级</text>
-        <text class="value">{{level}}</text>
+      <view class="stat-box">
+        <text class="stat-label">等级</text>
+        <text class="stat-value">{{level}}</text>
       </view>
-      <view class="stat-box" style="background: {{theme.cardBg}};">
-        <text class="label">消除行</text>
-        <text class="value">{{lines}}</text>
+      <view class="stat-box">
+        <text class="stat-label">消除行</text>
+        <text class="stat-value">{{lines}}</text>
       </view>
     </view>
   </view>

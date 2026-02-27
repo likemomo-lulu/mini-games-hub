@@ -1,7 +1,7 @@
 /* 首页样式 */
 .container {
   padding: 40rpx;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 .header {

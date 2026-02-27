@@ -24,7 +24,6 @@ const THEMES = {
     textPrimary: '#2d3436',
     textSecondary: '#636e72',
     pageBg: '#667eea',
-    cardBg: 'rgba(255, 255, 255, 0.95)',
   },
 
   // 清爽亮色主题（参考用户提供的配色方案）
@@ -48,8 +47,7 @@ const THEMES = {
      // 文本与背景
      textPrimary: '#2d3436',
      textSecondary: '#636e72',
-     pageBg: '#667eea',
-     cardBg: 'rgba(255, 255, 255, 0.95)',
+     pageBg: '#4ECDC4',
   },
 };
 

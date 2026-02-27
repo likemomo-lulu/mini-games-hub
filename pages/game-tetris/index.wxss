@@ -1,6 +1,6 @@
 /* 俄罗斯方块样式 */
 .container {
-  padding: 20rpx;
+  padding: 40rpx;
   height: 100vh;
   max-height: 100vh;
   overflow: hidden;
@@ -28,34 +28,35 @@
 
 .stats {
   display: flex;
-  justify-content: space-around;
-  gap: 16rpx;
+  justify-content: flex-end;
+  gap: 15rpx;
 }
 
 .stat-box {
   text-align: center;
-  flex: 1;
-  padding: 12rpx 16rpx;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 16rpx;
+  padding: 15rpx 25rpx;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
 }
 
-.stat-box .label {
+.stat-label {
   display: block;
-  font-size: 22rpx;
-  color: #636e72;
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.8);
 }
 
-.stat-box .value {
+.stat-value {
   display: block;
   font-size: 32rpx;
   font-weight: bold;
-  color: #667eea;
+  color: white;
 }
 
-/* 游戏区域：宽度自适应整行（最大 580rpx），高度由内容（画布）撑开 */
+/* 游戏区域 */
 .game-area {
-  background: rgba(255, 255, 255, 0.95);
+  background:  rgba(255, 255, 255, 0.15);;
   border-radius: 24rpx;
   padding: 12rpx;
   box-shadow: 0 20rpx 80rpx rgba(0, 0, 0, 0.3);

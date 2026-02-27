@@ -2,8 +2,7 @@
 
 /* 容器 */
 .container {
-  min-height: 100vh;
-  max-height: 100vh;
+  height: 100vh;
   overflow-y: auto;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20rpx;
@@ -14,7 +13,7 @@
 /* 头部信息栏 */
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   margin-bottom: 30rpx;
   padding: 0 10rpx;

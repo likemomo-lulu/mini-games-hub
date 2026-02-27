@@ -2,7 +2,6 @@
 <view class="container" style="background: linear-gradient(135deg, {{theme.primary}} 0%, {{theme.primaryDark}} 100%);">
   <!-- 头部信息栏 -->
   <view class="header">
-    <view class="title">🎮 记忆翻牌</view>
     <view class="stats">
       <view class="stat-box">
         <view class="stat-label">步数</view>

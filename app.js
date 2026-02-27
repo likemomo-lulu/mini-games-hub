@@ -9,6 +9,7 @@ App({
 
   onLaunch() {
     console.log('小游戏集合启动');
+    this._applyTheme();
   },
 
   /**
@@ -19,6 +20,19 @@ App({
     if (!THEMES[themeKey]) return;
     this.globalData.themeKey = themeKey;
     this.globalData.theme = getTheme(themeKey);
+    this._applyTheme();
+  },
+
+  /**
+   * 应用主题到导航栏
+   * @private
+   */
+  _applyTheme() {
+    const { primary } = this.globalData.theme;
+    wx.setNavigationBarColor({
+      frontColor: '#000000',
+      backgroundColor: primary,
+    });
   },
 });
 
