@@ -11,7 +11,7 @@
   </view>
 
   <view class="game-list">
-    <navigator class="game-card" url="/pages/game-2048/index" style="border-color: {{theme.primary}};">
+    <navigator class="game-card" url="/subpackages/game-2048/index" style="border-color: {{theme.primary}};">
       <view class="game-icon">🧩</view>
       <view class="game-info">
         <text class="game-name" style="color: {{theme.primary}};">2048</text>
@@ -19,7 +19,7 @@
       </view>
     </navigator>
 
-    <navigator class="game-card" url="/pages/game-tetris/index" style="border-color: {{theme.primary}};">
+    <navigator class="game-card" url="/subpackages/game-tetris/index" style="border-color: {{theme.primary}};">
       <view class="game-icon">🧱</view>
       <view class="game-info">
         <text class="game-name" style="color: {{theme.primary}};">俄罗斯方块</text>
@@ -27,7 +27,7 @@
       </view>
     </navigator>
 
-    <navigator class="game-card" url="/pages/game-catch/index" style="border-color: {{theme.primary}};">
+    <navigator class="game-card" url="/subpackages/game-catch/index" style="border-color: {{theme.primary}};">
       <view class="game-icon">🎯</view>
       <view class="game-info">
         <text class="game-name" style="color: {{theme.primary}};">接物品</text>
@@ -35,7 +35,7 @@
       </view>
     </navigator>
 
-    <navigator class="game-card" url="/pages/game-memory/index" style="border-color: {{theme.primary}};">
+    <navigator class="game-card" url="/subpackages/game-memory/index" style="border-color: {{theme.primary}};">
       <view class="game-icon">🎴</view>
       <view class="game-info">
         <text class="game-name" style="color: {{theme.primary}};">记忆翻牌</text>
@@ -43,11 +43,19 @@
       </view>
     </navigator>
 
-    <navigator class="game-card" url="/pages/game-minesweeper/index" style="border-color: {{theme.primary}};">
+    <navigator class="game-card" url="/subpackages/game-minesweeper/index" style="border-color: {{theme.primary}};">
       <view class="game-icon">💣</view>
       <view class="game-info">
         <text class="game-name" style="color: {{theme.primary}};">扫雷</text>
         <text class="game-desc">经典扫雷游戏</text>
+      </view>
+    </navigator>
+
+    <navigator class="game-card" url="/subpackages/game-whack/index" style="border-color: {{theme.primary}};">
+      <view class="game-icon">🐹</view>
+      <view class="game-info">
+        <text class="game-name" style="color: {{theme.primary}};">打地鼠</text>
+        <text class="game-desc">疯狂点击地鼠，超解压！</text>
       </view>
     </navigator>
   </view>

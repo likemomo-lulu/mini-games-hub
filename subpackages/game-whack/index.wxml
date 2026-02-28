@@ -1,0 +1,70 @@
+<!-- 打地鼠游戏 -->
+<view class="container" style="background: linear-gradient(135deg, {{theme.primary}} 0%, {{theme.primaryDark}} 100%);">
+  <!-- 头部信息栏 -->
+  <view class="header">
+    <view class="stats">
+      <view class="stat-box">
+        <view class="stat-label">分数</view>
+        <view class="stat-value">{{score}}</view>
+      </view>
+      <view class="stat-box">
+        <view class="stat-label">连击</view>
+        <view class="stat-value">{{combo}}</view>
+      </view>
+      <view class="stat-box">
+        <view class="stat-label">时间</view>
+        <view class="stat-value">{{timeDisplay}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="controls">
+    <button
+      class="btn"
+      bindtap="startGame"
+      disabled="{{gameRunning}}"
+      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
+    >{{gameRunning ? '游戏中...' : '开始游戏'}}</button>
+  </view>
+
+  <!-- 游戏区域：3x3 地鼠洞 -->
+  <!-- <view class="game-board"> -->
+    <view class="hole-grid">
+      <view
+        class="hole {{item.active ? 'active' : ''}} {{item.type === 'luck' ? 'luck' : ''}} {{item.type === 'pig' ? 'pig' : ''}}"
+        wx:for="{{holes}}"
+        wx:key="index"
+        bindtap="onHoleTap"
+        data-index="{{index}}"
+      >
+        <!-- 地洞图片 -->
+        <image class="hole-image" src="./hole.png" mode="aspectFit"></image>
+        <!-- 地鼠 -->
+        <view class="mole {{item.active ? 'up' : 'down'}}">
+          <text class="mole-icon">{{item.icon}}</text>
+        </view>
+        <!-- 打击特效 -->
+        <view class="hit-effect {{item.hit ? 'show' : ''}}">
+          <text class="hit-text">{{item.scoreText}}</text>
+        </view>
+      </view>
+    <!-- </view> -->
+
+    <!-- 游戏结束覆盖层 -->
+    <view class="overlay game-over {{gameOver ? 'show' : ''}}">
+      <view class="overlay-content">
+        <view class="overlay-title">⏰ 时间到！</view>
+        <view class="overlay-text">太棒了！</view>
+        <view class="overlay-info">最终得分: {{score}}</view>
+        <view class="overlay-info">最高连击: {{maxCombo}}</view>
+        <button class="btn-restart" bindtap="startGame">再来一局</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作提示 -->
+  <view class="tips">
+    💡 点地鼠得分 | 金色地鼠×3 | 炸弹扣分
+  </view>
+</view>

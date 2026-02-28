@@ -1,11 +1,20 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/game-2048/index",
-    "pages/game-tetris/index",
-    "pages/game-catch/index",
-    "pages/game-memory/index",
-    "pages/game-minesweeper/index"
+    "pages/index/index"
+  ],
+  "subPackages": [
+    {
+      "root": "subpackages",
+      "name": "games",
+      "pages": [
+        "game-2048/index",
+        "game-tetris/index",
+        "game-catch/index",
+        "game-memory/index",
+        "game-minesweeper/index",
+        "game-whack/index"
+      ]
+    }
   ],
   "window": {
     "backgroundTextStyle": "light",

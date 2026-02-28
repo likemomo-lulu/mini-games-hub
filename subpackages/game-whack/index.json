@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "打地鼠",
+  "navigationBarBackgroundColor": "#fff",
+  "navigationBarTextStyle": "black",
+  "enablePullDownRefresh": false,
+  "disableScroll": true
+}
