@@ -1,6 +1,18 @@
 // 记忆翻牌游戏
 const app = getApp();
 
+// 关卡配置
+const LEVEL_CONFIG = {
+  1: { pairs: 8, cols: 4, name: '新手' },   // 4x4
+  2: { pairs: 10, cols: 4, name: '简单' },  // 4x5
+  3: { pairs: 12, cols: 4, name: '中等' },  // 4x6
+  4: { pairs: 15, cols: 5, name: '困难' },  // 5x6
+  5: { pairs: 18, cols: 6, name: '大师' },  // 6x6
+  6: { pairs: 21, cols: 6, name: '专家' },  // 6x7
+  7: { pairs: 24, cols: 6, name: '挑战' },  // 6x8
+  8: { pairs: 28, cols: 7, name: '极限' },  // 7x8
+};
+
 Page({
   data: {
     // 游戏状态
@@ -9,12 +21,21 @@ Page({
     timeDisplay: '00:00', // 时间显示
     gameWin: false,      // 是否胜利
     canFlip: true,       // 是否可以翻牌
+    currentLevel: 1,     // 当前关卡
+    maxLevel: 8,         // 最大关卡数
+    levelName: '新手',   // 关卡名称
+    gridCols: 4,         // 网格列数
     // 主题（从全局获取，支持切换）
     theme: app.globalData.theme,
   },
 
   onLoad() {
-    this.initGame();
+    // 读取最高关卡记录
+    const savedLevel = wx.getStorageSync('memoryGameLevel');
+    if (savedLevel) {
+      this.setData({ currentLevel: savedLevel });
+    }
+    this.initGame(this.data.currentLevel);
   },
 
   onShow() {
@@ -33,32 +54,46 @@ Page({
 
   /**
    * 初始化游戏
+   * @param {number} level - 关卡数
    */
-  initGame() {
-    // emoji池 - 每次随机选8种
+  initGame(level = this.data.currentLevel) {
+    // 获取关卡配置
+    const config = LEVEL_CONFIG[level] || LEVEL_CONFIG[1];
+    const totalPairs = config.pairs;
+    const gridCols = config.cols;
+    const levelName = config.name;
+
+    // emoji池 - 足够的emoji支持高关卡
     this.emojiPool = [
       '🍎', '🍊', '🍇', '🍓', '🍒', '🥝', '🍑', '🥭',
       '🍌', '🍉', '🍋', '🍍', '🥥', '🥑', '🍆', '🥕',
       '🌽', '🥦', '🍄', '🥜', '🌰', '🍞', '🧀', '🍖',
       '🍗', '🍔', '🍟', '🍕', '🌭', '🥪', '🌮', '🌯',
       '🥚', '🍳', '🥘', '🍲', '🥣', '🥗', '🍿', '🧂',
-      '🥫', '🍱', '🍘', '🍙', '🍚', '🍛', '🍜', '🍝'
+      '🥫', '🍱', '🍘', '🍙', '🍚', '🍛', '🍜', '🍝',
+      '🍩', '🍦', '🍪', '🎂', '🍰', '🧁', '🥧', '🍫',
+      '🍬', '🍭', '🍮', '🍯', '🍼', '🥛', '☕', '🍵',
+      '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼',
+      '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔'
     ];
 
     // 游戏状态
     this.flippedCards = []; // 已翻开的卡片
     this.matchedPairs = 0;  // 已配对数量
-    this.totalPairs = 8;    // 总配对数
+    this.totalPairs = totalPairs; // 总配对数（根据关卡）
     this.seconds = 0;       // 计时秒数
     this.timer = null;      // 计时器
     this.gameStarted = false; // 游戏是否开始
 
     // 创建并洗牌
-    this.createCards();
+    this.createCards(totalPairs);
     this.shuffleCards();
 
-    // 重置数据 - 关键：把 cards 设置到 data 中
+    // 更新当前关卡数据
     this.setData({
+      currentLevel: level,
+      levelName: levelName,
+      gridCols: gridCols,
       cards: this.cards,
       moves: 0,
       timeDisplay: '00:00',
@@ -69,11 +104,12 @@ Page({
 
   /**
    * 创建卡片对
+   * @param {number} pairCount - 需要创建的卡片对数
    */
-  createCards() {
-    // 随机选择8种emoji
+  createCards(pairCount) {
+    // 随机选择指定数量的emoji
     const shuffled = [...this.emojiPool].sort(() => Math.random() - 0.5);
-    const selectedEmojis = shuffled.slice(0, 8);
+    const selectedEmojis = shuffled.slice(0, pairCount);
 
     // 每个emoji创建一对卡片
     const cards = [];
@@ -242,6 +278,9 @@ Page({
   gameWin() {
     this.clearTimer();
 
+    // 保存当前关卡进度
+    wx.setStorageSync('memoryGameLevel', this.data.currentLevel);
+
     // 延迟显示胜利界面
     setTimeout(() => {
       this.setData({ gameWin: true });
@@ -249,7 +288,23 @@ Page({
   },
 
   /**
-   * 重新开始
+   * 下一关
+   */
+  nextLevel() {
+    const nextLevel = this.data.currentLevel + 1;
+    const finalLevel = Math.min(nextLevel, this.data.maxLevel);
+
+    this.clearTimer();
+    this.flippedCards = [];
+    this.matchedPairs = 0;
+    this.seconds = 0;
+    this.gameStarted = false;
+
+    this.initGame(finalLevel);
+  },
+
+  /**
+   * 重新开始当前关卡
    */
   restart() {
     this.clearTimer();
@@ -257,6 +312,15 @@ Page({
     this.matchedPairs = 0;
     this.seconds = 0;
     this.gameStarted = false;
-    this.initGame();
+    this.initGame(this.data.currentLevel);
+  },
+
+  /**
+   * 重置到第一关
+   */
+  resetToFirstLevel() {
+    wx.removeStorageSync('memoryGameLevel');
+    this.setData({ currentLevel: 1 });
+    this.restart();
   },
 });

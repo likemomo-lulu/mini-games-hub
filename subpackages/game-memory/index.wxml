@@ -2,6 +2,8 @@
 <view class="container" style="background: linear-gradient(135deg, {{theme.primary}} 0%, {{theme.primaryDark}} 100%);">
   <!-- 头部信息栏 -->
   <view class="header">
+    <view class="level-badge">关卡 {{currentLevel}}/{{maxLevel}}</view>
+    <view class="level-name">{{levelName}}</view>
     <view class="stats">
       <view class="stat-box">
         <view class="stat-label">步数</view>
@@ -17,6 +19,11 @@
   <!-- 控制按钮 -->
   <view class="controls">
     <button
+      class="btn btn-small"
+      bindtap="resetToFirstLevel"
+      style="background: rgba(255,255,255,0.2);"
+    >重置关卡</button>
+    <button
       class="btn"
       bindtap="restart"
       style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
@@ -25,8 +32,8 @@
 
   <!-- 游戏棋盘 -->
   <view class="game-board">
-    <!-- 卡片网格 4x4 -->
-    <view class="grid">
+    <!-- 卡片网格 - 动态列数 -->
+    <view class="grid grid-{{gridCols}}">
       <view
         class="card-container"
         wx:for="{{cards}}"
@@ -48,9 +55,15 @@
       <view class="overlay-content">
         <view class="overlay-title">🎉 恭喜通关!</view>
         <view class="overlay-text">太棒了！</view>
+        <view class="overlay-info">关卡 {{currentLevel}} - {{levelName}}</view>
         <view class="overlay-info">步数: {{moves}}</view>
         <view class="overlay-info">用时: {{timeDisplay}}</view>
-        <button class="btn-restart" bindtap="restart">再来一局</button>
+        <view class="overlay-buttons">
+          <button class="btn-restart btn-secondary" bindtap="restart">再来一次</button>
+          <button class="btn-restart" bindtap="nextLevel" disabled="{{currentLevel >= maxLevel}}">
+            {{currentLevel >= maxLevel ? '已通关全部' : '挑战下一关'}}
+          </button>
+        </view>
       </view>
     </view>
   </view>
