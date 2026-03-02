@@ -13,7 +13,8 @@
 /* 头部：不参与收缩 */
 .header {
   width: 100%;
-  margin-bottom: 30rpx;
+  margin-top: 20rpx;
+  margin-bottom: 40rpx;
   flex-shrink: 0;
 }
 
@@ -130,6 +131,8 @@
   justify-content: space-around;
   gap: 14rpx;
   padding: 20rpx;
+  margin-top: 40rpx;
+  margin-bottom: 30rpx;
   width: 100%;
   max-width: 580rpx;
   flex-shrink: 0;
@@ -140,13 +143,15 @@
   color: white;
   border: none;
   padding: 0;
-  border-radius: 20rpx;
-  font-size: 24rpx;
-  box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.4);
+  border-radius: 25rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   height: 80rpx;
+  line-height: 80rpx;
   flex: 1;
 }
 

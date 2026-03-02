@@ -13,7 +13,6 @@
 /* 头部信息栏 */
 .header {
   width: 100%;
-  margin-top: 20rpx;
   margin-bottom: 40rpx;
 }
 
@@ -48,14 +47,13 @@
 /* 控制按钮 */
 .controls {
   width: 100%;
-  display: flex;
-  margin-top: 40rpx;
+  margin-top: 20rpx;
   margin-bottom: 30rpx;
 }
 
 .btn {
-  flex: 1;
-  padding: 0;
+  width: 100%;
+  padding: 25rpx;
   border: none;
   border-radius: 25rpx;
   font-size: 28rpx;

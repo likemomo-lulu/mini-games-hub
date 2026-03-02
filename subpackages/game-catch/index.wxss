@@ -14,7 +14,8 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-bottom: 30rpx;
+  margin-top: 20rpx;
+  margin-bottom: 40rpx;
   padding: 0 10rpx;
 }
 
@@ -138,12 +139,13 @@
 .controls {
   display: flex;
   gap: 20rpx;
-  margin-top: 30rpx;
+  margin-top: 40rpx;
+  margin-bottom: 30rpx;
 }
 
 .btn {
   flex: 1;
-  padding: 25rpx;
+  padding: 0;
   border: none;
   border-radius: 25rpx;
   font-size: 28rpx;
@@ -151,6 +153,8 @@
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   color: white;
   box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
+  height: 80rpx;
+  line-height: 80rpx;
   transition: all 0.3s;
 }
 

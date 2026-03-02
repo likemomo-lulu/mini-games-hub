@@ -15,6 +15,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin-top: 20rpx;
   margin-bottom: 40rpx;
 }
 
@@ -37,40 +38,44 @@
 .score-box,
 .step-box {
   background: rgba(255, 255, 255, 0.2);
-  padding: 20rpx 40rpx;
-  border-radius: 30rpx;
+  backdrop-filter: blur(10px);
+  padding: 15rpx 25rpx;
+  border-radius: 20rpx;
   text-align: center;
-  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
 }
 
 .score-label {
   display: block;
-  font-size: 24rpx;
+  font-size: 20rpx;
   color: rgba(255, 255, 255, 0.8);
 }
 
 .score-value {
   display: block;
-  font-size: 48rpx;
+  font-size: 32rpx;
   font-weight: bold;
   color: white;
 }
 
 .controls {
   width: 100%;
-  margin-bottom: 40rpx;
+  margin-top: 40rpx;
+  margin-bottom: 30rpx;
   display: flex;
   justify-content: center;
 }
 
 .btn {
   width: 100%;
-  padding: 30rpx;
+  padding: 0;
   border: none;
-  border-radius: 24rpx;
-  font-size: 32rpx;
+  border-radius: 25rpx;
+  font-size: 28rpx;
   font-weight: bold;
-  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
+  height: 80rpx;
+  line-height: 80rpx;
   overflow: hidden;
 }
 
