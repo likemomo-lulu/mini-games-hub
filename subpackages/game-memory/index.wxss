@@ -4,43 +4,25 @@
 .container {
   height: 100vh;
   overflow: hidden;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 30rpx 20rpx;
+}
+
+/* CSS 变量 - 从 WXML 的 style 属性传递 */
+.game-board {
+  --card-back-from: #ffeaa7;
+  --card-back-to: #fdcb6e;
+  --card-front-bg: rgba(255, 255, 255, 0.2);
 }
 
 /* 头部信息栏 */
 .header {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: flex-end;
+  gap: 15rpx;
   margin-bottom: 20rpx;
   padding: 0 10rpx;
-}
-
-/* 关卡徽章 */
-.level-badge {
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  color: white;
-  padding: 10rpx 30rpx;
-  border-radius: 50rpx;
-  font-size: 28rpx;
-  font-weight: bold;
-  margin-bottom: 10rpx;
-  box-shadow: 0 6rpx 20rpx rgba(255, 165, 0, 0.4);
-}
-
-.level-name {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: white;
-  margin-bottom: 15rpx;
-  text-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.3);
-}
-
-/* 统计信息 */
-.stats {
-  display: flex;
-  gap: 15rpx;
 }
 
 .stat-box {
@@ -67,7 +49,7 @@
 .controls {
   display: flex;
   gap: 20rpx;
-  margin-bottom: 20rpx;
+  margin-bottom: 40rpx;
 }
 
 .btn {
@@ -114,6 +96,8 @@
   display: grid;
   gap: 12rpx;
   width: 100%;
+  /* 保持整体正方形比例 */
+  aspect-ratio: 1;
 }
 
 /* 不同列数的网格 */
@@ -137,28 +121,30 @@
   grid-template-columns: repeat(7, 1fr);
 }
 
-/* 卡片尺寸根据列数自动调整 */
-.grid-3 .card {
-  font-size: 70rpx;
-}
-
-.grid-4 .card {
-  font-size: 55rpx;
-}
-
-.grid-5 .card {
-  font-size: 45rpx;
-}
-
-.grid-6 .card,
-.grid-7 .card {
-  font-size: 38rpx;
-}
-
-/* 卡片容器 */
+/* 卡片容器 - 保持正方形 */
 .card-container {
   perspective: 1000rpx;
   cursor: pointer;
+  aspect-ratio: 1;
+  width: 100%;
+}
+
+/* 卡片尺寸根据列数自动调整 */
+.grid-3 .card-back {
+  font-size: 70rpx;
+}
+
+.grid-4 .card-back {
+  font-size: 55rpx;
+}
+
+.grid-5 .card-back {
+  font-size: 45rpx;
+}
+
+.grid-6 .card-back,
+.grid-7 .card-back {
+  font-size: 38rpx;
 }
 
 /* 卡片主体 */
@@ -210,13 +196,13 @@
 
 /* 卡片背面（emoji面） */
 .card-back {
-  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  background: linear-gradient(135deg, var(--card-back-from) 0%, var(--card-back-to) 100%);
   transform: rotateY(180deg);
 }
 
 /* 卡片正面（问号面） */
 .card-front {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--card-front-bg);
   backdrop-filter: blur(5px);
 }
 

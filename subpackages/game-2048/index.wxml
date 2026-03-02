@@ -2,13 +2,13 @@
 <view class="container" style="background: {{theme.pageBg}};">
   <view class="header">
     <view class="header-right">
-      <view class="step-box" >
-        <text class="score-label">步数</text>
-        <text class="score-value">{{steps}}</text>
+      <view class="step-box" style="background: {{theme.headerCardBg}};">
+        <text class="score-label" style="color: {{theme.headerTextLight}};">步数</text>
+        <text class="score-value" style="color: {{theme.headerTextWhite}};">{{steps}}</text>
       </view>
-      <view class="score-box">
-        <text class="score-label">分数</text>
-        <text class="score-value">{{score}}</text>
+      <view class="score-box" style="background: {{theme.headerCardBg}};">
+        <text class="score-label" style="color: {{theme.headerTextLight}};">分数</text>
+        <text class="score-value" style="color: {{theme.headerTextWhite}};">{{score}}</text>
       </view>
     </view>
   </view>
@@ -39,7 +39,7 @@
     </view>
   </view>
 
-  <view class="tips">
+  <view class="tips" style="color: {{theme.tipsText}};">
     💡 滑动移动方块
   </view>
 </view>

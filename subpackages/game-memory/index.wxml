@@ -1,19 +1,19 @@
 <!-- 记忆翻牌游戏 -->
-<view class="container" style="background: linear-gradient(135deg, {{theme.primary}} 0%, {{theme.primaryDark}} 100%);">
+<view class="container" style="background: {{theme.pageBg}};">
   <!-- 头部信息栏 -->
   <view class="header">
-    <view class="level-badge">关卡 {{currentLevel}}/{{maxLevel}}</view>
-    <view class="level-name">{{levelName}}</view>
-    <view class="stats">
-      <view class="stat-box">
-        <view class="stat-label">步数</view>
-        <view class="stat-value">{{moves}}</view>
-      </view>
-      <view class="stat-box">
-        <view class="stat-label">时间</view>
-        <view class="stat-value">{{timeDisplay}}</view>
-      </view>
+    <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <view class="stat-label" style="color: {{theme.headerTextLight}};">关卡</view>
+        <view class="stat-value" style="color: {{theme.headerTextWhite}};"> {{currentLevel}}/{{maxLevel}}</view>
     </view>
+      <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <view class="stat-label" style="color: {{theme.headerTextLight}};">步数</view>
+        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{moves}}</view>
+      </view>
+      <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <view class="stat-label" style="color: {{theme.headerTextLight}};">时间</view>
+        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{timeDisplay}}</view>
+      </view>
   </view>
 
   <!-- 控制按钮 -->
@@ -21,7 +21,7 @@
     <button
       class="btn btn-small"
       bindtap="resetToFirstLevel"
-      style="background: rgba(255,255,255,0.2);"
+      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
     >重置关卡</button>
     <button
       class="btn"
@@ -31,7 +31,7 @@
   </view>
 
   <!-- 游戏棋盘 -->
-  <view class="game-board">
+  <view class="game-board" style="--card-back-from: {{theme.cardBackFrom}}; --card-back-to: {{theme.cardBackTo}}; --card-front-bg: {{theme.cardFront}};">
     <!-- 卡片网格 - 动态列数 -->
     <view class="grid grid-{{gridCols}}">
       <view
@@ -69,7 +69,7 @@
   </view>
 
   <!-- 操作提示 -->
-  <view class="tips">
+  <view class="tips" style="color: {{theme.tipsText}};">
     💡 点击卡片翻牌，找到相同图案配对
   </view>
 </view>

@@ -1,31 +1,31 @@
 <!-- 接物品游戏页面 -->
-<view class="container" style="background: linear-gradient(135deg, {{theme.primary}} 0%, {{theme.primaryDark}} 100%);">
+<view class="container" style="background: {{theme.pageBg}};">
   <!-- 头部信息栏 -->
   <view class="header">
     <view class="stats">
-      <view class="stat-box">
-        <view class="stat-label">分数</view>
-        <view class="stat-value">{{score}}</view>
+      <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <view class="stat-label" style="color: {{theme.headerTextLight}};">分数</view>
+        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{score}}</view>
       </view>
-      <view class="stat-box">
-        <view class="stat-label">生命</view>
-        <view class="stat-value">{{livesDisplay}}</view>
+      <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <view class="stat-label" style="color: {{theme.headerTextLight}};">生命</view>
+        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{livesDisplay}}</view>
       </view>
-      <view class="stat-box">
-        <view class="stat-label">难度</view>
-        <view class="stat-value">{{level}}</view>
+      <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <view class="stat-label" style="color: {{theme.headerTextLight}};">难度</view>
+        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{level}}</view>
       </view>
     </view>
   </view>
 
   <!-- 游戏区域 -->
-  <view class="game-board">
+  <view class="game-board" style="background: {{theme.canvasOverlayBg}};">
     <!-- Canvas 画布 - 写死尺寸（和俄罗斯方块一样） -->
     <canvas
       id="gameCanvas"
       type="2d"
       class="game-canvas"
-      style="width: 100%; height: {{boardHeight}}px; border-radius: 20rpx;"
+      style="width: 100%; height: {{boardHeight}}px; border-radius: 20rpx;background: {{theme.canvasOverlayBg}};"
       bindtouchstart="onTouchStart"
       bindtouchmove="onTouchMove"
       bindtouchend="onTouchEnd"
@@ -67,7 +67,7 @@
     <button
       class="btn"
       bindtap="togglePause"
-      style="background: linear-gradient(135deg, {{theme.primary}}, {{theme.primaryDark}});"
+      style="background: linear-gradient(135deg, {{theme.primary}}, {{theme.secondary}});"
     >{{paused ? '继续' : '暂停'}}</button>
     <button
       class="btn btn-move"
@@ -79,7 +79,7 @@
   </view>
 
   <!-- 操作提示 -->
-  <view class="tips">
+  <view class="tips" style="color: {{theme.tipsText}};">
     💡 滑动屏幕或点击按钮移动 | 接住水果，避开炸弹
   </view>
 </view>

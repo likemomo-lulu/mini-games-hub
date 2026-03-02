@@ -9,6 +9,14 @@ App({
 
   onLaunch() {
     console.log('小游戏集合启动');
+
+    // 读取缓存的主题
+    const savedThemeKey = wx.getStorageSync('themeKey');
+    if (savedThemeKey && THEMES[savedThemeKey]) {
+      this.globalData.themeKey = savedThemeKey;
+      this.globalData.theme = getTheme(savedThemeKey);
+    }
+
     this._applyTheme();
   },
 
@@ -20,6 +28,10 @@ App({
     if (!THEMES[themeKey]) return;
     this.globalData.themeKey = themeKey;
     this.globalData.theme = getTheme(themeKey);
+
+    // 保存到本地缓存
+    wx.setStorageSync('themeKey', themeKey);
+
     this._applyTheme();
   },
 

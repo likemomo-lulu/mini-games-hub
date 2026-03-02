@@ -3,17 +3,17 @@
   <!-- 头部信息 -->
   <view class="header">
     <view class="stats">
-      <view class="stat-box">
-        <text class="stat-label">分数</text>
-        <text class="stat-value">{{score}}</text>
+      <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <text class="stat-label" style="color: {{theme.headerTextLight}};">分数</text>
+        <text class="stat-value" style="color: {{theme.headerTextWhite}};">{{score}}</text>
       </view>
-      <view class="stat-box">
-        <text class="stat-label">等级</text>
-        <text class="stat-value">{{level}}</text>
+      <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <text class="stat-label" style="color: {{theme.headerTextLight}};">等级</text>
+        <text class="stat-value" style="color: {{theme.headerTextWhite}};">{{level}}</text>
       </view>
-      <view class="stat-box">
-        <text class="stat-label">消除行</text>
-        <text class="stat-value">{{lines}}</text>
+      <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <text class="stat-label" style="color: {{theme.headerTextLight}};">消除行</text>
+        <text class="stat-value" style="color: {{theme.headerTextWhite}};">{{lines}}</text>
       </view>
     </view>
   </view>
@@ -55,19 +55,19 @@
       class="btn btn-left"
       catchtouchstart="onBtnLeft"
       catchtouchend="onBtnEnd"
-      style="background: linear-gradient(135deg, {{theme.primary}}, {{theme.primaryDark}});"
+      style="background: linear-gradient(135deg, {{theme.accentFrom}}, {{theme.accentTo}});"
     >◀</button>
     <button
       class="btn btn-rotate"
       catchtouchstart="onBtnRotate"
       catchtouchend="onBtnEnd"
-      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
+      style="background: linear-gradient(135deg, {{theme.primary}} 0%, {{theme.secondary}} 100%);"
     >旋转</button>
     <button
       class="btn btn-right"
       catchtouchstart="onBtnRight"
       catchtouchend="onBtnEnd"
-      style="background: linear-gradient(135deg, {{theme.primary}}, {{theme.primaryDark}});"
+      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
     >▶</button>
   </view>
   <view class="btn-down-wrapper">
@@ -75,7 +75,7 @@
       class="btn btn-full"
       catchtouchstart="onBtnDown"
       catchtouchend="onBtnEnd"
-      style="background: linear-gradient(135deg, {{theme.warning}}, {{theme.goldTo}});"
+      style="background:{{them.warning}}"
     >下落</button>
   </view>
 </view>

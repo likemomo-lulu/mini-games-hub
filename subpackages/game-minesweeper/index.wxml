@@ -1,15 +1,15 @@
 <!-- 扫雷游戏 -->
-<view class="container" style="background: linear-gradient(135deg, {{theme.primary}} 0%, {{theme.primaryDark}} 100%);">
+<view class="container" style="background: {{theme.pageBg}};">
   <!-- 头部信息栏 -->
   <view class="header">
     <view class="stats">
-      <view class="stat-box">
-        <view class="stat-label">剩余地雷</view>
-        <view class="stat-value">{{remainingMines}}</view>
+      <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <view class="stat-label" style="color: {{theme.headerTextLight}};">剩余地雷</view>
+        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{remainingMines}}</view>
       </view>
-      <view class="stat-box">
-        <view class="stat-label">时间</view>
-        <view class="stat-value">{{timeDisplay}}</view>
+      <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <view class="stat-label" style="color: {{theme.headerTextLight}};">时间</view>
+        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{timeDisplay}}</view>
       </view>
     </view>
   </view>
@@ -80,7 +80,7 @@
   </view>
 
   <!-- 操作提示 -->
-  <view class="tips">
+  <view class="tips" style="color: {{theme.tipsText}};">
     💡 单击：揭开 | 长按：插旗🚩 | 点数字：快速揭开周围
   </view>
 </view>

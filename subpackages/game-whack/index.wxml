@@ -1,19 +1,19 @@
 <!-- 打地鼠游戏 -->
-<view class="container" style="background: linear-gradient(135deg, {{theme.primary}} 0%, {{theme.primaryDark}} 100%);">
+<view class="container" style="background: {{theme.pageBg}};">
   <!-- 头部信息栏 -->
   <view class="header">
     <view class="stats">
-      <view class="stat-box">
-        <view class="stat-label">分数</view>
-        <view class="stat-value">{{score}}</view>
+      <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <view class="stat-label" style="color: {{theme.headerTextLight}};">分数</view>
+        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{score}}</view>
       </view>
-      <view class="stat-box">
-        <view class="stat-label">连击</view>
-        <view class="stat-value">{{combo}}</view>
+      <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <view class="stat-label" style="color: {{theme.headerTextLight}};">连击</view>
+        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{combo}}</view>
       </view>
-      <view class="stat-box">
-        <view class="stat-label">时间</view>
-        <view class="stat-value">{{timeDisplay}}</view>
+      <view class="stat-box" style="background: {{theme.headerCardBg}};">
+        <view class="stat-label" style="color: {{theme.headerTextLight}};">时间</view>
+        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{timeDisplay}}</view>
       </view>
     </view>
   </view>
@@ -64,7 +64,7 @@
   </view>
 
   <!-- 操作提示 -->
-  <view class="tips">
+  <view class="tips" style="color: {{theme.tipsText}};">
     💡 点地鼠得分 | 金色地鼠×3 | 炸弹扣分
   </view>
 </view>

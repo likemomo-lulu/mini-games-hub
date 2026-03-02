@@ -23,7 +23,6 @@ Page({
     canFlip: true,       // 是否可以翻牌
     currentLevel: 1,     // 当前关卡
     maxLevel: 8,         // 最大关卡数
-    levelName: '新手',   // 关卡名称
     gridCols: 4,         // 网格列数
     // 主题（从全局获取，支持切换）
     theme: app.globalData.theme,
@@ -61,7 +60,6 @@ Page({
     const config = LEVEL_CONFIG[level] || LEVEL_CONFIG[1];
     const totalPairs = config.pairs;
     const gridCols = config.cols;
-    const levelName = config.name;
 
     // emoji池 - 足够的emoji支持高关卡
     this.emojiPool = [
@@ -92,7 +90,6 @@ Page({
     // 更新当前关卡数据
     this.setData({
       currentLevel: level,
-      levelName: levelName,
       gridCols: gridCols,
       cards: this.cards,
       moves: 0,
