@@ -66,5 +66,13 @@
         <text class="game-desc">点击水果得分，挑战高分！</text>
       </view>
     </navigator>
+
+    <navigator class="game-card" url="/subpackages/game-klotski/index" style="border-color: {{theme.primary}};">
+      <view class="game-icon">🤔</view>
+      <view class="game-info">
+        <text class="game-name" style="color: {{theme.primary}};">华容道</text>
+        <text class="game-desc">经典滑块益智游戏</text>
+      </view>
+    </navigator>
   </view>
 </view>

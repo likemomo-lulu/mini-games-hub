@@ -1,0 +1,251 @@
+.container {
+  padding: 40rpx;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #667eea;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 20rpx;
+  margin-bottom: 40rpx;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20rpx;
+  flex: 1;
+}
+
+.level-box,
+.step-box {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 15rpx 25rpx;
+  border-radius: 20rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
+}
+
+.score-label {
+  display: block;
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.score-value {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: white;
+}
+
+.controls {
+  width: 100%;
+  margin-top: 40rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  justify-content: center;
+  gap: 20rpx;
+}
+
+.btn {
+  flex: 1;
+  max-width: 350rpx;
+  padding: 0;
+  border: none;
+  border-radius: 25rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: white;
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
+  height: 80rpx;
+  line-height: 80rpx;
+  overflow: hidden;
+}
+
+.btn-restart {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.btn-select-level {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.game-board {
+  position: relative;
+  width: 552rpx;
+  height: 442rpx;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 40rpx;
+  padding: 24rpx;
+  box-shadow: 0 16rpx 60rpx rgba(0, 0, 0, 0.3);
+}
+
+.game-canvas {
+  width: 552rpx;
+  height: 442rpx;
+  border-radius: 24rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.game-over {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 40rpx;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.game-over.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.game-over-title {
+  font-size: 80rpx;
+  color: #ff6b6b;
+  margin-bottom: 30rpx;
+  text-shadow: 0 0 40rpx rgba(255, 107, 107, 0.5);
+  font-weight: bold;
+}
+
+.game-over-score {
+  font-size: 40rpx;
+  color: white;
+  margin-bottom: 50rpx;
+}
+
+.tips {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 40rpx;
+  font-size: 28rpx;
+}
+
+/* 关卡选择浮窗 */
+.level-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 100;
+}
+
+.level-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.level-modal-content {
+  width: 600rpx;
+  max-height: 80vh;
+  background: white;
+  border-radius: 30rpx;
+  overflow: hidden;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.4);
+}
+
+.level-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  color: white;
+}
+
+.level-modal-title {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.level-modal-close {
+  font-size: 48rpx;
+  color: white;
+  padding: 0 10rpx;
+}
+
+.level-list {
+  max-height: 60vh;
+  padding: 20rpx;
+}
+
+.level-item {
+  display: flex;
+  align-items: center;
+  padding: 25rpx;
+  margin-bottom: 15rpx;
+  background: #f5f5f5;
+  border-radius: 20rpx;
+  border: 3rpx solid transparent;
+  transition: all 0.2s;
+}
+
+.level-item.active {
+  border-color: #667eea;
+}
+
+.level-item-number {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  color: white;
+  font-size: 28rpx;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.level-item.active .level-item-number {
+  background: white !important;
+  color: #667eea;
+}
+
+.level-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5rpx;
+}
+
+.level-item-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.level-item-steps {
+  font-size: 24rpx;
+  color: #999;
+}
+

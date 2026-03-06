@@ -1,0 +1,76 @@
+<!-- 华容道游戏页 -->
+<view class="container" style="background: {{theme.pageBg}};">
+  <view class="header">
+    <view class="header-right">
+      <view class="level-box" style="background: {{theme.headerCardBg}};">
+        <text class="score-label" style="color: {{theme.headerTextLight}};">关卡</text>
+        <text class="score-value" style="color: {{theme.headerTextWhite}};">{{currentLevel + 1}}</text>
+      </view>
+      <view class="step-box" style="background: {{theme.headerCardBg}};">
+        <text class="score-label" style="color: {{theme.headerTextLight}};">步数</text>
+        <text class="score-value" style="color: {{theme.headerTextWhite}};">{{steps}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="controls">
+    <button
+      class="btn btn-restart"
+      bindtap="restart"
+      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
+    >重新开始</button>
+    <button
+      class="btn btn-select-level"
+      bindtap="toggleLevelModal"
+      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
+    >选择关卡</button>
+  </view>
+
+  <view class="game-board">
+    <canvas
+      type="2d"
+      id="gameCanvas"
+      class="game-canvas"
+      style="width: 552rpx; height: 442rpx;"
+      hidden="{{showLevelModal}}"
+      bindtouchstart="onTouchStart"
+      catchtouchmove="onTouchMove"
+      bindtouchend="onTouchEnd"
+    ></canvas>
+
+    <view class="game-over {{gameOver ? 'show' : ''}}">
+      <text class="game-over-title" style="color: {{theme.danger}};">🎉 胜利！</text>
+      <text class="game-over-score">用了 {{steps}} 步</text>
+      <button class="btn btn-restart" bindtap="nextLevel">下一关</button>
+    </view>
+  </view>
+
+  <view class="tips" style="color: {{theme.tipsText}};">
+    💡 拖动滑块，把曹操移到下方出口
+  </view>
+
+  <!-- 关卡选择浮窗 -->
+  <view class="level-modal {{showLevelModal ? 'show' : ''}}" bindtap="toggleLevelModal">
+    <view class="level-modal-content" catchtap="stopPropagation">
+      <view class="level-modal-header" style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);">
+        <text class="level-modal-title">选择关卡</text>
+        <text class="level-modal-close" bindtap="toggleLevelModal">✕</text>
+      </view>
+      <scroll-view class="level-list" scroll-y>
+        <view
+          wx:for="{{LEVELS}}"
+          wx:key="id"
+          class="level-item {{currentLevel === index ? 'active' : ''}}"
+          data-index="{{index}}"
+          bindtap="selectLevel"
+        >
+          <view class="level-item-number" style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);">{{index + 1}}</view>
+          <view class="level-item-info">
+            <text class="level-item-name">{{item.name}}</text>
+            <text class="level-item-steps">最优 {{item.minSteps}} 步</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>
