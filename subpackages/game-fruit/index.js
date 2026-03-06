@@ -17,7 +17,7 @@ Page({
 
   // 游戏配置
   GAME_DURATION: 60, // 游戏时长（秒）
-  SPAWN_INTERVAL: 1500, // 初始生成间隔（毫秒）
+  SPAWN_INTERVAL: 1000, // 初始生成间隔（毫秒）
 
   // 水果类型配置
   FRUIT_TYPES: [
