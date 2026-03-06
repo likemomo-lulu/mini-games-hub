@@ -12,7 +12,8 @@
         "game-catch/index",
         "game-memory/index",
         "game-minesweeper/index",
-        "game-whack/index"
+        "game-whack/index",
+        "game-fruit/index"
       ]
     }
   ],

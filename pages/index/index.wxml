@@ -58,5 +58,13 @@
         <text class="game-desc">疯狂点击地鼠，超解压！</text>
       </view>
     </navigator>
+
+    <navigator class="game-card" url="/subpackages/game-fruit/index" style="border-color: {{theme.primary}};">
+      <view class="game-icon">🍉</view>
+      <view class="game-info">
+        <text class="game-name" style="color: {{theme.primary}};">水果大战</text>
+        <text class="game-desc">点击水果得分，挑战高分！</text>
+      </view>
+    </navigator>
   </view>
 </view>
