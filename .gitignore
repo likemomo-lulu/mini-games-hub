@@ -1,5 +1,6 @@
 # 依赖
 node_modules/
+.claude/**/*
 
 # 私钥文件 - 不要提交到git
 .keys/
