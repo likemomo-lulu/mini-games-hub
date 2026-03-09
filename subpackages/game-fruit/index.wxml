@@ -46,7 +46,7 @@
     <view
       wx:for="{{particles}}"
       wx:key="id"
-      class="particle"
+      class="particle {{item.type === 'bomb' ? 'particle-bomb' : ''}}"
       style="left: {{item.x}}px; top: {{item.y}}px; width: {{item.size}}px; height: {{item.size}}px; background-color: {{item.color}}; opacity: {{item.life}};"
     ></view>
 

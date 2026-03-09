@@ -36,7 +36,7 @@ Page({
     { emoji: '🫐', color: '#4169E1', points: 10, type: 'normal' },
     { emoji: '🍒', color: '#DC143C', points: 10, type: 'normal' },
     { emoji: '⭐', color: '#ffd700', points: 50, type: 'gold' },
-    { emoji: '😈', color: '#333333', points: -30, type: 'bomb' },
+    { emoji: '💣', color: '#333333', points: -30, type: 'bomb' },
   ],
 
   onLoad() {
@@ -288,13 +288,44 @@ Page({
         }
       });
       this.fruits = this.fruits.filter(f => f.type !== 'normal');
+    } else if (fruit.type === 'bomb') {
+      // 💣 炸弹爆炸效果
+      this.createBombExplosion(fruit.x, fruit.y);
+
+      // 清除爆炸范围内的所有水果（100px半径内）
+      const explosionRadius = 100;
+      this.fruits.forEach((f, i) => {
+        if (i === index) return; // 跳过炸弹本身
+
+        const dx = f.x - fruit.x;
+        const dy = f.y - fruit.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < explosionRadius) {
+          // 范围内的水果也被炸飞
+          this.createParticles(f.x, f.y, '#ff6600');
+        }
+      });
+
+      // 清除所有在爆炸范围内的水果
+      this.fruits = this.fruits.filter((f, i) => {
+        if (i === index) return false; // 移除炸弹
+
+        const dx = f.x - fruit.x;
+        const dy = f.y - fruit.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        return distance >= explosionRadius; // 保留爆炸范围外的水果
+      });
+    } else {
+      // 普通水果：创建粒子特效
+      this.createParticles(fruit.x, fruit.y, fruit.color);
     }
 
-    // 创建粒子特效
-    this.createParticles(fruit.x, fruit.y, fruit.color);
-
-    // 移除被点击的水果
-    this.fruits.splice(index, 1);
+    // 移除被点击的水果（如果炸弹已经被上面的逻辑移除了，这里就不需要再移除）
+    if (fruit.type !== 'bomb') {
+      this.fruits.splice(index, 1);
+    }
 
     console.log('粒子数(点击后):', this.particles.length);
     console.log('准备setData - particles数组:', this.particles);
@@ -306,12 +337,13 @@ Page({
       particles: [...this.particles],
     }, () => {
       console.log('setData完成 - data.particles:', this.data.particles);
-    });
 
-    // 点击恶魔震动（只有恶魔震动）
-    if (fruit.type === 'bomb') {
-      wx.vibrateShort({ type: 'heavy' });
-    }
+      // 💣 炸弹震动效果（在setData完成后调用，确保真机生效）
+      if (fruit.type === 'bomb') {
+        wx.vibrateLong(); // 长震动400ms，更强烈
+        setTimeout(() => wx.vibrateShort(), 200); // 追加短震动
+      }
+    });
   },
 
   // ===== 粒子特效 =====
@@ -350,5 +382,49 @@ Page({
     }
 
     console.log('粒子总数:', this.particles.length);
+  },
+
+  // 💣 炸弹爆炸特效
+  createBombExplosion(x, y) {
+    console.log('💣 创建炸弹爆炸特效:', x, y);
+
+    // 爆炸颜色：红橙黄混合
+    const explosionColors = ['#ff0000', '#ff6600', '#ffcc00', '#ff3300', '#ff9900'];
+
+    // 创建大量粒子（80个粒子）
+    const particleCount = 80;
+
+    for (let i = 0; i < particleCount; i++) {
+      const angle = (Math.PI * 2 / particleCount) * i;
+      // 爆炸速度更快（8-18）
+      const speed = 8 + Math.random() * 10;
+      // 爆炸粒子更大（10-20px）
+      const size = 10 + Math.random() * 10;
+
+      // 随机选择爆炸颜色
+      const color = explosionColors[Math.floor(Math.random() * explosionColors.length)];
+
+      // 将hex颜色转为rgb
+      const hex = color.replace('#', '');
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+
+      const particle = {
+        id: Date.now() + Math.random(),
+        x,
+        y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        size,
+        color: `rgb(${r}, ${g}, ${b})`,
+        life: 1,
+        type: 'bomb', // 💥 标记为炸弹粒子
+      };
+
+      this.particles.push(particle);
+    }
+
+    console.log('爆炸粒子总数:', this.particles.length);
   },
 });
