@@ -1,19 +1,19 @@
-<!-- 记忆翻牌游戏 -->
+<!-- 记忆翻牌游戏 - 精致设计 -->
 <view class="container" style="background: {{theme.pageBg}};">
   <!-- 头部信息栏 -->
   <view class="header">
     <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <view class="stat-label" style="color: {{theme.headerTextLight}};">关卡</view>
-        <view class="stat-value" style="color: {{theme.headerTextWhite}};"> {{currentLevel}}/{{maxLevel}}</view>
+      <view class="stat-label" style="color: {{theme.headerTextLight}};">关卡</view>
+      <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{currentLevel}}/{{maxLevel}}</view>
     </view>
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <view class="stat-label" style="color: {{theme.headerTextLight}};">步数</view>
-        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{moves}}</view>
-      </view>
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <view class="stat-label" style="color: {{theme.headerTextLight}};">时间</view>
-        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{timeDisplay}}</view>
-      </view>
+    <view class="stat-box" style="background: {{theme.headerCardBg}};">
+      <view class="stat-label" style="color: {{theme.headerTextLight}};">步数</view>
+      <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{moves}}</view>
+    </view>
+    <view class="stat-box" style="background: {{theme.headerCardBg}};">
+      <view class="stat-label" style="color: {{theme.headerTextLight}};">时间</view>
+      <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{timeDisplay}}</view>
+    </view>
   </view>
 
   <!-- 控制按钮 -->
@@ -24,15 +24,15 @@
       style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
     >重置关卡</button>
     <button
-      class="btn"
+      class="btn btn-small"
       bindtap="restart"
       style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
     >重新开始</button>
   </view>
 
   <!-- 游戏棋盘 -->
-  <view class="game-board" style="--card-back-from: {{theme.cardBackFrom}}; --card-back-to: {{theme.cardBackTo}}; --card-front-bg: {{theme.cardFront}};">
-    <!-- 卡片网格 - 动态列数 -->
+  <view class="game-board">
+    <!-- 卡片网格 -->
     <view class="grid grid-{{gridCols}}">
       <view
         class="card-container"
@@ -42,25 +42,23 @@
         data-index="{{index}}"
       >
         <view class="card {{item.isFlipped ? 'flipped' : ''}} {{item.isMatched ? 'matched' : ''}}">
-          <!-- 卡片正面（背面图案） -->
           <view class="card-front"></view>
-          <!-- 卡片背面（emoji） -->
           <view class="card-back">{{item.emoji}}</view>
         </view>
       </view>
     </view>
 
     <!-- 胜利覆盖层 -->
-    <view class="overlay game-win {{gameWin ? 'show' : ''}}">
+    <view class="overlay {{gameWin ? 'show' : ''}}" style="background: {{theme.canvasOverlayBg}};">
       <view class="overlay-content">
-        <view class="overlay-title">🎉 恭喜通关!</view>
-        <view class="overlay-text">太棒了！</view>
-        <view class="overlay-info">关卡 {{currentLevel}} - {{levelName}}</view>
-        <view class="overlay-info">步数: {{moves}}</view>
-        <view class="overlay-info">用时: {{timeDisplay}}</view>
+        <text class="overlay-title" style="color: {{theme.goldFrom}};">🎉 恭喜通关!</text>
+        <text class="overlay-text" style="color: {{theme.headerTextWhite}};">太棒了！</text>
+        <text class="overlay-info" style="color: {{theme.headerTextWhite}};">关卡 {{currentLevel}} - {{levelName}}</text>
+        <text class="overlay-info" style="color: {{theme.headerTextWhite}};">步数: {{moves}}</text>
+        <text class="overlay-info" style="color: {{theme.headerTextWhite}};">用时: {{timeDisplay}}</text>
         <view class="overlay-buttons">
-          <button class="btn-restart btn-secondary" bindtap="restart">再来一次</button>
-          <button class="btn-restart" bindtap="nextLevel" disabled="{{currentLevel >= maxLevel}}">
+          <button class="btn btn-small btn-secondary" bindtap="restart" style="background: rgba(255, 255, 255, 0.2); border: 2rpx solid rgba(255, 255, 255, 0.5);">再来一次</button>
+          <button class="btn btn-small" bindtap="nextLevel" disabled="{{currentLevel >= maxLevel}}" style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);">
             {{currentLevel >= maxLevel ? '已通关全部' : '挑战下一关'}}
           </button>
         </view>

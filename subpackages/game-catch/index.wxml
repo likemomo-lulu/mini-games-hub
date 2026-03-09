@@ -20,12 +20,11 @@
 
   <!-- 游戏区域 -->
   <view class="game-board" style="background: {{theme.canvasOverlayBg}};">
-    <!-- Canvas 画布 - 写死尺寸（和俄罗斯方块一样） -->
+    <!-- Canvas 画布 -->
     <canvas
       id="gameCanvas"
       type="2d"
       class="game-canvas"
-      style="width: 100%; height: {{boardHeight}}px; border-radius: 20rpx;background: {{theme.canvasOverlayBg}};"
       bindtouchstart="onTouchStart"
       bindtouchmove="onTouchMove"
       bindtouchend="onTouchEnd"

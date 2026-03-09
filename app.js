@@ -8,7 +8,7 @@ App({
   },
 
   onLaunch() {
-    console.log('小游戏集合启动');
+    console.log('盖姆小院启动');
 
     // 读取缓存的主题
     const savedThemeKey = wx.getStorageSync('themeKey');
@@ -22,7 +22,7 @@ App({
 
   /**
    * 切换主题（全局生效）
-   * @param {string} themeKey - 主题键名，比如 'default'、'dark'
+   * @param {string} themeKey - 主题键名
    */
   setTheme(themeKey) {
     if (!THEMES[themeKey]) return;
@@ -41,10 +41,11 @@ App({
    */
   _applyTheme() {
     const { primary } = this.globalData.theme;
+
+    // 根据主题设置导航栏样式
     wx.setNavigationBarColor({
       frontColor: '#000000',
       backgroundColor: primary,
     });
   },
 });
-

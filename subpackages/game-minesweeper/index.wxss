@@ -5,16 +5,21 @@
   height: 100vh;
   overflow: hidden;
   padding: 30rpx 20rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 头部信息栏 */
 .header {
+  width: 100%;
+  max-width: 670rpx;
+  margin: 20rpx auto 40rpx;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-top: 20rpx;
-  margin-bottom: 40rpx;
-  padding: 0 10rpx;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .title {
@@ -51,20 +56,22 @@
 
 /* 控制按钮 */
 .controls {
+  width: 100%;
+  max-width: 670rpx;
   display: flex;
-  gap: 20rpx;
-  margin-top: 40rpx;
-  margin-bottom: 30rpx;
+  justify-content: center;
+  margin: 40rpx auto 30rpx;
+  box-sizing: border-box;
 }
 
 .btn {
   flex: 1;
+  min-width: 0;
   padding: 0;
   border: none;
   border-radius: 25rpx;
   font-size: 28rpx;
   font-weight: bold;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   color: white;
   box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
   height: 80rpx;
@@ -82,12 +89,16 @@
 
 /* 游戏棋盘 */
 .game-board {
+  width: 100%;
+  max-width: 670rpx;
+  margin: 0 auto;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
   border-radius: 30rpx;
   padding: 20rpx;
   box-shadow: 0 15rpx 50rpx rgba(0, 0, 0, 0.3);
   position: relative;
+  box-sizing: border-box;
 }
 
 /* 9x9 网格 */
@@ -214,8 +225,10 @@
 
 /* 重新开始按钮 */
 .btn-restart {
-  margin-top: 40rpx;
-  padding: 25rpx 60rpx;
+  width: 100%;
+  max-width: 400rpx;
+  margin: 40rpx auto 0;
+  padding: 25rpx 40rpx;
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   color: white;
   border: none;
@@ -223,6 +236,7 @@
   font-size: 32rpx;
   font-weight: bold;
   box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
 }
 
 .btn-restart::after {
@@ -231,9 +245,12 @@
 
 /* 操作提示 */
 .tips {
+  width: 100%;
+  max-width: 670rpx;
   text-align: center;
   color: rgba(255, 255, 255, 0.7);
-  margin-top: 30rpx;
+  margin: 30rpx auto 0;
   font-size: 24rpx;
   line-height: 1.6;
+  box-sizing: border-box;
 }

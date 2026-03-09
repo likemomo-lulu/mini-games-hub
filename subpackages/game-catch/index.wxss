@@ -2,21 +2,24 @@
 
 /* 容器 */
 .container {
-  height: 100vh;
-  overflow-y: auto;
+  min-height: 100vh;
+  overflow: hidden; /* 防止横向滚动 */
   padding: 20rpx;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
 /* 头部信息栏 */
 .header {
+  width: 100%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   margin-top: 20rpx;
   margin-bottom: 40rpx;
   padding: 0 10rpx;
+  box-sizing: border-box;
 }
 
 .title {
@@ -55,17 +58,25 @@
 
 /* 游戏区域 */
 .game-board {
+  width: 100%;
+  max-width: 670rpx;
   border-radius: 30rpx;
   padding: 20rpx;
   box-shadow: 0 15rpx 50rpx rgba(0, 0, 0, 0.3);
   position: relative;
   flex: 1;
+  min-height: 400rpx; /* 最小高度，确保canvas有足够空间 */
+  box-sizing: border-box;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Canvas 画布 */
 .game-canvas {
   width: 100%;
   height: 100%;
+  flex: 1;
   border-radius: 20rpx;
 }
 
@@ -137,14 +148,19 @@
 
 /* 控制按钮 */
 .controls {
+  width: 100%;
+  max-width: 670rpx; /* 限制最大宽度，防止超出屏幕 */
   display: flex;
-  gap: 20rpx;
-  margin-top: 40rpx;
-  margin-bottom: 30rpx;
+  justify-content: center;
+  align-items: center;
+  gap: 16rpx;
+  margin: 40rpx auto 30rpx;
+  box-sizing: border-box;
 }
 
 .btn {
   flex: 1;
+  min-width: 0; /* 允许按钮缩小 */
   padding: 0;
   border: none;
   border-radius: 25rpx;
@@ -173,9 +189,12 @@
 
 /* 操作提示 */
 .tips {
+  width: 100%;
+  max-width: 670rpx;
   text-align: center;
   color: rgba(255, 255, 255, 0.7);
-  margin-top: 20rpx;
+  margin: 20rpx auto 0;
   font-size: 24rpx;
   padding-bottom: 30rpx;
+  box-sizing: border-box;
 }

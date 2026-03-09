@@ -1,107 +1,95 @@
-/* 记忆翻牌游戏样式 */
+/* 记忆翻牌游戏样式 - 精致设计 */
 
-/* 容器 */
 .container {
-  height: 100vh;
-  overflow: hidden;
-  padding: 30rpx 20rpx;
-}
-
-/* CSS 变量 - 从 WXML 的 style 属性传递 */
-.game-board {
-  --card-back-from: #ffeaa7;
-  --card-back-to: #fdcb6e;
-  --card-front-bg: rgba(255, 255, 255, 0.2);
-}
-
-/* 头部信息栏 */
-.header {
+  padding: 40rpx;
+  min-height: 100vh;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  gap: 15rpx;
-  margin-top: 20rpx;
-  margin-bottom: 40rpx;
-  padding: 0 10rpx;
+}
+
+/* 头部统计 */
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* 靠右对齐 */
+  align-items: center;
+  gap: 16rpx;
+  padding: 20rpx 0;
+  margin-bottom: 30rpx;
+  flex-wrap: wrap;
 }
 
 .stat-box {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  padding: 15rpx 25rpx;
+  min-width: 120rpx;
+  padding: 16rpx 20rpx;
   border-radius: 20rpx;
   text-align: center;
-  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(20rpx);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
 }
 
 .stat-label {
-  font-size: 20rpx;
-  color: rgba(255, 255, 255, 0.8);
+  display: block;
+  font-size: 22rpx;
+  margin-bottom: 4rpx;
 }
 
 .stat-value {
+  display: block;
   font-size: 32rpx;
-  font-weight: bold;
-  color: white;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
-/* 控制按钮 */
+/* 控制按钮区域 - 使用flex自适应布局 */
 .controls {
+  width: 100%;
   display: flex;
-  gap: 20rpx;
-  margin-top: 40rpx;
+  justify-content: center;
+  align-items: center;
+  gap: 16rpx;
   margin-bottom: 30rpx;
 }
 
-.btn {
+/* 控制按钮样式 - 自适应平分空间 */
+.controls .btn {
   flex: 1;
-  padding: 0;
-  border: none;
-  border-radius: 25rpx;
-  font-size: 28rpx;
-  font-weight: bold;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
-  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
-  height: 80rpx;
-  line-height: 80rpx;
-}
-
-.btn-small {
-  flex: 0 0 auto;
-  min-width: 180rpx;
-}
-
-.btn::after {
-  border: none;
-}
-
-.btn:active {
-  opacity: 0.8;
-  transform: scale(0.98);
+  min-width: 0; /* 允许按钮缩小到内容宽度 */
+  max-width: 280rpx; /* 限制最大宽度，避免按钮过宽 */
 }
 
 /* 游戏棋盘 */
 .game-board {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border-radius: 30rpx;
-  padding: 20rpx;
-  box-shadow: 0 15rpx 50rpx rgba(0, 0, 0, 0.3);
   position: relative;
+  width: 552rpx;
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20rpx);
+  border-radius: 32rpx;
+  padding: 20rpx;
+  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.15),
+              inset 0 1rpx 1rpx rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  --card-back-from: #ffeaa7;
+  --card-back-to: #fdcb6e;
+  --card-front-bg: rgba(255, 255, 255, 0.9);
 }
 
-/* 动态网格布局 */
+/* 卡片网格 */
 .grid {
   display: grid;
   gap: 12rpx;
   width: 100%;
-  /* 保持整体正方形比例 */
-  aspect-ratio: 1;
+  height: 100%;
 }
 
-/* 不同列数的网格 */
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .grid-3 {
   grid-template-columns: repeat(3, 1fr);
 }
@@ -122,15 +110,14 @@
   grid-template-columns: repeat(7, 1fr);
 }
 
-/* 卡片容器 - 保持正方形 */
+/* 卡片容器 */
 .card-container {
+  aspect-ratio: 1;
   perspective: 1000rpx;
   cursor: pointer;
-  aspect-ratio: 1;
-  width: 100%;
 }
 
-/* 卡片尺寸根据列数自动调整 */
+/* 根据网格大小调整字体 */
 .grid-3 .card-back {
   font-size: 70rpx;
 }
@@ -148,36 +135,22 @@
   font-size: 38rpx;
 }
 
-/* 卡片主体 */
+/* 卡片翻转容器 */
 .card {
   position: relative;
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.6s;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 翻牌状态 */
 .card.flipped {
   transform: rotateY(180deg);
 }
 
-/* 配对成功动画 */
 .card.matched {
-  animation: matched 0.5s ease;
-}
-
-@keyframes matched {
-  0% {
-    transform: rotateY(180deg) scale(1);
-  }
-  50% {
-    transform: rotateY(180deg) scale(1.1);
-    box-shadow: 0 0 50rpx rgba(255, 215, 0, 0.8);
-  }
-  100% {
-    transform: rotateY(180deg) scale(1);
-  }
+  opacity: 0.6;
+  transform: rotateY(180deg) scale(0.95);
 }
 
 /* 卡片正反面 */
@@ -187,49 +160,47 @@
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  border-radius: 20rpx;
+  border-radius: 16rpx;
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: 50rpx;
-  box-shadow: 0 8rpx 15rpx rgba(0, 0, 0, 0.2);
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
 }
 
-/* 卡片背面（emoji面） */
+.card-front {
+  background: var(--card-front-bg);
+  backdrop-filter: blur(10rpx);
+}
+
+.card-front::after {
+  content: '?';
+  font-size: 48rpx;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.2);
+}
+
 .card-back {
   background: linear-gradient(135deg, var(--card-back-from) 0%, var(--card-back-to) 100%);
   transform: rotateY(180deg);
 }
 
-/* 卡片正面（问号面） */
-.card-front {
-  background: var(--card-front-bg);
-  backdrop-filter: blur(5px);
-}
-
-.card-front::after {
-  content: '?';
-  font-size: 60rpx;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-/* 胜利覆盖层 */
+/* 覆盖层 */
 .overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
+  border-radius: 32rpx;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  border-radius: 30rpx;
+  justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10;
+  padding: 40rpx;
 }
 
 .overlay.show {
@@ -238,78 +209,54 @@
 }
 
 .overlay-content {
-  text-align: center;
-  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .overlay-title {
-  font-size: 80rpx;
-  margin-bottom: 30rpx;
-}
-
-.overlay.game-win .overlay-title {
-  background: linear-gradient(45deg, #FFD700, #FFA500);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 64rpx;
+  font-weight: 800;
+  margin-bottom: 20rpx;
+  text-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
 }
 
 .overlay-text {
-  font-size: 36rpx;
+  font-size: 28rpx;
   margin-bottom: 30rpx;
-  color: white;
 }
 
 .overlay-info {
-  font-size: 32rpx;
-  margin-bottom: 15rpx;
-  color: white;
+  font-size: 26rpx;
+  margin-bottom: 8rpx;
+  opacity: 0.9;
 }
 
-/* 按钮组 */
 .overlay-buttons {
   display: flex;
-  gap: 20rpx;
-  margin-top: 40rpx;
+  gap: 16rpx;
+  margin-top: 30rpx;
+  flex-wrap: wrap;
   justify-content: center;
-}
-
-/* 重新开始按钮 */
-.btn-restart {
-  flex: 1;
-  max-width: 280rpx;
-  padding: 25rpx 40rpx;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
-  border: none;
-  border-radius: 50rpx;
-  font-size: 30rpx;
-  font-weight: bold;
-  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.3);
-}
-
-.btn-restart.btn-secondary {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-}
-
-.btn-restart::after {
-  border: none;
-}
-
-.btn-restart:active {
-  opacity: 0.8;
-  transform: scale(0.98);
-}
-
-.btn-restart[disabled] {
-  opacity: 0.5;
-  background: rgba(128, 128, 128, 0.3);
 }
 
 /* 操作提示 */
 .tips {
-  text-align: center;
-  color: rgba(255, 255, 255, 0.7);
   margin-top: 30rpx;
-  font-size: 24rpx;
+  font-size: 26rpx;
+  opacity: 0.8;
+  text-align: center;
+}
+
+/* 动画 */
+@keyframes slideUp {
+  from {
+    transform: translateY(60rpx);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

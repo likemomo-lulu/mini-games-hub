@@ -1,78 +1,172 @@
-<!-- 游戏列表页 -->
-<view class="container">
-  <view class="header">
-    <text class="title" style="color: {{theme.primary}};">欢迎来到盖姆小院</text>
-    <button
-      class="theme-toggle"
-      size="mini"
-      bindtap="onSwitchTheme"
-      style="color: {{theme.primary}};"
-    >切换主题</button>
+<!-- 游戏列表页 - 精致卡片设计 -->
+<view class="page-container" style="background: {{theme.pageBg}};">
+  <!-- 头部区域 -->
+  <view class="page-header">
+    <view class="header-top">
+      <view class="brand-section">
+        <text class="brand-icon">🎮</text>
+        <view class="brand-text">
+          <text class="brand-title" style="color: {{theme.primary}};">盖姆小院</text>
+          <text class="brand-subtitle">精品小游戏合集</text>
+        </view>
+      </view>
+      <button
+        class="theme-btn"
+        bindtap="onSwitchTheme"
+        style="background: {{theme.headerCardBg}}; color: {{theme.headerTextWhite}};"
+      >
+        <text class="theme-icon">🎨</text>
+        <text>换肤</text>
+      </button>
+    </view>
   </view>
 
-  <view class="game-list">
-    <navigator class="game-card" url="/subpackages/game-2048/index" style="border-color: {{theme.primary}};">
-      <view class="game-icon">🧩</view>
-      <view class="game-info">
-        <text class="game-name" style="color: {{theme.primary}};">2048</text>
-        <text class="game-desc">滑动合并数字，挑战2048！</text>
-      </view>
-    </navigator>
+  <!-- 游戏列表 -->
+  <scroll-view class="game-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+    <view class="game-grid">
+      <!-- 2048 -->
+      <navigator
+        class="game-card"
+        url="/subpackages/game-2048/index"
+        hover-class="game-card-hover"
+        hover-stay-time="100"
+      >
+        <view class="card-bg" style="background: linear-gradient(135deg, #FFE5D4 0%, #FFD4C4 100%);"></view>
+        <view class="card-content">
+          <view class="game-emoji" style="background: linear-gradient(135deg, #FF8E53 0%, #FF6B6B 100%);">🧩</view>
+          <view class="game-info">
+            <text class="game-title" style="color: {{theme.primary}};">2048</text>
+            <text class="game-desc">滑动合并数字</text>
+          </view>
+        </view>
+        <view class="card-arrow" style="color: {{theme.primary}};">→</view>
+      </navigator>
 
-    <navigator class="game-card" url="/subpackages/game-tetris/index" style="border-color: {{theme.primary}};">
-      <view class="game-icon">🧱</view>
-      <view class="game-info">
-        <text class="game-name" style="color: {{theme.primary}};">俄罗斯方块</text>
-        <text class="game-desc">经典方块消除游戏</text>
-      </view>
-    </navigator>
+      <!-- 俄罗斯方块 -->
+      <navigator
+        class="game-card"
+        url="/subpackages/game-tetris/index"
+        hover-class="game-card-hover"
+        hover-stay-time="100"
+      >
+        <view class="card-bg" style="background: linear-gradient(135deg, #E8F8F5 0%, #D1F2EB 100%);"></view>
+        <view class="card-content">
+          <view class="game-emoji" style="background: linear-gradient(135deg, #20B2AA 0%, #48D1CC 100%);">🧱</view>
+          <view class="game-info">
+            <text class="game-title" style="color: {{theme.primary}};">俄罗斯方块</text>
+            <text class="game-desc">经典消除游戏</text>
+          </view>
+        </view>
+        <view class="card-arrow" style="color: {{theme.primary}};">→</view>
+      </navigator>
 
-    <navigator class="game-card" url="/subpackages/game-catch/index" style="border-color: {{theme.primary}};">
-      <view class="game-icon">🎯</view>
-      <view class="game-info">
-        <text class="game-name" style="color: {{theme.primary}};">接物品</text>
-        <text class="game-desc">左右移动接住掉落物品</text>
-      </view>
-    </navigator>
+      <!-- 接物品 -->
+      <navigator
+        class="game-card"
+        url="/subpackages/game-catch/index"
+        hover-class="game-card-hover"
+        hover-stay-time="100"
+      >
+        <view class="card-bg" style="background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);"></view>
+        <view class="card-content">
+          <view class="game-emoji" style="background: linear-gradient(135deg, #FFA07A 0%, #FFD700 100%);">🎯</view>
+          <view class="game-info">
+            <text class="game-title" style="color: {{theme.primary}};">接物品</text>
+            <text class="game-desc">接住掉落物品</text>
+          </view>
+        </view>
+        <view class="card-arrow" style="color: {{theme.primary}};">→</view>
+      </navigator>
 
-    <navigator class="game-card" url="/subpackages/game-memory/index" style="border-color: {{theme.primary}};">
-      <view class="game-icon">🎴</view>
-      <view class="game-info">
-        <text class="game-name" style="color: {{theme.primary}};">记忆翻牌</text>
-        <text class="game-desc">考验记忆力的配对游戏</text>
-      </view>
-    </navigator>
+      <!-- 记忆翻牌 -->
+      <navigator
+        class="game-card"
+        url="/subpackages/game-memory/index"
+        hover-class="game-card-hover"
+        hover-stay-time="100"
+      >
+        <view class="card-bg" style="background: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%);"></view>
+        <view class="card-content">
+          <view class="game-emoji" style="background: linear-gradient(135deg, #EC407A 0%, #F48FB1 100%);">🎴</view>
+          <view class="game-info">
+            <text class="game-title" style="color: {{theme.primary}};">记忆翻牌</text>
+            <text class="game-desc">考验记忆力</text>
+          </view>
+        </view>
+        <view class="card-arrow" style="color: {{theme.primary}};">→</view>
+      </navigator>
 
-    <navigator class="game-card" url="/subpackages/game-minesweeper/index" style="border-color: {{theme.primary}};">
-      <view class="game-icon">💣</view>
-      <view class="game-info">
-        <text class="game-name" style="color: {{theme.primary}};">扫雷</text>
-        <text class="game-desc">经典扫雷游戏</text>
-      </view>
-    </navigator>
+      <!-- 扫雷 -->
+      <navigator
+        class="game-card"
+        url="/subpackages/game-minesweeper/index"
+        hover-class="game-card-hover"
+        hover-stay-time="100"
+      >
+        <view class="card-bg" style="background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);"></view>
+        <view class="card-content">
+          <view class="game-emoji" style="background: linear-gradient(135deg, #2196F3 0%, #64B5F6 100%);">💣</view>
+          <view class="game-info">
+            <text class="game-title" style="color: {{theme.primary}};">扫雷</text>
+            <text class="game-desc">经典益智游戏</text>
+          </view>
+        </view>
+        <view class="card-arrow" style="color: {{theme.primary}};">→</view>
+      </navigator>
 
-    <navigator class="game-card" url="/subpackages/game-whack/index" style="border-color: {{theme.primary}};">
-      <view class="game-icon">🐹</view>
-      <view class="game-info">
-        <text class="game-name" style="color: {{theme.primary}};">打地鼠</text>
-        <text class="game-desc">疯狂点击地鼠，超解压！</text>
-      </view>
-    </navigator>
+      <!-- 打地鼠 -->
+      <navigator
+        class="game-card"
+        url="/subpackages/game-whack/index"
+        hover-class="game-card-hover"
+        hover-stay-time="100"
+      >
+        <view class="card-bg" style="background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);"></view>
+        <view class="card-content">
+          <view class="game-emoji" style="background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);">🐹</view>
+          <view class="game-info">
+            <text class="game-title" style="color: {{theme.primary}};">打地鼠</text>
+            <text class="game-desc">疯狂点击解压</text>
+          </view>
+        </view>
+        <view class="card-arrow" style="color: {{theme.primary}};">→</view>
+      </navigator>
 
-    <navigator class="game-card" url="/subpackages/game-fruit/index" style="border-color: {{theme.primary}};">
-      <view class="game-icon">🍉</view>
-      <view class="game-info">
-        <text class="game-name" style="color: {{theme.primary}};">水果大战</text>
-        <text class="game-desc">点击水果得分，挑战高分！</text>
-      </view>
-    </navigator>
+      <!-- 水果大战 -->
+      <navigator
+        class="game-card"
+        url="/subpackages/game-fruit/index"
+        hover-class="game-card-hover"
+        hover-stay-time="100"
+      >
+        <view class="card-bg" style="background: linear-gradient(135deg, #F1F8E9 0%, #DCEDC8 100%);"></view>
+        <view class="card-content">
+          <view class="game-emoji" style="background: linear-gradient(135deg, #8BC34A 0%, #AED581 100%);">🍉</view>
+          <view class="game-info">
+            <text class="game-title" style="color: {{theme.primary}};">水果大战</text>
+            <text class="game-desc">点击水果得分</text>
+          </view>
+        </view>
+        <view class="card-arrow" style="color: {{theme.primary}};">→</view>
+      </navigator>
 
-    <navigator class="game-card" url="/subpackages/game-klotski/index" style="border-color: {{theme.primary}};">
-      <view class="game-icon">🤔</view>
-      <view class="game-info">
-        <text class="game-name" style="color: {{theme.primary}};">华容道</text>
-        <text class="game-desc">经典滑块益智游戏</text>
-      </view>
-    </navigator>
-  </view>
+      <!-- 华容道 -->
+      <navigator
+        class="game-card"
+        url="/subpackages/game-klotski/index"
+        hover-class="game-card-hover"
+        hover-stay-time="100"
+      >
+        <view class="card-bg" style="background: linear-gradient(135deg, #E8EAF6 0%, #C5CAE9 100%);"></view>
+        <view class="card-content">
+          <view class="game-emoji" style="background: linear-gradient(135deg, #5C6BC0 0%, #7986CB 100%);">🤔</view>
+          <view class="game-info">
+            <text class="game-title" style="color: {{theme.primary}};">华容道</text>
+            <text class="game-desc">经典滑块游戏</text>
+          </view>
+        </view>
+        <view class="card-arrow" style="color: {{theme.primary}};">→</view>
+      </navigator>
+    </view>
+  </scroll-view>
 </view>

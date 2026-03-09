@@ -1,4 +1,294 @@
-/* 全局样式 */
+/* ==================== 全局样式 ==================== */
+/* 基础重置与布局 */
+
 page {
   height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==================== 通用容器 ==================== */
+
+.container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* ==================== 按钮样式系统 ==================== */
+
+/* 主要按钮 */
+.btn {
+  width: 552rpx;
+  height: 88rpx;
+  border-radius: 44rpx;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  border: none;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.btn:active::before {
+  opacity: 1;
+}
+
+.btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 次要按钮 */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(10rpx);
+  border: 2rpx solid rgba(255, 255, 255, 0.5);
+}
+
+/* 小按钮 */
+.btn-small {
+  width: auto;
+  min-width: 160rpx;
+  height: 64rpx;
+  padding: 0 32rpx;
+  font-size: 26rpx;
+  border-radius: 32rpx;
+}
+
+/* ==================== 卡片样式 ==================== */
+
+.card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:active {
+  transform: translateY(4rpx);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+}
+
+/* ==================== 头部统计卡片 ==================== */
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20rpx 0;
+  margin-bottom: 30rpx;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16rpx;
+  flex: 1;
+}
+
+.stat-box {
+  min-width: 140rpx;
+  padding: 16rpx 24rpx;
+  border-radius: 20rpx;
+  text-align: center;
+  backdrop-filter: blur(20rpx);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+}
+
+.stat-label {
+  display: block;
+  font-size: 22rpx;
+  margin-bottom: 4rpx;
+}
+
+.stat-value {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* ==================== 游戏棋盘容器 ==================== */
+
+.game-board {
+  position: relative;
+  width: 552rpx;
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20rpx);
+  border-radius: 32rpx;
+  padding: 20rpx;
+  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.15),
+              inset 0 1rpx 1rpx rgba(255, 255, 255, 0.3);
+}
+
+/* ==================== 覆盖层（游戏结束/胜利） ==================== */
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+}
+
+.overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.overlay-title {
+  font-size: 72rpx;
+  font-weight: 800;
+  margin-bottom: 20rpx;
+  text-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+}
+
+.overlay-text {
+  font-size: 32rpx;
+  margin-bottom: 30rpx;
+}
+
+.overlay-info {
+  font-size: 28rpx;
+  margin-bottom: 12rpx;
+  opacity: 0.9;
+}
+
+.overlay-buttons {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 30rpx;
+}
+
+/* ==================== 操作提示 ==================== */
+
+.tips {
+  margin-top: 30rpx;
+  font-size: 26rpx;
+  opacity: 0.8;
+  text-align: center;
+}
+
+/* ==================== 动画定义 ==================== */
+
+@keyframes slideUp {
+  from {
+    transform: translateY(60rpx);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* ==================== 工具类 ==================== */
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* ==================== 响应式间距 ==================== */
+
+/* 标题间距 */
+.title-spacing {
+  margin-bottom: 60rpx;
+}
+
+/* 区块间距 */
+.section-spacing {
+  margin-bottom: 40rpx;
+}
+
+/* 小间距 */
+.small-spacing {
+  margin-bottom: 20rpx;
 }

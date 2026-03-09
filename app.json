@@ -20,10 +20,10 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#667eea",
-    "navigationBarTitleText": "Games",
+    "navigationBarBackgroundColor": "#FF6B6B",
+    "navigationBarTitleText": "盖姆小院",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#667eea"
+    "backgroundColor": "#FFF5F0"
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"

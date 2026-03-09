@@ -81,8 +81,8 @@
 /* 游戏区域 */
 .game-board {
   position: relative;
-  width: calc(100% - 40rpx);
-  background: rgba(255, 255, 255, 0.15);
+  width: 100%;
+  max-width: 670rpx;
   backdrop-filter: blur(10px);
   border-radius: 30rpx;
   padding: 24rpx;
@@ -90,6 +90,7 @@
   overflow: hidden;
   margin: 0 auto;
   flex: 1;
+  box-sizing: border-box;
 }
 
 /* 水果样式 */

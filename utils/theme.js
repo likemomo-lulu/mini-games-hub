@@ -1,138 +1,182 @@
-// 主题配置
-// 可以在这里集中维护项目的主题色卡，并支持多套主题切换
+// 主题配置 - 精致配色系统
+// 三套独特主题，每套都有明确的视觉性格
 
 const THEMES = {
-  // 默认主题：现在项目里实际使用的主色抽象整理
+  // 默认主题：日落珊瑚系 - 温暖活力
   default: {
-    // 主色（标题、强调文字、卡片描边等）
-    primary: '#667eea',
-    secondary: '#764ba2',
+    // 主色调（珊瑚橙渐变）
+    primary: '#FF6B6B',
+    secondary: '#FF8E53',
 
-    // 强调渐变（按钮、重要操作）
-    accentFrom: '#f093fb',
-    accentTo: '#f5576c',
+    // 强调渐变（按钮、重要元素）
+    accentFrom: '#FF8E53',
+    accentTo: '#FF6B6B',
 
-    // 高亮 / 奖励色
-    goldFrom: '#FFD700',
+    // 高亮/奖励色（金色光芒）
+    goldFrom: '#FFD93D',
     goldTo: '#FFA500',
     warning: '#FFD93D',
 
-    // 危险 / 失败提示
-    danger: '#ff6b6b',
-
-    // 文本与背景
-    textPrimary: '#2d3436',
-    textSecondary: '#636e72',
-    pageBg: '#667eea',
-
-    // Header 统计文字颜色
-    headerTextWhite: '#ffffff',                  // 纯白 - 统计数值
-    headerTextLight: 'rgba(255, 255, 255, 0.8)', // 半透明白 - 标签
-
-    // Header 卡片容器背景
-    headerCardBg: 'rgba(255, 255, 255, 0.2)',    // 半透明白色 - 统计卡片背景
-
-    // 操作提示文字颜色
-    tipsText: 'rgba(255, 255, 255, 0.7)',        // 半透明白 - 底部提示文字
-
-    // 翻牌游戏卡片背景
-    cardBackFrom: '#ffeaa7',                     // 卡片背面渐变起始色
-    cardBackTo: '#fdcb6e',                       // 卡片背面渐变结束色
-    cardFront: 'rgba(255, 255, 255, 0.2)',      // 卡片正面背景（问号面）
-    // Canvas 覆盖层背景
-    canvasOverlayBg: 'rgba(255, 255, 255, 0.15)',
-  },
-  fresh: {
-    // 主色 & 次主色
-    primary: '#4ECDC4',      // --primary
-    secondary: '#45B7D1',
-
-    // 强调色（按钮等），这里用同一色做渐变两端，必要时可以再拆分
-    accentFrom: '#FFBC60',
-    accentTo: '#FF9F1C',
-
-     // 高亮 / 奖励色
-     goldFrom: '#FFD700',
-     goldTo: '#FFA500',
-     warning: '#FFD93D',
-
-     // 危险 / 失败提示
-     danger: '#FF8A5C',
-
-     // 文本与背景
-     textPrimary: '#2d3436',
-     textSecondary: '#636e72',
-     pageBg: '#4ECDC4',
-
-     // Header 统计文字颜色
-     headerTextWhite: '#ffffff',
-     headerTextLight: 'rgba(255, 255, 255, 0.8)',
-
-     // Header 卡片容器背景
-     headerCardBg: 'rgba(255, 255, 255, 0.2)',
-
-     // 操作提示文字颜色
-     tipsText: 'rgba(255, 255, 255, 0.7)',
-
-     // 翻牌游戏卡片背景
-     cardBackFrom: '#ffeaa7',
-     cardBackTo: '#fdcb6e',
-     cardFront: 'rgba(255, 255, 255, 0.2)',
-
-     // Canvas 覆盖层背景
-     canvasOverlayBg: 'rgba(255, 255, 255, 0.15)',
-  },
-  warmOrange: {
-    // 主色：温暖活力橙
-    primary: '#FF9A3C',
-    secondary: '#FF7733',
-
-    // 强调渐变按钮（暖橙 → 红橙）
-    accentFrom: '#FFB86C',
-    accentTo: '#FF7733',
-
-    // 金色高亮
-    goldFrom: '#FFD700',
-    goldTo: '#FFA500',
-
-    // 提示色
-    warning: '#FFCC66',
+    // 危险/失败（珊瑚红）
     danger: '#FF6B6B',
 
-    // 文字（深灰，护眼不刺眼）
-    textPrimary: '#333333',
-    textSecondary: '#777777',
+    // 成功/正确（薄荷绿）
+    success: '#20B2AA',
 
-    // 背景（浅暖白，非常舒服）
-    pageBg: '#FFF9F2',
-    cardBg: '#FFFFFF',
+    // 文本颜色
+    textPrimary: '#2D3436',
+    textSecondary: '#636E72',
+    textLight: '#B2BEC3',
 
-    // 顶部标题栏文字
-    headerTextWhite: '#ffffff',
+    // 背景色（米白渐变）
+    pageBg: 'linear-gradient(135deg, #FFF5F0 0%, #FFE8DC 100%)',
+    pageBgSolid: '#FFF5F0',
+
+    // Header 统计卡片
+    headerTextWhite: '#FFFFFF',
     headerTextLight: 'rgba(255, 255, 255, 0.85)',
+    headerCardBg: 'linear-gradient(135deg, rgba(255, 107, 107, 0.9) 0%, rgba(255, 142, 83, 0.9) 100%)',
 
-    // Header 卡片容器背景
-    headerCardBg: '#FF917a',
+    // 操作提示
+    tipsText: '#636E72',
 
-    // 操作提示文字颜色
-    tipsText: '#333333',
+    // 翻牌游戏卡片
+    cardBackFrom: '#FFEAA7',
+    cardBackTo: '#FDcb6E',
+    cardFront: 'rgba(255, 255, 255, 0.9)',
 
-    // 翻牌游戏卡片背景
-    cardBackFrom: '#ffeaa7',
-    cardBackTo: '#fdcb6e',
-    cardFront: '#FFCD9E',
+    // Canvas 遮罩
+    canvasOverlayBg: 'rgba(255, 255, 255, 0.25)',
 
-    // Canvas 覆盖层背景
-    canvasOverlayBg: 'rgba(255, 255, 255, 0.6)',
+    // 卡片背景（首页游戏卡片）
+    gameCardBg: '#FFFFFF',
+    gameCardShadow: 'rgba(255, 107, 107, 0.15)',
+  },
+
+  // 清新主题：薄荷迷雾系 - 清新舒适
+  fresh: {
+    // 主色调（薄荷绿）
+    primary: '#20B2AA',
+    secondary: '#48D1CC',
+
+    // 强调渐变
+    accentFrom: '#48D1CC',
+    accentTo: '#20B2AA',
+
+    // 高亮/奖励
+    goldFrom: '#FFD93D',
+    goldTo: '#FFA500',
+    warning: '#FFD93D',
+
+    // 危险/失败
+    danger: '#FF6B6B',
+
+    // 成功/正确
+    success: '#20B2AA',
+
+    // 文本颜色
+    textPrimary: '#2D3436',
+    textSecondary: '#636E72',
+    textLight: '#B2BEC3',
+
+    // 背景色（淡绿渐变）
+    pageBg: 'linear-gradient(135deg, #E8F8F5 0%, #D1F2EB 100%)',
+    pageBgSolid: '#E8F8F5',
+
+    // Header 统计卡片
+    headerTextWhite: '#FFFFFF',
+    headerTextLight: 'rgba(255, 255, 255, 0.85)',
+    headerCardBg: 'linear-gradient(135deg, rgba(32, 178, 170, 0.9) 0%, rgba(72, 209, 204, 0.9) 100%)',
+
+    // 操作提示
+    tipsText: '#636E72',
+
+    // 翻牌游戏卡片
+    cardBackFrom: '#D4F1F4',
+    cardBackTo: '#A8E6CF',
+    cardFront: 'rgba(255, 255, 255, 0.9)',
+
+    // Canvas 遮罩
+    canvasOverlayBg: 'rgba(255, 255, 255, 0.25)',
+
+    // 卡片背景
+    gameCardBg: '#FFFFFF',
+    gameCardShadow: 'rgba(32, 178, 170, 0.15)',
+  },
+
+  // 暖阳主题：蜜糖暖阳系 - 温暖治愈
+  warmOrange: {
+    // 主色调（蜜糖橙）
+    primary: '#FFA07A',
+    secondary: '#FFD700',
+
+    // 强调渐变
+    accentFrom: '#FFD700',
+    accentTo: '#FFA07A',
+
+    // 高亮/奖励
+    goldFrom: '#FFD93D',
+    goldTo: '#FFA500',
+    warning: '#FFD93D',
+
+    // 危险/失败
+    danger: '#FF6B6B',
+
+    // 成功/正确
+    success: '#20B2AA',
+
+    // 文本颜色（深棕，护眼）
+    textPrimary: '#3E2723',
+    textSecondary: '#6D4C41',
+    textLight: '#A1887F',
+
+    // 背景色（暖白渐变）
+    pageBg: 'linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%)',
+    pageBgSolid: '#FFF8E1',
+
+    // Header 统计卡片
+    headerTextWhite: '#3E2723',
+    headerTextLight: 'rgba(62, 39, 35, 0.7)',
+    headerCardBg: 'linear-gradient(135deg, rgba(255, 160, 122, 0.95) 0%, rgba(255, 215, 0, 0.95) 100%)',
+
+    // 操作提示
+    tipsText: '#3E2723',
+
+    // 翻牌游戏卡片
+    cardBackFrom: '#FFE0B2',
+    cardBackTo: '#FFCC80',
+    cardFront: 'rgba(255, 255, 255, 0.9)',
+
+    // Canvas 遮罩
+    canvasOverlayBg: 'rgba(255, 255, 255, 0.25)',
+
+    // 卡片背景
+    gameCardBg: '#FFFFFF',
+    gameCardShadow: 'rgba(255, 160, 122, 0.15)',
   },
 };
 
+// 获取主题
 function getTheme(themeKey = 'default') {
   return THEMES[themeKey] || THEMES.default;
+}
+
+// 获取所有主题键名
+function getThemeKeys() {
+  return Object.keys(THEMES);
+}
+
+// 获取下一个主题（循环切换）
+function getNextTheme(currentKey) {
+  const keys = getThemeKeys();
+  const currentIndex = keys.indexOf(currentKey);
+  const nextIndex = (currentIndex + 1) % keys.length;
+  return keys[nextIndex];
 }
 
 module.exports = {
   THEMES,
   getTheme,
+  getThemeKeys,
+  getNextTheme,
 };
-

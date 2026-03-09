@@ -411,7 +411,7 @@ Page({
     ctx.save();
     this.applyGameCanvasClip(ctx);
 
-    // 绘制背景（半透明黑色）
+    // 绘制背景（半透明白色，与主题一致）
     ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
     ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 
