@@ -114,6 +114,7 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s;
+  z-index: 10;
 }
 
 .game-over.show {
@@ -133,6 +134,14 @@
   font-size: 40rpx;
   color: white;
   margin-bottom: 50rpx;
+}
+
+.game-over .btn {
+  height: 50rpx;
+  line-height: 50rpx;
+  padding: 0;
+  box-sizing: border-box;
+  min-height: 32rpx;
 }
 
 .tips {
