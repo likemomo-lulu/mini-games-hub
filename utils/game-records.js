@@ -1,11 +1,11 @@
 const RECENT_GAME_KEY = 'recentGameId';
-const GAME_VISIT_HISTORY_KEY = 'gameVisitHistory';
 const GAME_BEST_RECORDS_KEY = 'gameBestRecords';
 const { unlockAchievements } = require('./achievements.js');
 
 const RECORD_STORAGE_KEYS = [
   RECENT_GAME_KEY,
-  GAME_VISIT_HISTORY_KEY,
+  // 旧版本用于记录最近游玩时间；当前不再写入，仅在清空记录时顺带清理历史数据。
+  'gameVisitHistory',
   GAME_BEST_RECORDS_KEY,
   'fruitHighScore',
   'memoryGameLevel',
@@ -44,11 +44,6 @@ function safeRemoveStorage(key) {
   }
 }
 
-function getVisitHistory() {
-  const history = safeGetStorage(GAME_VISIT_HISTORY_KEY, []);
-  return Array.isArray(history) ? history : [];
-}
-
 function getAllGameRecords() {
   const records = safeGetStorage(GAME_BEST_RECORDS_KEY, {});
   return records && typeof records === 'object' && !Array.isArray(records) ? records : {};
@@ -71,24 +66,12 @@ function saveGameRecord(gameId, record) {
 
 /**
  * 记录成功进入游戏的行为。
- * 当前只用于恢复“继续游玩”和最近游玩时间，不在首页卡片展示记录模块。
+ * 当前只保存最近一次进入的游戏 ID，用于首页“继续游玩”；不记录具体游玩时间。
  * @param {string} gameId - 首页游戏卡片的唯一 ID。
  */
 function recordGameVisit(gameId) {
   if (!gameId) return;
-  const now = Date.now();
-  const history = getVisitHistory();
-  const nextItem = {
-    id: gameId,
-    lastPlayedAt: now,
-  };
-  const nextHistory = [
-    nextItem,
-    ...history.filter(item => item.id !== gameId),
-  ].slice(0, 20);
-
   safeSetStorage(RECENT_GAME_KEY, gameId);
-  safeSetStorage(GAME_VISIT_HISTORY_KEY, nextHistory);
   unlockAchievements('first_play');
 }
 
@@ -178,35 +161,6 @@ function getGameRecordText(gameId) {
   return '暂无最佳记录';
 }
 
-function formatLastPlayed(historyItem) {
-  if (!historyItem || !historyItem.lastPlayedAt) return '';
-  const diff = Date.now() - historyItem.lastPlayedAt;
-  const minute = 60 * 1000;
-  const hour = 60 * minute;
-  const day = 24 * hour;
-
-  if (diff < minute) return '刚刚玩过';
-  if (diff < hour) return `${Math.floor(diff / minute)} 分钟前`;
-  if (diff < day) return `${Math.floor(diff / hour)} 小时前`;
-  return `${Math.floor(diff / day)} 天前`;
-}
-
-function decorateHomeGameCards(games) {
-  const history = getVisitHistory();
-  const historyMap = history.reduce((map, item) => {
-    map[item.id] = item;
-    return map;
-  }, {});
-
-  return games.map(game => {
-    const historyItem = historyMap[game.id] || null;
-    return {
-      ...game,
-      lastPlayedText: formatLastPlayed(historyItem),
-    };
-  });
-}
-
 function getRecentGame(games) {
   const recentGameId = safeGetStorage(RECENT_GAME_KEY, '');
   if (!recentGameId) return null;
@@ -218,7 +172,6 @@ function clearGameRecords() {
 }
 
 module.exports = {
-  decorateHomeGameCards,
   getAllGameRecords,
   getGameRecord,
   getGameRecordText,

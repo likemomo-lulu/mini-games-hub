@@ -36,7 +36,13 @@
           class="game-canvas"
           style="width: {{gameCanvasWidth}}px; height: {{gameCanvasHeight}}px;"
         ></canvas>
-        <view class="pause-overlay" wx:if="{{isPaused}}">暂停中</view>
+        <!-- 暂停覆盖层：与接物品保持普通 view overlay 结构一致。 -->
+        <view class="overlay show paused pause-overlay-card" wx:if="{{isPaused && !gameOver}}">
+          <view class="overlay-content">
+            <view class="overlay-title">⏸️ 暂停中</view>
+            <view class="overlay-info">点击继续按钮恢复游戏</view>
+          </view>
+        </view>
       </view>
 
       <!-- 右侧面板 -->
@@ -50,7 +56,7 @@
           ></canvas>
         </view>
         <!-- 暂停按钮 -->
-        <view class="btn-pause" bindtap="togglePause">{{isPaused ? '▶' : '⏸'}}</view>
+        <view class="btn-pause" bindtap="togglePause">{{isPaused ? '继续' : '暂停'}}</view>
       </view>
     </view>
   </view>

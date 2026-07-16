@@ -52,7 +52,7 @@
     </view>
 
     <!-- 暂停覆盖层 -->
-    <view class="overlay show paused" wx:if="{{paused && !gameOver}}">
+    <view class="overlay show paused pause-overlay-card" wx:if="{{paused && !gameOver}}">
       <view class="overlay-content">
         <view class="overlay-title">⏸️ 暂停中</view>
         <view class="overlay-info">点击继续按钮恢复游戏</view>

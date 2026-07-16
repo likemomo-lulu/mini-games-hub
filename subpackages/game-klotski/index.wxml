@@ -45,7 +45,7 @@
     <view class="game-over overlay {{gameOver ? 'show' : ''}}">
       <text class="game-over-title overlay-title overlay-title-win">🎉 胜利！</text>
       <text class="game-over-score">用了 {{steps}} 步</text>
-      <button class="btn btn-restart" bindtap="nextLevel">下一关</button>
+      <button class="btn btn-next-level" bindtap="nextLevel">下一关</button>
     </view>
   </view>
 

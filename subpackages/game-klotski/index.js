@@ -14,6 +14,7 @@ const { showToast } = require('../../utils/modal-manager.js');
 const BOARD_COLS = 5;  // 5列
 const BOARD_ROWS = 4;  // 4行
 const CELL_GAP = 8;    // 格子间距
+const EXIT_COL = 1;    // 底部出口起始列，出口宽度与曹操一致为 2 格
 
 /**
  * 兼容性：绘制圆角矩形
@@ -293,7 +294,10 @@ Page(withThemePage({
 
     // 检查边界
     if (newX < 0 || newX + block.width > BOARD_COLS) return false;
-    if (newY < 0 || newY + block.height > BOARD_ROWS) return false;
+    if (newY < 0) return false;
+    if (newY + block.height > BOARD_ROWS && !this.isMovingCaocaoThroughExit(block, newX, newY)) {
+      return false;
+    }
 
     // 检查碰撞（排除自己）
     for (const other of this.blocks) {
@@ -312,12 +316,27 @@ Page(withThemePage({
   },
 
   /**
-   * 检查胜利条件（曹操到达底部中央）
+   * 曹操只有在底部出口列向下移动时，才允许越过棋盘底边。
+   * 这样胜利必须发生在“曹操真正出关”之后，而不是刚到出口内侧就提前触发。
+   * @param {Object} block - 当前尝试移动的滑块。
+   * @param {number} newX - 移动后的列坐标。
+   * @param {number} newY - 移动后的行坐标。
+   * @returns {boolean} 是否允许曹操通过出口越界。
+   */
+  isMovingCaocaoThroughExit(block, newX, newY) {
+    if (!block || block.type !== 'caocao') return false;
+    return newX === EXIT_COL
+      && block.width === 2
+      && block.height === 2
+      && newY === BOARD_ROWS - 1;
+  },
+
+  /**
+   * 检查胜利条件：曹操必须从底部出口向下移出棋盘。
    */
   checkWin() {
     const caocao = this.blocks.find(b => b.type === 'caocao');
-    // 曹操在底部中央位置：x=1, y=2（2×2，占据(1,2),(2,2),(1,3),(2,3)）
-    if (caocao && caocao.x === 1 && caocao.y === 2) {
+    if (caocao && caocao.x === EXIT_COL && caocao.y + caocao.height > BOARD_ROWS) {
       const level = LEVELS[this.data.currentLevel] || {};
       updateGameBestRecord('game-klotski', {
         steps: this.data.steps,
@@ -393,7 +412,7 @@ Page(withThemePage({
     }
 
     // 绘制出口提示（底部中间）
-    const exitX = CELL_GAP + 1 * (this.cellWidth + CELL_GAP);
+    const exitX = CELL_GAP + EXIT_COL * (this.cellWidth + CELL_GAP);
     const exitY = CELL_GAP + 3 * (this.cellHeight + CELL_GAP) + this.cellHeight + CELL_GAP;
     ctx.fillStyle = palette.exitBg || 'rgba(255, 255, 255, 0.3)';
     ctx.fillRect(exitX, exitY, this.cellWidth * 2 + CELL_GAP, 8);

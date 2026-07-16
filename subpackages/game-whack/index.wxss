@@ -136,12 +136,12 @@
   filter: drop-shadow(0 4rpx 8rpx rgba(0, 0, 0, 0.3));
 }
 
-/* 金色地鼠 */
+/* 独角兽奖励 */
 .hole.luck .mole-icon {
   filter: drop-shadow(0 0 20rpx var(--gold-from, #FFD700)) drop-shadow(0 4rpx 8rpx rgba(0, 0, 0, 0.3));
 }
 
-/* 炸弹 */
+/* 小猪扣分 */
 .hole.pig .mole-icon {
   animation: shake 0.5s ease infinite;
 }

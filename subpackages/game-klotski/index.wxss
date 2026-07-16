@@ -90,12 +90,16 @@
   margin-bottom: 50rpx;
 }
 
-.game-over .btn {
-  height: 50rpx;
-  line-height: 50rpx;
+.game-over .btn-next-level {
+  flex: none;
+  width: 220rpx;
+  max-width: 220rpx;
+  height: 72rpx;
+  line-height: 72rpx;
   padding: 0;
   box-sizing: border-box;
-  min-height: 32rpx;
+  border-radius: 24rpx;
+  font-size: 28rpx;
 }
 
 .tips {

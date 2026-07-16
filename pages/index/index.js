@@ -5,7 +5,6 @@ const {
   withThemePage,
 } = require('../../utils/theme-manager.js');
 const {
-  decorateHomeGameCards,
   getRecentGame,
   recordGameVisit,
 } = require('../../utils/game-records.js');
@@ -31,7 +30,7 @@ Page(withThemePage({
   },
 
   refreshHome() {
-    const games = decorateHomeGameCards(getHomeGameCards());
+    const games = getHomeGameCards();
     const themeOptions = getThemeOptions(this.data.themeKey);
     const currentTheme = themeOptions.find(item => item.active) || themeOptions[0];
     this.setData({

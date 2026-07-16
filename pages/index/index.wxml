@@ -34,9 +34,7 @@
         <view class="recent-copy">
           <text class="section-eyebrow">继续游玩</text>
           <text class="recent-title">{{recentGame.icon}} {{recentGame.title}}</text>
-          <text class="recent-desc">{{recentGame.lastPlayedText || '上次玩到这里'}}</text>
         </view>
-        <view class="recent-action">继续 →</view>
       </view>
 
     <view class="section-title-row">
@@ -70,7 +68,6 @@
             </view>
           </view>
           </view>
-          <view class="card-arrow">→</view>
         </view>
       </view>
     </view>

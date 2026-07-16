@@ -316,6 +316,26 @@ page {
   min-width: 220rpx;
 }
 
+/* 统一暂停态遮罩。普通视图游戏和 Canvas 游戏都使用同一套 overlay 文案与样式。 */
+.pause-overlay-card {
+  background: var(--overlay-bg, rgba(45, 52, 54, 0.78));
+}
+
+.pause-overlay-card .overlay-content {
+  gap: 10rpx;
+}
+
+.pause-overlay-card .overlay-title {
+  font-size: 52rpx;
+  margin-bottom: 0;
+}
+
+.pause-overlay-card .overlay-info,
+.pause-overlay-card .overlay-text {
+  font-size: 26rpx;
+  margin-bottom: 0;
+}
+
 /* 页面级弹窗：用于选关、整页结算等不依赖棋盘尺寸的弹层。 */
 .app-modal {
   position: fixed;

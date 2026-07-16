@@ -1,4 +1,4 @@
-<!-- 打气球游戏 -->
+<!-- 水果大战游戏 -->
 <view class="container" style="{{themeStyle}}">
   <!-- 头部信息栏 -->
   <view class="header game-topbar">
@@ -61,10 +61,10 @@
     ></view>
 
     <!-- 游戏准备覆盖层 -->
-    <view class="overlay game-ready {{gamePaused ? 'show' : ''}}" wx:if="{{gamePaused}}">
+    <view class="overlay show pause-overlay-card" wx:if="{{gamePaused}}">
       <view class="overlay-content">
-        <view class="overlay-title">⏸️ 游戏暂停</view>
-        <view class="overlay-text">点击下方按钮继续</view>
+        <view class="overlay-title">⏸️ 暂停中</view>
+        <view class="overlay-info">点击继续按钮恢复游戏</view>
       </view>
     </view>
 
@@ -83,6 +83,6 @@
 
   <!-- 操作提示 -->
   <view class="tips">
-    💡 点击气球得分 | 金色×5 | 炸弹-30 | 闪电清屏
+    💡 点击水果得分 | 星星 +50 | 炸弹 -30 | 闪电清屏
   </view>
 </view>

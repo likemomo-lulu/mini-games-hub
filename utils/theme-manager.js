@@ -485,6 +485,7 @@ function syncPageTheme(page, themeState = null) {
     theme: state.theme,
     themeStyle: state.themeStyle,
   });
+  applyNavigationBar(state.theme);
   return state;
 }
 

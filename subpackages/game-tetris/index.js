@@ -98,6 +98,7 @@ Page(withThemePage({
     const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
     const windowWidth = info.windowWidth || 375;
     const windowHeight = info.windowHeight || 667;
+    const safeAreaBottom = info.safeArea ? Math.max(0, windowHeight - info.safeArea.bottom) : 0;
 
     // 1 rpx 对应的 px（小程序里 750rpx = windowWidth px）
     const rpxToPx = windowWidth / 750;
@@ -124,12 +125,18 @@ Page(withThemePage({
     // 按列行比例保持 10:20 的棋盘长宽比先算一版高度
     let gameCanvasHeight = gameCanvasWidth * (ROWS / COLS);
 
-    // 一屏内可用高度：减去头部、统计、游戏区外边距、控制按钮、底部边距等（用 rpx 换算）
-    const headerStatsHeight = (50 + 20 + 60 + 30) * rpxToPx;   // 标题+统计区约 150px
-    const controlsHeight = (80 + 20 + 80 + 12 + 20) * rpxToPx; // 控制按钮+下落按钮+边距约 212px
-    const containerPadding = 40 * rpxToPx;
+    // 一屏内可用高度：减去顶部信息、最佳记录、控制按钮和真机底部安全区，避免“下落”按钮被遮挡。
+    const headerStatsHeight = (92 + 56 + 20) * rpxToPx;
+    const controlsHeight = (80 + 16 + 80 + 16) * rpxToPx;
+    const containerPadding = 56 * rpxToPx;
     const gameAreaPadding = 24 * rpxToPx;
-    const maxCanvasHeight = windowHeight - headerStatsHeight - controlsHeight - containerPadding - gameAreaPadding;
+    const safeBottomReserve = Math.max(safeAreaBottom, 48 * rpxToPx);
+    const maxCanvasHeight = windowHeight
+      - headerStatsHeight
+      - controlsHeight
+      - containerPadding
+      - gameAreaPadding
+      - safeBottomReserve;
 
     // 若按宽度算出的高度超出一屏，则按高度反算宽度，保证不出现滚动
     if (gameCanvasHeight > maxCanvasHeight && maxCanvasHeight > 0) {

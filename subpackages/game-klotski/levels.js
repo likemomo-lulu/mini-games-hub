@@ -23,19 +23,15 @@ const LEVELS = [
     id: 1,
     name: '初出茅庐',
     blocks: [
-      { id: 'caocao', type: 'caocao', x: 2, y: 2, width: 2, height: 2 },
-      { id: 'v1', type: 'v-general', x: 4, y: 2, width: 1, height: 2 },
-      { id: 'v2', type: 'v-general', x: 3, y: 0, width: 1, height: 2 },
-      { id: 'h1', type: 'h-general', x: 0, y: 1, width: 2, height: 1 },
-      { id: 'h2', type: 'h-general', x: 0, y: 0, width: 2, height: 1 },
-      { id: 's1', type: 'soldier', x: 1, y: 2, width: 1, height: 1 },
+      { id: 'caocao', type: 'caocao', x: 1, y: 0, width: 2, height: 2 },
+      { id: 'v1', type: 'v-general', x: 0, y: 0, width: 1, height: 2 },
+      { id: 'v2', type: 'v-general', x: 4, y: 0, width: 1, height: 2 },
+      { id: 'h1', type: 'h-general', x: 1, y: 2, width: 2, height: 1 },
+      { id: 's1', type: 'soldier', x: 0, y: 2, width: 1, height: 1 },
       { id: 's2', type: 'soldier', x: 0, y: 3, width: 1, height: 1 },
-      { id: 's3', type: 'soldier', x: 4, y: 1, width: 1, height: 1 },
-      { id: 's4', type: 'soldier', x: 2, y: 1, width: 1, height: 1 },
-      { id: 's5', type: 'soldier', x: 2, y: 0, width: 1, height: 1 },
-      { id: 's6', type: 'soldier', x: 4, y: 0, width: 1, height: 1 },
+      { id: 's3', type: 'soldier', x: 4, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 2,
+    minSteps: 5,
   },
   {
     id: 2,
@@ -50,7 +46,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 4, y: 2, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 2,
+    minSteps: 3,
   },
   {
     id: 3,
@@ -68,7 +64,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 4, y: 3, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 4, y: 1, width: 1, height: 1 },
     ],
-    minSteps: 3,
+    minSteps: 4,
   },
   {
     id: 4,
@@ -83,7 +79,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 3, y: 2, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 4, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 3,
+    minSteps: 4,
   },
   {
     id: 5,
@@ -101,7 +97,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 1, y: 3, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 4,
+    minSteps: 5,
   },
   {
     id: 6,
@@ -119,7 +115,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 4, y: 2, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 2, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 4,
+    minSteps: 5,
   },
   {
     id: 7,
@@ -136,7 +132,7 @@ const LEVELS = [
       { id: 's4', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
       { id: 's5', type: 'soldier', x: 4, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 4,
+    minSteps: 5,
   },
   {
     id: 8,
@@ -151,7 +147,7 @@ const LEVELS = [
       { id: 's1', type: 'soldier', x: 0, y: 3, width: 1, height: 1 },
       { id: 's2', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 4,
+    minSteps: 5,
   },
   {
     id: 9,
@@ -167,7 +163,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 4,
+    minSteps: 5,
   },
   {
     id: 10,
@@ -184,7 +180,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 4, y: 0, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 5,
+    minSteps: 6,
   },
   {
     id: 11,
@@ -202,7 +198,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 4, y: 2, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 1, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 5,
+    minSteps: 6,
   },
   {
     id: 12,
@@ -219,7 +215,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 1, y: 3, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 5,
+    minSteps: 6,
   },
   {
     id: 13,
@@ -237,7 +233,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 0, y: 3, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 3, y: 1, width: 1, height: 1 },
     ],
-    minSteps: 6,
+    minSteps: 7,
   },
   {
     id: 14,
@@ -253,7 +249,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 3, y: 0, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 0, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 7,
+    minSteps: 8,
   },
   {
     id: 15,
@@ -269,7 +265,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 3, y: 2, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 4, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 7,
+    minSteps: 8,
   },
   {
     id: 16,
@@ -285,7 +281,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 3, y: 2, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 7,
+    minSteps: 8,
   },
   {
     id: 17,
@@ -303,7 +299,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 1, y: 2, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 0, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 7,
+    minSteps: 8,
   },
   {
     id: 18,
@@ -321,7 +317,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 2, y: 0, width: 1, height: 1 },
     ],
-    minSteps: 8,
+    minSteps: 9,
   },
   {
     id: 19,
@@ -337,7 +333,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 0, y: 3, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 8,
+    minSteps: 9,
   },
   {
     id: 20,
@@ -353,7 +349,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 3, y: 2, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 4, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 8,
+    minSteps: 9,
   },
   {
     id: 21,
@@ -369,7 +365,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 4, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 8,
+    minSteps: 9,
   },
   {
     id: 22,
@@ -386,7 +382,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 1, y: 1, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 3, y: 0, width: 1, height: 1 },
     ],
-    minSteps: 9,
+    minSteps: 10,
   },
   {
     id: 23,
@@ -401,7 +397,7 @@ const LEVELS = [
       { id: 's1', type: 'soldier', x: 4, y: 2, width: 1, height: 1 },
       { id: 's2', type: 'soldier', x: 4, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 9,
+    minSteps: 10,
   },
   {
     id: 24,
@@ -418,7 +414,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 0, y: 0, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 10,
+    minSteps: 11,
   },
   {
     id: 25,
@@ -435,7 +431,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 4, y: 1, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 4, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 11,
+    minSteps: 12,
   },
   {
     id: 26,
@@ -453,7 +449,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 0, y: 0, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 4, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 11,
+    minSteps: 12,
   },
   {
     id: 27,
@@ -469,7 +465,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 0, y: 2, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 11,
+    minSteps: 12,
   },
   {
     id: 28,
@@ -484,7 +480,7 @@ const LEVELS = [
       { id: 's1', type: 'soldier', x: 1, y: 3, width: 1, height: 1 },
       { id: 's2', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 11,
+    minSteps: 12,
   },
   {
     id: 29,
@@ -502,7 +498,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 2, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 12,
+    minSteps: 13,
   },
   {
     id: 30,
@@ -519,7 +515,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 1, y: 0, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 13,
+    minSteps: 14,
   },
   {
     id: 31,
@@ -537,7 +533,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 1, y: 2, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 0, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 13,
+    minSteps: 14,
   },
   {
     id: 32,
@@ -553,7 +549,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 1, y: 3, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 13,
+    minSteps: 14,
   },
   {
     id: 33,
@@ -570,7 +566,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 13,
+    minSteps: 14,
   },
   {
     id: 34,
@@ -587,7 +583,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 4, y: 3, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 4, y: 1, width: 1, height: 1 },
     ],
-    minSteps: 14,
+    minSteps: 15,
   },
   {
     id: 35,
@@ -603,7 +599,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 1, y: 3, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 4, y: 0, width: 1, height: 1 },
     ],
-    minSteps: 14,
+    minSteps: 15,
   },
   {
     id: 36,
@@ -621,7 +617,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 2, y: 2, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 0, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 14,
+    minSteps: 15,
   },
   {
     id: 37,
@@ -639,7 +635,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 2, y: 0, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 2, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 14,
+    minSteps: 15,
   },
   {
     id: 38,
@@ -657,7 +653,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 0, y: 1, width: 1, height: 1 },
     ],
-    minSteps: 15,
+    minSteps: 16,
   },
   {
     id: 39,
@@ -673,7 +669,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 1, y: 3, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 15,
+    minSteps: 16,
   },
   {
     id: 40,
@@ -690,7 +686,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 0, y: 2, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 16,
+    minSteps: 17,
   },
   {
     id: 41,
@@ -706,7 +702,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 1, y: 3, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 16,
+    minSteps: 17,
   },
   {
     id: 42,
@@ -721,7 +717,7 @@ const LEVELS = [
       { id: 'h1', type: 'h-general', x: 0, y: 1, width: 2, height: 1 },
       { id: 's1', type: 'soldier', x: 2, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 17,
+    minSteps: 18,
   },
   {
     id: 43,
@@ -737,7 +733,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 4, y: 0, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 18,
+    minSteps: 19,
   },
   {
     id: 44,
@@ -754,7 +750,7 @@ const LEVELS = [
       { id: 's4', type: 'soldier', x: 2, y: 2, width: 1, height: 1 },
       { id: 's5', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 18,
+    minSteps: 19,
   },
   {
     id: 45,
@@ -771,7 +767,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 2, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 19,
+    minSteps: 20,
   },
   {
     id: 46,
@@ -789,7 +785,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 1, y: 0, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 1, y: 1, width: 1, height: 1 },
     ],
-    minSteps: 20,
+    minSteps: 21,
   },
   {
     id: 47,
@@ -805,7 +801,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 4, y: 2, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 20,
+    minSteps: 21,
   },
   {
     id: 48,
@@ -823,7 +819,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 4, y: 1, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 2, y: 0, width: 1, height: 1 },
     ],
-    minSteps: 21,
+    minSteps: 22,
   },
   {
     id: 49,
@@ -839,7 +835,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 2, y: 2, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 3, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 21,
+    minSteps: 22,
   },
   {
     id: 50,
@@ -856,7 +852,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 1, y: 3, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 22,
+    minSteps: 23,
   },
   {
     id: 51,
@@ -872,7 +868,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 1, y: 1, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 0, y: 1, width: 1, height: 1 },
     ],
-    minSteps: 22,
+    minSteps: 23,
   },
   {
     id: 52,
@@ -890,7 +886,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 0, y: 3, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 4, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 22,
+    minSteps: 23,
   },
   {
     id: 53,
@@ -906,7 +902,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 4, y: 1, width: 1, height: 1 },
     ],
-    minSteps: 23,
+    minSteps: 24,
   },
   {
     id: 54,
@@ -922,7 +918,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 4, y: 3, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 3, y: 0, width: 1, height: 1 },
     ],
-    minSteps: 24,
+    minSteps: 25,
   },
   {
     id: 55,
@@ -939,7 +935,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 3, y: 1, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 0, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 25,
+    minSteps: 26,
   },
   {
     id: 56,
@@ -957,7 +953,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 0, y: 2, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 1, y: 1, width: 1, height: 1 },
     ],
-    minSteps: 25,
+    minSteps: 26,
   },
   {
     id: 57,
@@ -975,7 +971,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 2, y: 0, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 0, y: 0, width: 1, height: 1 },
     ],
-    minSteps: 26,
+    minSteps: 27,
   },
   {
     id: 58,
@@ -991,7 +987,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 1, y: 3, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 0, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 27,
+    minSteps: 28,
   },
   {
     id: 59,
@@ -1009,7 +1005,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 3, y: 0, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 0, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 28,
+    minSteps: 29,
   },
   {
     id: 60,
@@ -1026,7 +1022,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 4, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 29,
+    minSteps: 30,
   },
   {
     id: 61,
@@ -1044,7 +1040,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 4, y: 2, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 0, y: 1, width: 1, height: 1 },
     ],
-    minSteps: 29,
+    minSteps: 30,
   },
   {
     id: 62,
@@ -1062,7 +1058,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 3, y: 0, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 2, y: 0, width: 1, height: 1 },
     ],
-    minSteps: 30,
+    minSteps: 31,
   },
   {
     id: 63,
@@ -1080,7 +1076,7 @@ const LEVELS = [
       { id: 's5', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
       { id: 's6', type: 'soldier', x: 2, y: 1, width: 1, height: 1 },
     ],
-    minSteps: 32,
+    minSteps: 33,
   },
   {
     id: 64,
@@ -1097,7 +1093,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 0, y: 1, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 33,
+    minSteps: 34,
   },
   {
     id: 65,
@@ -1113,7 +1109,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 1, y: 3, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 3, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 33,
+    minSteps: 34,
   },
   {
     id: 66,
@@ -1130,7 +1126,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 1, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 36,
+    minSteps: 37,
   },
   {
     id: 67,
@@ -1147,7 +1143,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 1, y: 1, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 4, y: 0, width: 1, height: 1 },
     ],
-    minSteps: 37,
+    minSteps: 38,
   },
   {
     id: 68,
@@ -1164,7 +1160,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 3, y: 2, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 4, y: 2, width: 1, height: 1 },
     ],
-    minSteps: 42,
+    minSteps: 43,
   },
   {
     id: 69,
@@ -1181,7 +1177,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 4, y: 0, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 2, y: 0, width: 1, height: 1 },
     ],
-    minSteps: 45,
+    minSteps: 46,
   },
   {
     id: 70,
@@ -1198,7 +1194,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 4, y: 0, width: 1, height: 1 },
     ],
-    minSteps: 45,
+    minSteps: 46,
   },
   {
     id: 71,
@@ -1214,7 +1210,7 @@ const LEVELS = [
       { id: 's2', type: 'soldier', x: 4, y: 3, width: 1, height: 1 },
       { id: 's3', type: 'soldier', x: 3, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 46,
+    minSteps: 47,
   },
   {
     id: 72,
@@ -1231,7 +1227,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 3, y: 2, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 0, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 49,
+    minSteps: 50,
   },
   {
     id: 73,
@@ -1248,7 +1244,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 4, y: 0, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 4, y: 1, width: 1, height: 1 },
     ],
-    minSteps: 59,
+    minSteps: 60,
   },
   {
     id: 74,
@@ -1265,7 +1261,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 1, y: 3, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 2, y: 3, width: 1, height: 1 },
     ],
-    minSteps: 68,
+    minSteps: 69,
   },
   {
     id: 75,
@@ -1282,7 +1278,7 @@ const LEVELS = [
       { id: 's3', type: 'soldier', x: 3, y: 1, width: 1, height: 1 },
       { id: 's4', type: 'soldier', x: 1, y: 1, width: 1, height: 1 },
     ],
-    minSteps: 99,
+    minSteps: 100,
   },
 ];
 

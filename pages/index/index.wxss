@@ -141,17 +141,6 @@
   font-weight: 800;
 }
 
-.recent-desc {
-  font-size: 24rpx;
-  opacity: 0.82;
-}
-
-.recent-action {
-  flex-shrink: 0;
-  font-size: 26rpx;
-  font-weight: 700;
-}
-
 .section-title-row {
   display: flex;
   align-items: center;
@@ -276,26 +265,10 @@
   background: rgba(255, 255, 255, 0.46);
 }
 
-/* 箭头 */
-.card-arrow {
-  position: relative;
-  z-index: 1;
-  font-size: 40rpx;
-  font-weight: 300;
-  color: var(--primary, #FF6B6B);
-  opacity: 0.5;
-  transition: all 0.3s;
-}
-
 /* 卡片悬停效果 */
 .game-card-hover {
   transform: translateY(-4rpx) scale(1.02);
   box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
-}
-
-.game-card-hover .card-arrow {
-  opacity: 1;
-  transform: translateX(8rpx);
 }
 
 /* ==================== 动画效果 ==================== */

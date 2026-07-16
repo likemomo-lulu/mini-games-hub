@@ -170,9 +170,30 @@ function checkRuntimeCodeQuality() {
 
 function checkHomePresentationRules() {
   const indexWxml = fs.readFileSync(path.join(ROOT, 'pages/index/index.wxml'), 'utf8');
-  const forbiddenTokens = ['played-badge', 'recordSummary', 'recordText', 'game-record', '已玩'];
+  const indexWxss = fs.readFileSync(path.join(ROOT, 'pages/index/index.wxss'), 'utf8');
+  const forbiddenTokens = [
+    'played-badge',
+    'recordSummary',
+    'recordText',
+    'game-record',
+    '已玩',
+    'lastPlayedText',
+    'lastPlayedAt',
+    '分钟前',
+    '小时前',
+    '天前',
+    '刚刚玩过',
+    '上次玩到这里',
+    'recent-desc',
+    'recent-action',
+    'card-arrow',
+    '→',
+  ];
   forbiddenTokens.forEach(token => {
     assert(!indexWxml.includes(token), `首页不应展示记录/已玩模块残留：${token}`);
+  });
+  ['recent-desc', 'recent-action', 'card-arrow'].forEach(token => {
+    assert(!indexWxss.includes(token), `首页样式不应保留已移除模块：${token}`);
   });
 }
 

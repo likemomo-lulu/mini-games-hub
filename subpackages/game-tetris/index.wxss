@@ -1,6 +1,7 @@
 /* 俄罗斯方块样式 */
 .container {
-  padding: 40rpx;
+  padding: 28rpx 32rpx calc(28rpx + constant(safe-area-inset-bottom));
+  padding: 28rpx 32rpx calc(28rpx + env(safe-area-inset-bottom));
   height: 100vh;
   max-height: 100vh;
   overflow: hidden;
@@ -13,8 +14,8 @@
 /* 头部：不参与收缩 */
 .header {
   width: 100%;
-  margin-top: 20rpx;
-  margin-bottom: 40rpx;
+  margin-top: 0;
+  margin-bottom: 20rpx;
   flex-shrink: 0;
 }
 
@@ -64,7 +65,7 @@
   width: 100%;
   max-width: 600rpx;
   box-sizing: border-box;
-  margin-bottom: 20rpx;
+  margin-bottom: 12rpx;
 }
 
 /* 画布区域（包含画布和右侧面板） */
@@ -81,25 +82,16 @@
   justify-content: center;
 }
 
+.canvas-wrapper .overlay {
+  border-radius: 20rpx;
+}
+
 .game-canvas {
   border: 6rpx solid var(--warning, #FFD93D);
   border-radius: 20rpx;
   background: var(--text-primary, #2D3436);
   box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.2);
   flex-shrink: 0;
-}
-
-.pause-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--overlay-bg, rgba(0, 0, 0, 0.8));
-  color: var(--header-text-white, #FFFFFF);
-  padding: 40rpx 80rpx;
-  border-radius: 30rpx;
-  font-size: 48rpx;
-  font-weight: bold;
 }
 
 /* 右侧面板 */
@@ -130,9 +122,9 @@
   align-items: center;
   justify-content: space-around;
   gap: 14rpx;
-  padding: 20rpx;
-  margin-top: 40rpx;
-  margin-bottom: 30rpx;
+  padding: 12rpx 20rpx;
+  margin-top: 14rpx;
+  margin-bottom: 12rpx;
   width: 100%;
   max-width: 580rpx;
   flex-shrink: 0;
@@ -161,10 +153,10 @@
 }
 
 .btn-pause {
-  background: var(--warning, #FFD93D);
-  color: var(--text-primary, #FFF);
+  background: linear-gradient(135deg, var(--accent-from, #FF8E53), var(--accent-to, #FF6B6B));
+  color: var(--button-primary-text, #FFFFFF);
   font-weight: bold;
-  font-size: 32rpx;
+  font-size: 22rpx;
   height: 80rpx;
   width: 80rpx !important;
   display: flex;
@@ -181,15 +173,18 @@
   width: 100%;
   font-size: 22rpx;
   height: 80rpx;
-  background: var(--warning, #FFD93D);
-  color: var(--text-primary, #2D3436);
+  background: linear-gradient(135deg, var(--accent-from, #FF8E53), var(--accent-to, #FF6B6B));
+  color: var(--button-primary-text, #FFFFFF);
 }
 
 .btn-down-wrapper {
   width: 100%;
   max-width: 580rpx;
-  margin-bottom: 12rpx;
+  margin-bottom: 0;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 /* 游戏结束 */
