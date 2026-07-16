@@ -1,7 +1,15 @@
 // 接物品游戏
-const app = getApp();
+const { withThemePage, getCanvasPalette } = require('../../utils/theme-manager.js');
+const { createTimerManager } = require('../../utils/timer-manager.js');
+const {
+  getGameRecordText,
+  updateGameBestRecord,
+} = require('../../utils/game-records.js');
+const { unlockAchievements } = require('../../utils/achievements.js');
 
-Page({
+const DEFAULT_CATCH_PALETTE = getCanvasPalette('default', 'catch');
+
+Page(withThemePage({
   // 页面数据
   data: {
     score: 0,        // 分数
@@ -13,12 +21,17 @@ Page({
     gameReady: false,// 游戏是否准备好
     // 画布在视图层的高度（px），用于根据机型自适应
     boardHeight: 400,
-    // 主题（从全局获取，支持切换）
-    theme: app.globalData.theme,
+    bestRecordText: '暂无最佳记录',
   },
 
   onLoad() {
+    this.timers = createTimerManager();
+    this.refreshBestRecord();
     this.initGame();
+  },
+
+  onShow() {
+    this.refreshBestRecord();
   },
 
   onReady() {
@@ -26,23 +39,26 @@ Page({
     this.onCanvasReady();
   },
 
-  onUnload() {
-    // 页面卸载时清理定时器
-    this.clearGameLoop();
-  },
-
-  onHide() {
-    // 页面隐藏时暂停
-    if (this.data.gameReady && !this.data.gameOver) {
-      this.togglePause();
+  onThemeChange() {
+    this.canvasPalette = getCanvasPalette(this.data.themeKey, 'catch');
+    if (this.ctx) {
+      this.draw();
     }
   },
 
-  onShow() {
-    // 同步最新主题
-    this.setData({
-      theme: app.globalData.theme,
-    });
+  onUnload() {
+    // 页面卸载时清理定时器
+    this.saveBestRecord();
+    this.clearGameLoop();
+    if (this.timers) this.timers.clearAll();
+  },
+
+  onHide() {
+    this.saveBestRecord();
+    // 页面隐藏时暂停
+    if (this.data.gameReady && !this.data.gameOver && !this.data.paused) {
+      this.togglePause();
+    }
   },
 
   // ===== 游戏初始化 =====
@@ -57,6 +73,7 @@ Page({
     this.canvasWidth = 0;
     this.canvasHeight = 0;
     this.dpr = 1; // 设备像素比
+    this.canvasPalette = getCanvasPalette(this.data.themeKey, 'catch');
 
     // 玩家（篮子）配置
     this.player = {
@@ -111,7 +128,7 @@ Page({
     });
 
     // 根据屏幕尺寸计算一个适合的画布高度（保持在不同机型上占据大致相似的区域）
-    const info = wx.getSystemInfoSync();
+    const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
     const windowWidth = info.windowWidth || 375;
     const windowHeight = info.windowHeight || 667;
 
@@ -139,7 +156,9 @@ Page({
       .exec((res) => {
         if (!res[0]) {
           console.error('Canvas获取失败，重试中...');
-          setTimeout(() => this.onCanvasReady(), 100);
+          this.timers.setTimeout('canvasRetry', () => {
+            this.onCanvasReady();
+          }, 100);
           return;
         }
 
@@ -183,10 +202,8 @@ Page({
         // 标记游戏准备好
         this.setData({ gameReady: true });
 
-        console.log('Canvas初始化完成', { width: this.canvasWidth, height: this.canvasHeight, dpr });
-
         // 延迟启动，确保Canvas完全准备好
-        setTimeout(() => {
+        this.timers.setTimeout('startDelay', () => {
           // 立即生成一个测试物品
           this.spawnItem();
           // 启动游戏循环
@@ -201,19 +218,20 @@ Page({
    * 启动游戏循环
    */
   startGameLoop() {
+    this.clearGameLoop();
     this.lastTime = Date.now();
     // 微信小程序不支持requestAnimationFrame，使用setTimeout
-    this.gameLoopId = setTimeout(() => this.gameLoop(), 16);
+    this.timers.setTimeout('gameLoop', () => this.gameLoop(), 16);
   },
 
   /**
    * 清理游戏循环
    */
   clearGameLoop() {
-    if (this.gameLoopId) {
-      clearTimeout(this.gameLoopId);
-      this.gameLoopId = null;
-    }
+    if (!this.timers) return;
+    this.timers.clear('gameLoop');
+    this.timers.clear('canvasRetry');
+    this.timers.clear('startDelay');
   },
 
   /**
@@ -232,7 +250,7 @@ Page({
     }
 
     // 约60fps (16ms)
-    this.gameLoopId = setTimeout(() => this.gameLoop(), 16);
+    this.timers.setTimeout('gameLoop', () => this.gameLoop(), 16);
   },
 
   // ===== 游戏更新 =====
@@ -241,14 +259,6 @@ Page({
    * 更新游戏状态
    */
   update(deltaTime) {
-    // 每60帧输出一次状态
-    if (!this._frameCount) this._frameCount = 0;
-    this._frameCount++;
-
-    if (this._frameCount % 60 === 0) {
-      console.log('update执行', { paused: this.paused, items: this.items.length, deltaTime });
-    }
-
     // 更新玩家位置
     if (this.keys.left && this.player.x > 0) {
       this.player.x -= this.player.speed;
@@ -262,7 +272,6 @@ Page({
     if (this.spawnTimer >= this.spawnInterval) {
       this.spawnItem();
       this.spawnTimer = 0;
-      console.log('生成物品，当前数量:', this.items.length);
     }
 
     // 更新物品位置
@@ -271,13 +280,11 @@ Page({
 
       // 根据难度调整速度
       const speed = this.baseSpeed + (this.level - 1) * 0.2;
-      const oldY = item.y;
       item.y += speed;
       item.rotation += 0.05;
 
       // 检测碰撞
       if (this.checkCollision(item)) {
-        console.log('碰撞检测触发，移除物品', { itemY: oldY, playerY: this.player.y });
         this.handleCatch(item);
         this.items.splice(i, 1);
         continue;
@@ -285,16 +292,9 @@ Page({
 
       // 移除超出屏幕的物品（和原HTML一样）
       if (item.y > this.canvasHeight) {
-        console.log('超出屏幕，移除物品', { itemY: item.y, canvasHeight: this.canvasHeight });
         this.items.splice(i, 1);
       }
     }
-
-    // 调试：如果物品数量突然变为0，输出原因
-    if (this.items.length === 0 && this._prevItemsCount > 0) {
-      console.log('物品全部消失！');
-    }
-    this._prevItemsCount = this.items.length;
   },
 
   /**
@@ -398,7 +398,6 @@ Page({
    */
   draw() {
     if (!this.ctx) {
-      console.log('draw(): ctx 不存在');
       return;
     }
 
@@ -411,19 +410,16 @@ Page({
     ctx.save();
     this.applyGameCanvasClip(ctx);
 
-    // 绘制背景（半透明白色，与主题一致）
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    // 绘制主题化背景，与页面换肤保持一致。
+    const palette = this.canvasPalette || DEFAULT_CATCH_PALETTE;
+    ctx.fillStyle = palette.boardBg || DEFAULT_CATCH_PALETTE.boardBg;
     ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     // 绘制玩家（篮子）
     this.drawPlayer();
 
     // 绘制物品
-    this.items.forEach((item, index) => {
-      // 每秒输出一次物品位置（通过时间戳取模避免刷屏）
-      if (Date.now() % 1000 < 20) {
-        console.log(`物品${index}: x=${item.x.toFixed(1)}, y=${item.y.toFixed(1)}`);
-      }
+    this.items.forEach(item => {
       this.drawItem(item);
     });
 
@@ -469,9 +465,11 @@ Page({
     const h = this.player.height;
     const x = this.player.x;
     const y = this.player.y;
+    const palette = this.canvasPalette || DEFAULT_CATCH_PALETTE;
+    const playerColors = palette.player || DEFAULT_CATCH_PALETTE.player;
 
     // 绘制篮子主体
-    ctx.fillStyle = '#8B4513';
+    ctx.fillStyle = playerColors.fill;
     ctx.beginPath();
     ctx.moveTo(x, y);
     ctx.lineTo(x + w, y);
@@ -481,7 +479,7 @@ Page({
     ctx.fill();
 
     // 绘制篮子纹理
-    ctx.strokeStyle = '#A0522D';
+    ctx.strokeStyle = playerColors.texture;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(x + 10, y);
@@ -491,7 +489,7 @@ Page({
     ctx.stroke();
 
     // 篮子边缘
-    ctx.strokeStyle = '#D2691E';
+    ctx.strokeStyle = playerColors.rim;
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -529,13 +527,32 @@ Page({
   endGame() {
     this.gameOver = true;
     this.clearGameLoop();
+    this.saveBestRecord();
     this.setData({ gameOver: true });
+  },
+
+  saveBestRecord() {
+    if (this.score <= 0 && this.level <= 1) return;
+    updateGameBestRecord('game-catch', {
+      score: this.score,
+      level: this.level,
+    });
+    this.refreshBestRecord();
+    if (this.score >= 1000) unlockAchievements('score_1000');
+    if (this.score >= 5000) unlockAchievements('score_5000');
+  },
+
+  refreshBestRecord() {
+    this.setData({
+      bestRecordText: getGameRecordText('game-catch'),
+    });
   },
 
   /**
    * 重新开始
    */
   restart() {
+    this.clearGameLoop();
     this.items = [];
     this.initGame();
     this.onCanvasReady();
@@ -617,4 +634,4 @@ Page({
   onRightEnd() {
     this.keys.right = false;
   },
-});
+}));

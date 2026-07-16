@@ -1,27 +1,68 @@
 // 首页 - 游戏列表
-const app = getApp();
-const { getNextTheme } = require('../../utils/theme.js');
+const {
+  getHomeGameCards,
+  getThemeOptions,
+  withThemePage,
+} = require('../../utils/theme-manager.js');
+const {
+  decorateHomeGameCards,
+  getRecentGame,
+  recordGameVisit,
+} = require('../../utils/game-records.js');
+const { showToast } = require('../../utils/modal-manager.js');
 
-Page({
+Page(withThemePage({
   data: {
-    theme: app.globalData.theme,
+    games: [],
+    recentGame: null,
+    currentThemeName: '',
+  },
+
+  onLoad() {
+    this.refreshHome();
   },
 
   onShow() {
-    // 每次显示时同步最新主题
+    this.refreshHome();
+  },
+
+  onThemeChange() {
+    this.refreshHome();
+  },
+
+  refreshHome() {
+    const games = decorateHomeGameCards(getHomeGameCards());
+    const themeOptions = getThemeOptions(this.data.themeKey);
+    const currentTheme = themeOptions.find(item => item.active) || themeOptions[0];
     this.setData({
-      theme: app.globalData.theme,
+      games,
+      recentGame: getRecentGame(games),
+      currentThemeName: currentTheme ? currentTheme.name : '默认',
     });
   },
 
-  // 切换主题
-  onSwitchTheme() {
-    const currentKey = app.globalData.themeKey || 'default';
-    const nextKey = getNextTheme(currentKey);
-
-    app.setTheme(nextKey);
-    this.setData({
-      theme: app.globalData.theme,
+  onOpenSettings() {
+    wx.navigateTo({
+      url: '/pages/settings/index',
     });
   },
-});
+
+  onGameTap(e) {
+    const { id, url } = e.currentTarget.dataset;
+    if (!id || !url) return;
+
+    wx.navigateTo({
+      url,
+      success: () => {
+        recordGameVisit(id);
+      },
+      fail: (error) => {
+        console.error('打开游戏失败:', id, url, error);
+        showToast({
+          title: '打开失败',
+          icon: 'none',
+        });
+      },
+    });
+  },
+}));

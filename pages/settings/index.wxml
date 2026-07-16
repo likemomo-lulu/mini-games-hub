@@ -1,0 +1,84 @@
+<!-- 设置页 -->
+<view class="settings-page" style="{{themeStyle}}">
+  <scroll-view class="settings-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+    <view class="settings-hero">
+      <text class="settings-icon">🏔️</text>
+      <view class="settings-copy">
+        <text class="settings-title">小院设置</text>
+        <text class="settings-subtitle">皮肤、震动和本地数据都放在这里</text>
+      </view>
+    </view>
+
+    <view class="settings-section">
+      <view class="section-header">
+        <text class="section-title">主题皮肤</text>
+        <text class="section-desc">切换后首页和各游戏页同步生效</text>
+      </view>
+      <view class="theme-list">
+        <view
+          wx:for="{{themeOptions}}"
+          wx:key="key"
+          class="theme-option {{item.active ? 'active' : ''}}"
+          bindtap="onSelectTheme"
+          data-key="{{item.key}}"
+        >
+          <view
+            class="theme-swatch"
+            style="background: linear-gradient(135deg, {{item.primary}} 0%, {{item.secondary}} 100%);"
+          ></view>
+          <view class="theme-info">
+            <text class="theme-name">{{item.name}}</text>
+            <text class="theme-desc">{{item.description}}</text>
+          </view>
+          <text class="theme-check">{{item.active ? '✓' : ''}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="settings-section">
+      <view class="section-header">
+        <text class="section-title">游戏反馈</text>
+        <text class="section-desc">关闭后会停止游戏内震动反馈</text>
+      </view>
+      <view class="setting-row">
+        <view class="setting-info">
+          <text class="setting-title">震动反馈</text>
+          <text class="setting-desc">扫雷插旗、华容道胜利、水果炸弹等触发</text>
+        </view>
+        <switch
+          checked="{{settings.vibration}}"
+          color="{{theme.primary}}"
+          bindchange="onVibrationChange"
+        />
+      </view>
+    </view>
+
+    <view class="settings-section danger-section">
+      <view class="section-header">
+        <text class="section-title">成就</text>
+        <text class="section-desc">已解锁 {{achievementProgress}}</text>
+      </view>
+      <view class="achievement-list">
+        <view
+          wx:for="{{achievements}}"
+          wx:key="id"
+          class="achievement-item {{item.unlocked ? 'unlocked' : 'locked'}}"
+        >
+          <view class="achievement-medal">{{item.unlocked ? '🏅' : '🔒'}}</view>
+          <view class="achievement-copy">
+            <text class="achievement-title">{{item.title}}</text>
+            <text class="achievement-desc">{{item.desc}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="settings-section danger-section">
+      <view class="section-header">
+        <text class="section-title">本地数据</text>
+        <text class="section-desc">清理最近游玩、最佳记录和成就，不影响皮肤和设置</text>
+      </view>
+      <button class="clear-btn" bindtap="onClearRecords">清空本地数据</button>
+    </view>
+  </scroll-view>
+</view>

@@ -1,26 +1,28 @@
 <!-- 扫雷游戏 -->
-<view class="container" style="background: {{theme.pageBg}};">
+<view class="container" style="{{themeStyle}}">
   <!-- 头部信息栏 -->
-  <view class="header">
-    <view class="stats">
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <view class="stat-label" style="color: {{theme.headerTextLight}};">剩余地雷</view>
-        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{remainingMines}}</view>
+  <view class="header game-topbar">
+    <view class="game-title-block">
+      <text class="game-title">扫雷</text>
+      <text class="game-subtitle">推理排雷，长按插旗</text>
+    </view>
+    <view class="stats game-stats">
+      <view class="stat-box game-stat">
+        <view class="stat-label">剩余地雷</view>
+        <view class="stat-value">{{remainingMines}}</view>
       </view>
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <view class="stat-label" style="color: {{theme.headerTextLight}};">时间</view>
-        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{timeDisplay}}</view>
+      <view class="stat-box game-stat">
+        <view class="stat-label">时间</view>
+        <view class="stat-value">{{timeDisplay}}</view>
       </view>
     </view>
   </view>
 
+  <view class="best-record-bar">🏆 {{bestRecordText}}</view>
+
   <!-- 控制按钮 -->
   <view class="controls">
-    <button
-      class="btn"
-      bindtap="restart"
-      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
-    >重新开始</button>
+    <button class="btn" bindtap="restart">重新开始</button>
   </view>
 
   <!-- 游戏棋盘 -->
@@ -62,25 +64,25 @@
     <!-- 游戏失败覆盖层 -->
     <view class="overlay game-over {{gameOver ? 'show' : ''}}">
       <view class="overlay-content">
-        <view class="overlay-title">💥 踩到地雷了!</view>
+        <view class="overlay-title overlay-title-danger">💥 踩到地雷了!</view>
         <view class="overlay-info">用时: {{timeDisplay}}</view>
-        <button class="btn-restart" bindtap="restart">再来一局</button>
+        <button class="btn btn-restart" bindtap="restart">再来一局</button>
       </view>
     </view>
 
     <!-- 游戏胜利覆盖层 -->
     <view class="overlay game-win {{gameWon ? 'show' : ''}}">
       <view class="overlay-content">
-        <view class="overlay-title">🎉 恭喜通关!</view>
+        <view class="overlay-title overlay-title-win">🎉 恭喜通关!</view>
         <view class="overlay-text">太棒了老大！</view>
         <view class="overlay-info">用时: {{timeDisplay}}</view>
-        <button class="btn-restart" bindtap="restart">再来一局</button>
+        <button class="btn btn-restart" bindtap="restart">再来一局</button>
       </view>
     </view>
   </view>
 
   <!-- 操作提示 -->
-  <view class="tips" style="color: {{theme.tipsText}};">
+  <view class="tips">
     💡 单击：揭开 | 长按：插旗🚩 | 点数字：快速揭开周围
   </view>
 </view>

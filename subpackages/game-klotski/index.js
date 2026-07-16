@@ -1,12 +1,19 @@
 // 华容道游戏页
 const { LEVELS, BLOCK_COLORS } = require('./levels.js');
+const { withThemePage, getCanvasPalette } = require('../../utils/theme-manager.js');
+const { vibrateShort } = require('../../utils/settings-manager.js');
+const { createTimerManager } = require('../../utils/timer-manager.js');
+const {
+  getGameRecordText,
+  updateGameBestRecord,
+} = require('../../utils/game-records.js');
+const { unlockAchievements } = require('../../utils/achievements.js');
+const { showToast } = require('../../utils/modal-manager.js');
 
 // 棋盘配置
 const BOARD_COLS = 5;  // 5列
 const BOARD_ROWS = 4;  // 4行
 const CELL_GAP = 8;    // 格子间距
-
-const app = getApp();
 
 /**
  * 兼容性：绘制圆角矩形
@@ -26,14 +33,14 @@ function drawRoundRect(ctx, x, y, width, height, radius) {
   ctx.closePath();
 }
 
-Page({
+Page(withThemePage({
   data: {
     steps: 0,
     gameOver: false,
     currentLevel: 0,
     LEVELS: LEVELS,
-    theme: app.globalData.theme,
     showLevelModal: false,
+    bestRecordText: '暂无最佳记录',
   },
 
   // 游戏状态
@@ -53,14 +60,26 @@ Page({
   blockStartY: 0,
 
   onLoad() {
+    this.timers = createTimerManager();
+    this.refreshBestRecord();
     this.initCanvas();
     this.initLevel(this.data.currentLevel);
   },
 
+  onUnload() {
+    if (this.timers) this.timers.clearAll();
+  },
+
   onShow() {
-    this.setData({
-      theme: app.globalData.theme,
-    });
+    this.refreshBestRecord();
+  },
+
+  onThemeChange() {
+    const palette = getCanvasPalette(this.data.themeKey, 'klotski');
+    this.blockColors = palette.blockColors || BLOCK_COLORS;
+    if (this.canvas) {
+      this.render();
+    }
   },
 
   /**
@@ -89,7 +108,7 @@ Page({
         this.cellWidth = (this.canvasWidth - totalGapX) / BOARD_COLS;
         this.cellHeight = (this.canvasHeight - totalGapY) / BOARD_ROWS;
 
-        setTimeout(() => this.render(), 100);
+        this.timers.setTimeout('initialRender', () => this.render(), 100);
       });
   },
 
@@ -100,7 +119,7 @@ Page({
     const level = LEVELS[levelIndex];
     if (!level) {
       // 所有关卡完成
-      wx.showToast({
+      showToast({
         title: '恭喜通关！',
         icon: 'success'
       });
@@ -158,7 +177,7 @@ Page({
     if (nextLevel < LEVELS.length) {
       this.initLevel(nextLevel);
     } else {
-      wx.showToast({
+      showToast({
         title: '恭喜通关所有关卡！',
         icon: 'success'
       });
@@ -299,9 +318,26 @@ Page({
     const caocao = this.blocks.find(b => b.type === 'caocao');
     // 曹操在底部中央位置：x=1, y=2（2×2，占据(1,2),(2,2),(1,3),(2,3)）
     if (caocao && caocao.x === 1 && caocao.y === 2) {
+      const level = LEVELS[this.data.currentLevel] || {};
+      updateGameBestRecord('game-klotski', {
+        steps: this.data.steps,
+        level: this.data.currentLevel + 1,
+      });
+      this.refreshBestRecord();
+      const achievements = ['klotski_solver'];
+      if (level.minSteps && this.data.steps <= level.minSteps) {
+        achievements.push('klotski_clean_move');
+      }
+      unlockAchievements(achievements);
       this.setData({ gameOver: true });
-      wx.vibrateShort({ type: 'heavy' });
+      vibrateShort({ type: 'heavy' });
     }
+  },
+
+  refreshBestRecord() {
+    this.setData({
+      bestRecordText: getGameRecordText('game-klotski'),
+    });
   },
 
   /**
@@ -310,9 +346,11 @@ Page({
   render() {
     if (!this.ctx) return;
     const ctx = this.ctx;
+    const palette = getCanvasPalette(this.data.themeKey, 'klotski');
+    const blockColors = this.blockColors || palette.blockColors || BLOCK_COLORS;
 
     // 清空画布
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = palette.boardBg || '#fff';
     ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     // 绘制滑块
@@ -323,7 +361,7 @@ Page({
       const height = block.height * this.cellHeight + (block.height - 1) * CELL_GAP;
 
       // 获取配色
-      const colors = BLOCK_COLORS[block.type] || BLOCK_COLORS.soldier;
+      const colors = blockColors[block.type] || blockColors.soldier;
 
       // 绘制滑块背景（渐变）
       const gradient = ctx.createLinearGradient(x, y, x + width, y + height);
@@ -357,13 +395,13 @@ Page({
     // 绘制出口提示（底部中间）
     const exitX = CELL_GAP + 1 * (this.cellWidth + CELL_GAP);
     const exitY = CELL_GAP + 3 * (this.cellHeight + CELL_GAP) + this.cellHeight + CELL_GAP;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.fillStyle = palette.exitBg || 'rgba(255, 255, 255, 0.3)';
     ctx.fillRect(exitX, exitY, this.cellWidth * 2 + CELL_GAP, 8);
 
     // 出口文字
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.fillStyle = palette.exitText || 'rgba(255, 255, 255, 0.6)';
     ctx.font = '14px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('出口', exitX + this.cellWidth + CELL_GAP / 2, exitY + 25);
   },
-});
+}));

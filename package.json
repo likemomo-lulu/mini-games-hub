@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "小游戏集合 - 微信小程序",
   "scripts": {
+    "check": "node scripts/check.js",
     "build": "node build.js",
     "build:prod": "node build.js --prod",
     "upload": "node build.js --upload",

@@ -1,9 +1,15 @@
 // 打地鼠游戏
-const app = getApp();
+const { withThemePage } = require('../../utils/theme-manager.js');
+const { vibrateShort } = require('../../utils/settings-manager.js');
+const { createTimerManager } = require('../../utils/timer-manager.js');
+const {
+  getGameRecordText,
+  updateGameBestRecord,
+} = require('../../utils/game-records.js');
+const { unlockAchievements } = require('../../utils/achievements.js');
 
-Page({
+Page(withThemePage({
   data: {
-    theme: app.globalData.theme,
     score: 0,
     combo: 0,
     maxCombo: 0,
@@ -12,18 +18,32 @@ Page({
     gameRunning: false,
     gameOver: false,
     holes: [],
-    timer: null,
-    moleTimer: null,
+    bestRecordText: '暂无最佳记录',
   },
 
   onLoad() {
+    this.timers = createTimerManager();
+    this.refreshBestRecord();
     this.initHoles();
   },
 
   onShow() {
-    this.setData({
-      theme: app.globalData.theme,
-    });
+    this.refreshBestRecord();
+    if (this.wasRunningOnHide && !this.data.gameOver && this.data.timeLeft > 0) {
+      this.wasRunningOnHide = false;
+      this.setData({ gameRunning: true });
+      this.startTimer();
+      this.spawnMole();
+    }
+  },
+
+  onHide() {
+    this.saveBestRecord();
+    if (this.data.gameRunning) {
+      this.wasRunningOnHide = true;
+      this.clearTimers();
+      this.setData({ gameRunning: false });
+    }
   },
 
   // 初始化地洞
@@ -43,6 +63,8 @@ Page({
 
   // 开始游戏
   startGame() {
+    this.clearTimers();
+    this.wasRunningOnHide = false;
     this.setData({
       score: 0,
       combo: 0,
@@ -59,7 +81,7 @@ Page({
 
   // 倒计时
   startTimer() {
-    this.data.timer = setInterval(() => {
+    this.timers.setInterval('mainTimer', () => {
       const timeLeft = this.data.timeLeft - 1;
       this.setData({
         timeLeft,
@@ -77,13 +99,13 @@ Page({
     if (!this.data.gameRunning) return;
 
     // 随机选择一个地洞
-    const holes = this.data.holes;
+    const holes = this.data.holes.map(hole => ({ ...hole }));
     const availableHoles = holes
       .map((h, i) => ({ ...h, index: i }))
       .filter(h => !h.active);
 
     if (availableHoles.length === 0) {
-      this.data.moleTimer = setTimeout(() => this.spawnMole(), 500);
+      this.timers.setTimeout('moleTimer', () => this.spawnMole(), 500);
       return;
     }
 
@@ -118,19 +140,20 @@ Page({
     // 地鼠停留时间
     const stayTime = type === 'luck' ? 800 : type === 'pig' ? 1200 : 1000;
 
-    setTimeout(() => {
+    this.timers.addTimeout('moleHide', () => {
       if (this.data.gameRunning && !this.data.holes[index].hit) {
-        holes[index] = {
-          ...holes[index],
+        const nextHoles = this.data.holes.map(hole => ({ ...hole }));
+        nextHoles[index] = {
+          ...nextHoles[index],
           active: false,
         };
-        this.setData({ holes });
+        this.setData({ holes: nextHoles });
       }
     }, stayTime);
 
     // 下一次生成地鼠
     const nextSpawnTime = Math.random() * 800 + 400;
-    this.data.moleTimer = setTimeout(() => this.spawnMole(), nextSpawnTime);
+    this.timers.setTimeout('moleTimer', () => this.spawnMole(), nextSpawnTime);
   },
 
   // 点击地洞
@@ -138,7 +161,7 @@ Page({
     if (!this.data.gameRunning) return;
 
     const { index } = e.currentTarget.dataset;
-    const holes = this.data.holes;
+    const holes = this.data.holes.map(item => ({ ...item }));
     const hole = holes[index];
 
     if (!hole.active || hole.hit) return;
@@ -155,29 +178,33 @@ Page({
     let scoreText = '';
 
     if (hole.type === 'normal') {
+      const nextCombo = this.data.combo + 1;
       score = 10;
       scoreText = '+10';
       this.setData({
-        combo: this.data.combo + 1,
-        maxCombo: Math.max(this.data.maxCombo, this.data.combo + 1),
+        combo: nextCombo,
+        maxCombo: Math.max(this.data.maxCombo, nextCombo),
       });
+      if (nextCombo > 1) {
+        score += nextCombo * 2;
+        scoreText += ` ×${nextCombo}`;
+      }
     } else if (hole.type === 'luck') {
+      const nextCombo = this.data.combo + 1;
       score = 30;
       scoreText = '+30';
       this.setData({
-        combo: this.data.combo + 1,
-        maxCombo: Math.max(this.data.maxCombo, this.data.combo + 1),
+        combo: nextCombo,
+        maxCombo: Math.max(this.data.maxCombo, nextCombo),
       });
+      if (nextCombo > 1) {
+        score += nextCombo * 2;
+        scoreText += ` ×${nextCombo}`;
+      }
     } else if (hole.type === 'pig') {
       score = -20;
       scoreText = '-20';
       this.setData({ combo: 0 });
-    }
-
-    // 连击加成
-    if (this.data.combo > 0 && hole.type !== 'pig') {
-      score += this.data.combo * 2;
-      scoreText += ` ×${this.data.combo + 1}`;
     }
 
     holes[index].scoreText = scoreText;
@@ -188,23 +215,24 @@ Page({
     });
 
     // 震动反馈
-    wx.vibrateShort({ type: 'light' });
+    vibrateShort({ type: 'light' });
 
     // 显示得分特效后重置
-    setTimeout(() => {
-      holes[index] = {
-        ...holes[index],
+    this.timers.addTimeout('scoreText', () => {
+      const nextHoles = this.data.holes.map(item => ({ ...item }));
+      nextHoles[index] = {
+        ...nextHoles[index],
         hit: false,
         scoreText: '',
       };
-      this.setData({ holes });
+      this.setData({ holes: nextHoles });
     }, 500);
   },
 
   // 结束游戏
   endGame() {
-    clearInterval(this.data.timer);
-    clearTimeout(this.data.moleTimer);
+    this.clearTimers();
+    this.saveBestRecord();
 
     this.setData({
       gameRunning: false,
@@ -212,8 +240,33 @@ Page({
     });
   },
 
-  onUnload() {
-    clearInterval(this.data.timer);
-    clearTimeout(this.data.moleTimer);
+  saveBestRecord() {
+    if (this.data.score <= 0 && this.data.maxCombo <= 0) return;
+    updateGameBestRecord('game-whack', {
+      score: this.data.score,
+      level: this.data.maxCombo,
+    });
+    this.refreshBestRecord();
+    if (this.data.score >= 1000) unlockAchievements('score_1000');
+    if (this.data.score >= 5000) unlockAchievements('score_5000');
   },
-});
+
+  refreshBestRecord() {
+    this.setData({
+      bestRecordText: getGameRecordText('game-whack'),
+    });
+  },
+
+  clearTimers() {
+    if (!this.timers) return;
+    this.timers.clear('mainTimer');
+    this.timers.clear('moleTimer');
+    this.timers.clearByPrefix('moleHide');
+    this.timers.clearByPrefix('scoreText');
+  },
+
+  onUnload() {
+    this.saveBestRecord();
+    if (this.timers) this.timers.clearAll();
+  },
+}));

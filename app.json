@@ -1,6 +1,7 @@
 {
   "pages": [
-    "pages/index/index"
+    "pages/index/index",
+    "pages/settings/index"
   ],
   "subPackages": [
     {
@@ -22,7 +23,7 @@
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#FF6B6B",
     "navigationBarTitleText": "盖姆小院",
-    "navigationBarTextStyle": "white",
+    "navigationBarTextStyle": "black",
     "backgroundColor": "#FFF5F0"
   },
   "style": "v2",

@@ -12,13 +12,17 @@ page {
 
 /* ==================== 通用容器 ==================== */
 
-.container {
+.container,
+.page-container,
+.game-page {
   min-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+  background: var(--page-bg, #FFF5F0);
+  color: var(--text-primary, #2D3436);
 }
 
 /* ==================== 按钮样式系统 ==================== */
@@ -34,8 +38,9 @@ page {
   justify-content: center;
   font-size: 32rpx;
   font-weight: 600;
-  color: #FFFFFF;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+  color: var(--button-primary-text, #FFFFFF);
+  background: linear-gradient(135deg, var(--accent-from, #FF8E53) 0%, var(--accent-to, #FF6B6B) 100%);
+  box-shadow: 0 8rpx 24rpx var(--game-card-shadow, rgba(0, 0, 0, 0.15));
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -71,6 +76,7 @@ page {
   background: rgba(255, 255, 255, 0.3) !important;
   backdrop-filter: blur(10rpx);
   border: 2rpx solid rgba(255, 255, 255, 0.5);
+  color: var(--header-text-white, #FFFFFF);
 }
 
 /* 小按钮 */
@@ -86,9 +92,9 @@ page {
 /* ==================== 卡片样式 ==================== */
 
 .card {
-  background: #FFFFFF;
+  background: var(--game-card-bg, #FFFFFF);
   border-radius: 24rpx;
-  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8rpx 32rpx var(--game-card-shadow, rgba(0, 0, 0, 0.08));
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -122,13 +128,15 @@ page {
   border-radius: 20rpx;
   text-align: center;
   backdrop-filter: blur(20rpx);
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4rpx 16rpx var(--game-card-shadow, rgba(0, 0, 0, 0.1));
+  background: var(--header-card-bg, linear-gradient(135deg, rgba(255, 107, 107, 0.9) 0%, rgba(255, 142, 83, 0.9) 100%));
 }
 
 .stat-label {
   display: block;
   font-size: 22rpx;
   margin-bottom: 4rpx;
+  color: var(--header-text-light, rgba(255, 255, 255, 0.85));
 }
 
 .stat-value {
@@ -136,6 +144,84 @@ page {
   font-size: 36rpx;
   font-weight: 700;
   line-height: 1.2;
+  color: var(--header-text-white, #FFFFFF);
+}
+
+/* 统一游戏页顶部布局：左侧标题，右侧核心状态。 */
+.container .game-topbar {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+  padding: 20rpx 0;
+  margin-bottom: 24rpx;
+}
+
+.game-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  min-width: 0;
+  flex: 1;
+}
+
+.game-title {
+  font-size: 34rpx;
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--primary, #FF6B6B);
+}
+
+.game-subtitle {
+  font-size: 22rpx;
+  line-height: 1.35;
+  color: var(--text-secondary, #636E72);
+}
+
+.container .game-stats {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 12rpx;
+  flex: none;
+}
+
+.container .game-stat {
+  min-width: 106rpx;
+  padding: 12rpx 16rpx;
+  border-radius: 18rpx;
+}
+
+.container .game-stat .stat-label,
+.container .game-stat .score-label {
+  font-size: 20rpx;
+  margin-bottom: 3rpx;
+}
+
+.container .game-stat .stat-value,
+.container .game-stat .score-value {
+  font-size: 30rpx;
+}
+
+.best-record-bar {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56rpx;
+  margin: -10rpx 0 24rpx;
+  padding: 12rpx 24rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--text-primary, #2D3436);
+  background: rgba(255, 255, 255, 0.48);
+  box-shadow: 0 4rpx 16rpx var(--game-card-shadow, rgba(0, 0, 0, 0.08));
 }
 
 /* ==================== 游戏棋盘容器 ==================== */
@@ -144,11 +230,11 @@ page {
   position: relative;
   width: 552rpx;
   aspect-ratio: 1;
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--panel-bg, rgba(255, 255, 255, 0.25));
   backdrop-filter: blur(20rpx);
   border-radius: 32rpx;
   padding: 20rpx;
-  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.15),
+  box-shadow: 0 16rpx 48rpx var(--game-card-shadow, rgba(0, 0, 0, 0.15)),
               inset 0 1rpx 1rpx rgba(255, 255, 255, 0.3);
 }
 
@@ -165,6 +251,7 @@ page {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background: var(--overlay-bg, rgba(255, 255, 255, 0.25));
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -188,23 +275,97 @@ page {
   font-weight: 800;
   margin-bottom: 20rpx;
   text-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+  color: var(--header-text-white, #FFFFFF);
+}
+
+.overlay-title-danger {
+  color: var(--danger, #FF6B6B);
+}
+
+.overlay-title-win {
+  color: var(--gold-from, #FFD93D);
 }
 
 .overlay-text {
   font-size: 32rpx;
   margin-bottom: 30rpx;
+  color: var(--header-text-white, #FFFFFF);
 }
 
 .overlay-info {
   font-size: 28rpx;
   margin-bottom: 12rpx;
   opacity: 0.9;
+  color: var(--header-text-white, #FFFFFF);
 }
 
 .overlay-buttons {
   display: flex;
   gap: 16rpx;
   margin-top: 30rpx;
+}
+
+.overlay-score {
+  font-size: 80rpx;
+  font-weight: 800;
+  margin-bottom: 40rpx;
+  color: var(--gold-from, #FFD93D);
+}
+
+.btn-restart {
+  min-width: 220rpx;
+}
+
+/* 页面级弹窗：用于选关、整页结算等不依赖棋盘尺寸的弹层。 */
+.app-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+  box-sizing: border-box;
+  background: var(--overlay-bg, rgba(45, 52, 54, 0.78));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.app-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.app-modal-content {
+  width: 100%;
+  max-width: 640rpx;
+  box-sizing: border-box;
+  padding: 36rpx;
+  border-radius: 32rpx;
+  background: var(--game-card-bg, #FFFFFF);
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.18);
+  animation: scaleIn 0.22s ease;
+}
+
+.app-modal-title {
+  display: block;
+  margin-bottom: 18rpx;
+  font-size: 40rpx;
+  font-weight: 900;
+  text-align: center;
+  color: var(--primary, #FF6B6B);
+}
+
+.app-modal-info {
+  display: block;
+  margin-bottom: 24rpx;
+  font-size: 28rpx;
+  text-align: center;
+  color: var(--text-secondary, #636E72);
 }
 
 /* ==================== 操作提示 ==================== */
@@ -214,6 +375,7 @@ page {
   font-size: 26rpx;
   opacity: 0.8;
   text-align: center;
+  color: var(--tips-text, #636E72);
 }
 
 /* ==================== 动画定义 ==================== */
@@ -264,6 +426,37 @@ page {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* ==================== 主题化组件 ==================== */
+
+.theme-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  width: 160rpx !important;
+  height: 64rpx !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 32rpx !important;
+  font-size: 26rpx;
+  font-weight: 600;
+  border: none;
+  color: var(--header-text-white, #FFFFFF);
+  background: var(--header-card-bg, linear-gradient(135deg, rgba(255, 107, 107, 0.9) 0%, rgba(255, 142, 83, 0.9) 100%));
+  box-shadow: 0 4rpx 16rpx var(--game-card-shadow, rgba(0, 0, 0, 0.1));
+  flex-shrink: 0;
+  white-space: nowrap;
+  line-height: 64rpx;
+}
+
+.theme-btn::after {
+  border: none !important;
+}
+
+.theme-icon {
+  font-size: 28rpx;
 }
 
 .flex-between {

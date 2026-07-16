@@ -1,18 +1,25 @@
 // 打水果游戏（DOM实现）
-const app = getApp();
+const { withThemePage } = require('../../utils/theme-manager.js');
+const { vibrateLong, vibrateShort } = require('../../utils/settings-manager.js');
+const { createTimerManager } = require('../../utils/timer-manager.js');
+const {
+  getGameRecordText,
+  updateGameBestRecord,
+} = require('../../utils/game-records.js');
+const { unlockAchievements } = require('../../utils/achievements.js');
 
-Page({
+Page(withThemePage({
   data: {
     score: 0,           // 分数
     timeLeft: 60,       // 剩余时间（秒）
     gameRunning: false, // 游戏是否进行中
     gameReady: false,   // 游戏是否准备好
+    gamePaused: false,  // 游戏是否暂停
     fruits: [],         // 水果数组
     particles: [],      // 粒子特效数组
     canvasWidth: 0,     // 游戏区域宽度
     canvasHeight: 0,    // 游戏区域高度
-    // 主题
-    theme: app.globalData.theme,
+    bestRecordText: '暂无最佳记录',
   },
 
   // 游戏配置
@@ -37,12 +44,15 @@ Page({
     { emoji: '🍒', color: '#DC143C', points: 10, type: 'normal' },
     { emoji: '⭐', color: '#ffd700', points: 50, type: 'gold' },
     { emoji: '💣', color: '#333333', points: -30, type: 'bomb' },
+    { emoji: '⚡', color: '#66ccff', points: 0, type: 'lightning' },
   ],
 
   onLoad() {
+    this.timers = createTimerManager();
+    this.refreshBestRecord();
     // 计算游戏区域尺寸
-    const systemInfo = wx.getSystemInfoSync();
-    const screenWidth = systemInfo.screenWidth;
+    const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
+    const screenWidth = windowInfo.windowWidth || windowInfo.screenWidth || 375;
     const rpxToPx = screenWidth / 750;
 
     // 游戏区域宽度 = 屏幕宽度 - 左右padding(40rpx) - game-board padding(48rpx)
@@ -55,25 +65,21 @@ Page({
       canvasHeight: Math.floor(canvasHeight),
     });
 
-    console.log('游戏区域尺寸:', Math.floor(canvasWidth), 'x', Math.floor(canvasHeight));
-
     this.initGame();
   },
 
-  onShow() {
-    // 同步最新主题
-    this.setData({
-      theme: app.globalData.theme,
-    });
+  onUnload() {
+    this.saveBestRecord();
+    // 清理定时器
+    if (this.timers) this.timers.clearAll();
   },
 
-  onUnload() {
-    // 清理定时器
-    this.clearGameLoop();
-    this.clearUpdateLoop();
+  onShow() {
+    this.refreshBestRecord();
   },
 
   onHide() {
+    this.saveBestRecord();
     // 页面隐藏时暂停
     if (this.data.gameRunning) {
       this.pauseGame();
@@ -85,9 +91,6 @@ Page({
   initGame() {
     this.fruits = [];
     this.particles = [];
-    this.spawnTimer = null;
-    this.gameTimer = null;
-    this.updateTimer = null;
     this.secondsElapsed = 0;
     this.currentSpawnInterval = this.SPAWN_INTERVAL;
     this.currentFruitSpeed = 2;
@@ -96,53 +99,77 @@ Page({
   // ===== 游戏控制 =====
 
   startGame() {
+    this.clearGameLoop();
+    this.clearUpdateLoop();
+    this.clearVibrateTimer();
+    this.initGame();
+
     this.setData({
       gameRunning: true,
       gameReady: true,
+      gamePaused: false,
       score: 0,
       timeLeft: this.GAME_DURATION,
       fruits: [],
       particles: [],
     });
 
-    this.initGame();
     this.startGameLoop();
     this.startUpdateLoop();
   },
 
   pauseGame() {
+    if (!this.data.gameRunning) return;
     this.setData({ gameRunning: false });
     this.clearGameLoop();
     this.clearUpdateLoop();
+    this.setData({ gamePaused: true });
   },
 
   resumeGame() {
-    this.setData({ gameRunning: true });
+    if (!this.data.gamePaused || this.data.timeLeft <= 0) return;
+    this.setData({ gameRunning: true, gamePaused: false });
     this.startGameLoop();
     this.startUpdateLoop();
   },
 
   endGame() {
-    this.setData({ gameRunning: false });
+    this.setData({ gameRunning: false, gamePaused: false, timeLeft: 0 });
     this.clearGameLoop();
     this.clearUpdateLoop();
+    this.saveBestRecord();
+  },
 
+  saveBestRecord() {
+    if (this.data.score <= 0) return;
     // 保存最高分
     const highScore = wx.getStorageSync('fruitHighScore') || 0;
     if (this.data.score > highScore) {
       wx.setStorageSync('fruitHighScore', this.data.score);
     }
+    updateGameBestRecord('game-fruit', { score: this.data.score });
+    this.refreshBestRecord();
+    if (this.data.score >= 1000) unlockAchievements('score_1000');
+    if (this.data.score >= 5000) unlockAchievements('score_5000');
+  },
+
+  refreshBestRecord() {
+    this.setData({
+      bestRecordText: getGameRecordText('game-fruit'),
+    });
   },
 
   // ===== 游戏循环 =====
 
   startGameLoop() {
+    this.clearGameLoop();
+
     // 开始生成水果
     this.spawnFruit();
     this.scheduleNextSpawn();
 
     // 开始倒计时
-    this.gameTimer = setInterval(() => {
+    this.timers.setInterval('gameTimer', () => {
       this.secondsElapsed++;
       this.setData({ timeLeft: this.GAME_DURATION - this.secondsElapsed });
 
@@ -159,30 +186,26 @@ Page({
   },
 
   clearGameLoop() {
-    if (this.spawnTimer) {
-      clearTimeout(this.spawnTimer);
-      this.spawnTimer = null;
-    }
-    if (this.gameTimer) {
-      clearInterval(this.gameTimer);
-      this.gameTimer = null;
-    }
+    if (!this.timers) return;
+    this.timers.clear('spawnTimer');
+    this.timers.clear('gameTimer');
+  },
+
+  clearVibrateTimer() {
+    if (this.timers) this.timers.clear('vibrateTimer');
   },
 
   // ===== 更新循环（替代Canvas渲染） =====
 
   startUpdateLoop() {
     // 每30ms更新一次水果和粒子位置
-    this.updateTimer = setInterval(() => {
+    this.timers.setInterval('updateTimer', () => {
       this.update();
     }, 30);
   },
 
   clearUpdateLoop() {
-    if (this.updateTimer) {
-      clearInterval(this.updateTimer);
-      this.updateTimer = null;
-    }
+    if (this.timers) this.timers.clear('updateTimer');
   },
 
   update() {
@@ -199,7 +222,6 @@ Page({
     });
 
     // 更新粒子位置
-    const beforeParticleCount = this.particles.length;
     this.particles = this.particles.filter(particle => {
       particle.x += particle.vx;
       particle.y += particle.vy;
@@ -208,10 +230,6 @@ Page({
 
       return particle.life > 0;
     });
-
-    if (beforeParticleCount > 0 || this.particles.length > 0) {
-      console.log(`粒子更新: ${beforeParticleCount} -> ${this.particles.length}`);
-    }
 
     // 批量更新数据
     this.setData({
@@ -225,7 +243,7 @@ Page({
   scheduleNextSpawn() {
     if (!this.data.gameRunning) return;
 
-    this.spawnTimer = setTimeout(() => {
+    this.timers.setTimeout('spawnTimer', () => {
       this.spawnFruit();
       this.scheduleNextSpawn();
     }, this.currentSpawnInterval);
@@ -239,11 +257,11 @@ Page({
     const rand = Math.random();
     let fruitConfig;
     if (rand < 0.05) {
-      fruitConfig = this.FRUIT_TYPES[14]; // 炸弹 5%
+      fruitConfig = this.FRUIT_TYPES[14]; // 金星 5%
     } else if (rand < 0.15) {
-      fruitConfig = this.FRUIT_TYPES[15]; // 闪电 10%
-    } else if (rand < 0.30) {
-      fruitConfig = this.FRUIT_TYPES[13]; // 金星 15%
+      fruitConfig = this.FRUIT_TYPES[15]; // 炸弹 10%
+    } else if (rand < 0.25) {
+      fruitConfig = this.FRUIT_TYPES[16]; // 闪电 10%
     } else {
       // 随机选择普通水果（前14个都是普通水果）
       const normalFruits = this.FRUIT_TYPES.slice(0, 14);
@@ -271,9 +289,7 @@ Page({
 
     const { index } = e.currentTarget.dataset;
     const fruit = this.fruits[index];
-
-    console.log('点击水果:', fruit);
-    console.log('当前粒子数(点击前):', this.particles.length);
+    if (!fruit) return;
 
     // 计算得分
     let points = fruit.points;
@@ -327,21 +343,18 @@ Page({
       this.fruits.splice(index, 1);
     }
 
-    console.log('粒子数(点击后):', this.particles.length);
-    console.log('准备setData - particles数组:', this.particles);
-
     // 更新分数和粒子（关键：同步更新particles到视图）
     this.setData({
       score: this.data.score + points,
       fruits: [...this.fruits],
       particles: [...this.particles],
     }, () => {
-      console.log('setData完成 - data.particles:', this.data.particles);
-
       // 💣 炸弹震动效果（在setData完成后调用，确保真机生效）
       if (fruit.type === 'bomb') {
-        wx.vibrateLong(); // 长震动400ms，更强烈
-        setTimeout(() => wx.vibrateShort(), 200); // 追加短震动
+        vibrateLong(); // 长震动400ms，更强烈
+        this.timers.setTimeout('vibrateTimer', () => {
+          vibrateShort();
+        }, 200); // 追加短震动
       }
     });
   },
@@ -349,7 +362,6 @@ Page({
   // ===== 粒子特效 =====
 
   createParticles(x, y, color) {
-    console.log('创建粒子特效:', x, y, color);
     const particleCount = 30; // 增加粒子数量，营造丰富果汁感
 
     // 将hex颜色转为rgb，用于rgba
@@ -380,14 +392,10 @@ Page({
 
       this.particles.push(particle);
     }
-
-    console.log('粒子总数:', this.particles.length);
   },
 
   // 💣 炸弹爆炸特效
   createBombExplosion(x, y) {
-    console.log('💣 创建炸弹爆炸特效:', x, y);
-
     // 爆炸颜色：红橙黄混合
     const explosionColors = ['#ff0000', '#ff6600', '#ffcc00', '#ff3300', '#ff9900'];
 
@@ -424,7 +432,5 @@ Page({
 
       this.particles.push(particle);
     }
-
-    console.log('爆炸粒子总数:', this.particles.length);
   },
-});
+}));

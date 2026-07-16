@@ -1,25 +1,31 @@
 <!-- 接物品游戏页面 -->
-<view class="container" style="background: {{theme.pageBg}};">
+<view class="container" style="{{themeStyle}}">
   <!-- 头部信息栏 -->
-  <view class="header">
-    <view class="stats">
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <view class="stat-label" style="color: {{theme.headerTextLight}};">分数</view>
-        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{score}}</view>
+  <view class="header game-topbar">
+    <view class="game-title-block">
+      <text class="game-title">接物品</text>
+      <text class="game-subtitle">接住好物，避开炸弹</text>
+    </view>
+    <view class="stats game-stats">
+      <view class="stat-box game-stat">
+        <view class="stat-label">分数</view>
+        <view class="stat-value">{{score}}</view>
       </view>
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <view class="stat-label" style="color: {{theme.headerTextLight}};">生命</view>
-        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{livesDisplay}}</view>
+      <view class="stat-box game-stat">
+        <view class="stat-label">生命</view>
+        <view class="stat-value">{{livesDisplay}}</view>
       </view>
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <view class="stat-label" style="color: {{theme.headerTextLight}};">难度</view>
-        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{level}}</view>
+      <view class="stat-box game-stat">
+        <view class="stat-label">难度</view>
+        <view class="stat-value">{{level}}</view>
       </view>
     </view>
   </view>
 
+  <view class="best-record-bar">🏆 {{bestRecordText}}</view>
+
   <!-- 游戏区域 -->
-  <view class="game-board" style="background: {{theme.canvasOverlayBg}};">
+  <view class="game-board">
     <!-- Canvas 画布 -->
     <canvas
       id="gameCanvas"
@@ -36,17 +42,17 @@
     </view>
 
     <!-- 游戏结束覆盖层 -->
-    <view class="overlay game-over" wx:if="{{gameOver}}">
+    <view class="overlay show game-over" wx:if="{{gameOver}}">
       <view class="overlay-content">
-        <view class="overlay-title" style="color: {{theme.danger}};">💥 游戏结束</view>
+        <view class="overlay-title overlay-title-danger">💥 游戏结束</view>
         <view class="overlay-info">得分: {{score}}</view>
         <view class="overlay-info">难度: {{level}}</view>
-        <button class="btn-restart" bindtap="restart">再来一局</button>
+        <button class="btn btn-restart" bindtap="restart">再来一局</button>
       </view>
     </view>
 
     <!-- 暂停覆盖层 -->
-    <view class="overlay paused" wx:if="{{paused && !gameOver}}">
+    <view class="overlay show paused" wx:if="{{paused && !gameOver}}">
       <view class="overlay-content">
         <view class="overlay-title">⏸️ 暂停中</view>
         <view class="overlay-info">点击继续按钮恢复游戏</view>
@@ -61,24 +67,21 @@
       bindtouchstart="onLeftStart"
       bindtouchend="onLeftEnd"
       catchtouchmove
-      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
     >左移</button>
     <button
       class="btn"
       bindtap="togglePause"
-      style="background: linear-gradient(135deg, {{theme.primary}}, {{theme.secondary}});"
     >{{paused ? '继续' : '暂停'}}</button>
     <button
       class="btn btn-move"
       bindtouchstart="onRightStart"
       bindtouchend="onRightEnd"
       catchtouchmove
-      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
     >右移</button>
   </view>
 
   <!-- 操作提示 -->
-  <view class="tips" style="color: {{theme.tipsText}};">
+  <view class="tips">
     💡 滑动屏幕或点击按钮移动 | 接住水果，避开炸弹
   </view>
 </view>

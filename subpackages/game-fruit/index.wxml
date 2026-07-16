@@ -1,37 +1,47 @@
 <!-- 打气球游戏 -->
-<view class="container" style="background: {{theme.pageBg}};">
+<view class="container" style="{{themeStyle}}">
   <!-- 头部信息栏 -->
-  <view class="header">
-    <view class="stats">
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <view class="stat-label" style="color: {{theme.headerTextLight}};">分数</view>
-        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{score}}</view>
+  <view class="header game-topbar">
+    <view class="game-title-block">
+      <text class="game-title">水果大战</text>
+      <text class="game-subtitle">点击水果，躲开炸弹</text>
+    </view>
+    <view class="stats game-stats">
+      <view class="stat-box game-stat">
+        <view class="stat-label">分数</view>
+        <view class="stat-value">{{score}}</view>
       </view>
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <view class="stat-label" style="color: {{theme.headerTextLight}};">时间</view>
-        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{timeLeft}}s</view>
+      <view class="stat-box game-stat">
+        <view class="stat-label">时间</view>
+        <view class="stat-value">{{timeLeft}}s</view>
       </view>
     </view>
   </view>
 
+  <view class="best-record-bar">🏆 {{bestRecordText}}</view>
+
   <!-- 控制按钮 -->
   <view class="controls">
     <button
+      wx:if="{{!gamePaused}}"
       class="btn"
       bindtap="startGame"
       disabled="{{gameRunning}}"
-      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
-    >{{gameRunning ? '游戏中...' : '开始游戏'}}</button>
+    >{{gameRunning ? '游戏中...' : (gameReady ? '重新开始' : '开始游戏')}}</button>
     <button
       wx:if="{{gameRunning}}"
       class="btn"
       bindtap="pauseGame"
-      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
     >暂停</button>
+    <button
+      wx:if="{{gamePaused}}"
+      class="btn"
+      bindtap="resumeGame"
+    >继续</button>
   </view>
 
   <!-- 游戏区域 -->
-  <view class="game-board" style="background: {{theme.canvasOverlayBg}};">
+  <view class="game-board">
     <!-- 水果列表 -->
     <view
       wx:for="{{fruits}}"
@@ -51,7 +61,7 @@
     ></view>
 
     <!-- 游戏准备覆盖层 -->
-    <view class="overlay game-ready {{gameReady && !gameRunning ? 'show' : ''}}" wx:if="{{!gameRunning && score > 0}}">
+    <view class="overlay game-ready {{gamePaused ? 'show' : ''}}" wx:if="{{gamePaused}}">
       <view class="overlay-content">
         <view class="overlay-title">⏸️ 游戏暂停</view>
         <view class="overlay-text">点击下方按钮继续</view>
@@ -59,20 +69,20 @@
     </view>
 
     <!-- 游戏结束覆盖层 -->
-    <view class="overlay game-over {{!gameRunning && gameReady ? 'show' : ''}}" wx:if="{{!gameRunning && gameReady}}">
+    <view class="overlay game-over {{!gameRunning && gameReady && !gamePaused && timeLeft <= 0 ? 'show' : ''}}" wx:if="{{!gameRunning && gameReady && !gamePaused && timeLeft <= 0}}">
       <view class="overlay-content">
         <view class="overlay-title">🎉 时间到！</view>
         <view class="overlay-text">最终得分</view>
         <view class="overlay-score">{{score}}</view>
         <view class="overlay-buttons">
-          <button class="btn-restart" bindtap="startGame">再来一次</button>
+        <button class="btn btn-restart" bindtap="startGame">再来一次</button>
         </view>
       </view>
     </view>
   </view>
 
   <!-- 操作提示 -->
-  <view class="tips" style="color: {{theme.tipsText}};">
+  <view class="tips">
     💡 点击气球得分 | 金色×5 | 炸弹-30 | 闪电清屏
   </view>
 </view>

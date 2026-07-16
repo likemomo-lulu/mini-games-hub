@@ -1,22 +1,28 @@
 <!-- 打地鼠游戏 -->
-<view class="container" style="background: {{theme.pageBg}};">
+<view class="container" style="{{themeStyle}}">
   <!-- 头部信息栏 -->
-  <view class="header">
-    <view class="stats">
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <view class="stat-label" style="color: {{theme.headerTextLight}};">分数</view>
-        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{score}}</view>
+  <view class="header game-topbar">
+    <view class="game-title-block">
+      <text class="game-title">打地鼠</text>
+      <text class="game-subtitle">限时点击，连击加分</text>
+    </view>
+    <view class="stats game-stats">
+      <view class="stat-box game-stat">
+        <view class="stat-label">分数</view>
+        <view class="stat-value">{{score}}</view>
       </view>
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <view class="stat-label" style="color: {{theme.headerTextLight}};">连击</view>
-        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{combo}}</view>
+      <view class="stat-box game-stat">
+        <view class="stat-label">连击</view>
+        <view class="stat-value">{{combo}}</view>
       </view>
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <view class="stat-label" style="color: {{theme.headerTextLight}};">时间</view>
-        <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{timeDisplay}}</view>
+      <view class="stat-box game-stat">
+        <view class="stat-label">时间</view>
+        <view class="stat-value">{{timeDisplay}}</view>
       </view>
     </view>
   </view>
+
+  <view class="best-record-bar">🏆 {{bestRecordText}}</view>
 
   <!-- 控制按钮 -->
   <view class="controls">
@@ -24,7 +30,6 @@
       class="btn"
       bindtap="startGame"
       disabled="{{gameRunning}}"
-      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
     >{{gameRunning ? '游戏中...' : '开始游戏'}}</button>
   </view>
 
@@ -58,13 +63,13 @@
         <view class="overlay-text">太棒了！</view>
         <view class="overlay-info">最终得分: {{score}}</view>
         <view class="overlay-info">最高连击: {{maxCombo}}</view>
-        <button class="btn-restart" bindtap="startGame">再来一局</button>
+        <button class="btn btn-restart" bindtap="startGame">再来一局</button>
       </view>
     </view>
   </view>
 
   <!-- 操作提示 -->
-  <view class="tips" style="color: {{theme.tipsText}};">
+  <view class="tips">
     💡 点地鼠得分 | 金色地鼠×3 | 炸弹扣分
   </view>
 </view>

@@ -1,7 +1,14 @@
 // 扫雷游戏
-const app = getApp();
+const { withThemePage } = require('../../utils/theme-manager.js');
+const { vibrateShort } = require('../../utils/settings-manager.js');
+const { createTimerManager } = require('../../utils/timer-manager.js');
+const {
+  getGameRecordText,
+  updateGameBestRecord,
+} = require('../../utils/game-records.js');
+const { unlockAchievements } = require('../../utils/achievements.js');
 
-Page({
+Page(withThemePage({
   data: {
     // 游戏配置
     rows: 9,
@@ -17,23 +24,21 @@ Page({
     gameOver: false,   // 游戏结束
     gameWon: false,    // 游戏胜利
     firstClick: true,  // 第一次点击
-    // 主题（从全局获取，支持切换）
-    theme: app.globalData.theme,
+    bestRecordText: '暂无最佳记录',
   },
 
   onLoad() {
+    this.timers = createTimerManager();
+    this.refreshBestRecord();
     this.initGame();
   },
 
   onShow() {
-    // 同步最新主题
-    this.setData({
-      theme: app.globalData.theme,
-    });
+    this.refreshBestRecord();
   },
 
   onUnload() {
-    this.clearTimer();
+    if (this.timers) this.timers.clearAll();
   },
 
   // ===== 游戏初始化 =====
@@ -42,14 +47,14 @@ Page({
    * 初始化游戏
    */
   initGame() {
+    this.clearLoseTimer();
+
     // 游戏状态
     this.board = [];          // 雷区数据（-1雷，0-8数字）
     this.revealed = [];       // 已揭开的格子
     this.flagged = [];        // 已插旗的格子
     this.mines = [];          // 地雷位置
     this.seconds = 0;         // 计时秒数
-    this.timer = null;        // 计时器
-
     // 初始化网格
     this.createGrid();
 
@@ -221,7 +226,7 @@ Page({
     });
 
     // 触觉反馈
-    wx.vibrateShort({ type: 'light' });
+    vibrateShort({ type: 'light' });
 
     // 更新显示
     this.updateGridData();
@@ -309,7 +314,7 @@ Page({
     if (flagCount === mineCount) {
       for (let dr = -1; dr <= 1; dr++) {
         for (let dc = -1; dc <= 1; dc++) {
-          if (dr === 0 || dc === 0) continue;
+          if (dr === 0 && dc === 0) continue;
 
           const nr = row + dr;
           const nc = col + dc;
@@ -362,9 +367,9 @@ Page({
     this.updateGridData();
 
     // 显示失败界面
-    setTimeout(() => {
+    this.timers.setTimeout('loseTimer', () => {
       this.setData({ gameOver: true });
-      wx.vibrateShort({ type: 'heavy' });
+      vibrateShort({ type: 'heavy' });
     }, 500);
   },
 
@@ -373,8 +378,19 @@ Page({
    */
   gameWin() {
     this.clearTimer();
+    updateGameBestRecord('game-minesweeper', {
+      timeSeconds: this.seconds,
+    });
+    this.refreshBestRecord();
+    unlockAchievements('minesweeper_win');
     this.setData({ gameWon: true });
-    wx.vibrateShort({ type: 'light' });
+    vibrateShort({ type: 'light' });
+  },
+
+  refreshBestRecord() {
+    this.setData({
+      bestRecordText: getGameRecordText('game-minesweeper'),
+    });
   },
 
   // ===== 计时器 =====
@@ -383,7 +399,8 @@ Page({
    * 启动计时器
    */
   startTimer() {
-    this.timer = setInterval(() => {
+    this.clearTimer();
+    this.timers.setInterval('mainTimer', () => {
       this.seconds++;
       this.updateTimeDisplay();
     }, 1000);
@@ -403,10 +420,11 @@ Page({
    * 清理计时器
    */
   clearTimer() {
-    if (this.timer) {
-      clearInterval(this.timer);
-      this.timer = null;
-    }
+    if (this.timers) this.timers.clear('mainTimer');
+  },
+
+  clearLoseTimer() {
+    if (this.timers) this.timers.clear('loseTimer');
   },
 
   // ===== 游戏控制 =====
@@ -416,6 +434,7 @@ Page({
    */
   restart() {
     this.clearTimer();
+    this.clearLoseTimer();
     this.initGame();
   },
-});
+}));

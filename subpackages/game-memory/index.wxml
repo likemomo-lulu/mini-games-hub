@@ -1,32 +1,38 @@
 <!-- 记忆翻牌游戏 - 精致设计 -->
-<view class="container" style="background: {{theme.pageBg}};">
+<view class="container" style="{{themeStyle}}">
   <!-- 头部信息栏 -->
-  <view class="header">
-    <view class="stat-box" style="background: {{theme.headerCardBg}};">
-      <view class="stat-label" style="color: {{theme.headerTextLight}};">关卡</view>
-      <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{currentLevel}}/{{maxLevel}}</view>
+  <view class="header game-topbar">
+    <view class="game-title-block">
+      <text class="game-title">记忆翻牌</text>
+      <text class="game-subtitle">翻牌配对，挑战记忆力</text>
     </view>
-    <view class="stat-box" style="background: {{theme.headerCardBg}};">
-      <view class="stat-label" style="color: {{theme.headerTextLight}};">步数</view>
-      <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{moves}}</view>
+    <view class="stats game-stats">
+    <view class="stat-box game-stat">
+      <view class="stat-label">关卡</view>
+      <view class="stat-value">{{currentLevel}}/{{maxLevel}}</view>
     </view>
-    <view class="stat-box" style="background: {{theme.headerCardBg}};">
-      <view class="stat-label" style="color: {{theme.headerTextLight}};">时间</view>
-      <view class="stat-value" style="color: {{theme.headerTextWhite}};">{{timeDisplay}}</view>
+    <view class="stat-box game-stat">
+      <view class="stat-label">步数</view>
+      <view class="stat-value">{{moves}}</view>
+    </view>
+    <view class="stat-box game-stat">
+      <view class="stat-label">时间</view>
+      <view class="stat-value">{{timeDisplay}}</view>
+    </view>
     </view>
   </view>
+
+  <view class="best-record-bar">🏆 {{bestRecordText}}</view>
 
   <!-- 控制按钮 -->
   <view class="controls">
     <button
       class="btn btn-small"
       bindtap="resetToFirstLevel"
-      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
     >重置关卡</button>
     <button
       class="btn btn-small"
       bindtap="restart"
-      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
     >重新开始</button>
   </view>
 
@@ -49,16 +55,16 @@
     </view>
 
     <!-- 胜利覆盖层 -->
-    <view class="overlay {{gameWin ? 'show' : ''}}" style="background: {{theme.canvasOverlayBg}};">
+    <view class="overlay {{gameWin ? 'show' : ''}}">
       <view class="overlay-content">
-        <text class="overlay-title" style="color: {{theme.goldFrom}};">🎉 恭喜通关!</text>
-        <text class="overlay-text" style="color: {{theme.headerTextWhite}};">太棒了！</text>
-        <text class="overlay-info" style="color: {{theme.headerTextWhite}};">关卡 {{currentLevel}} - {{levelName}}</text>
-        <text class="overlay-info" style="color: {{theme.headerTextWhite}};">步数: {{moves}}</text>
-        <text class="overlay-info" style="color: {{theme.headerTextWhite}};">用时: {{timeDisplay}}</text>
+        <text class="overlay-title overlay-title-win">🎉 恭喜通关!</text>
+        <text class="overlay-text">太棒了！</text>
+        <text class="overlay-info">关卡 {{currentLevel}} - {{levelName}}</text>
+        <text class="overlay-info">步数: {{moves}}</text>
+        <text class="overlay-info">用时: {{timeDisplay}}</text>
         <view class="overlay-buttons">
-          <button class="btn btn-small btn-secondary" bindtap="restart" style="background: rgba(255, 255, 255, 0.2); border: 2rpx solid rgba(255, 255, 255, 0.5);">再来一次</button>
-          <button class="btn btn-small" bindtap="nextLevel" disabled="{{currentLevel >= maxLevel}}" style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);">
+          <button class="btn btn-small btn-secondary" bindtap="restart">再来一次</button>
+          <button class="btn btn-small" bindtap="nextLevel" disabled="{{currentLevel >= maxLevel}}">
             {{currentLevel >= maxLevel ? '已通关全部' : '挑战下一关'}}
           </button>
         </view>
@@ -67,7 +73,7 @@
   </view>
 
   <!-- 操作提示 -->
-  <view class="tips" style="color: {{theme.tipsText}};">
+  <view class="tips">
     💡 点击卡片翻牌，找到相同图案配对
   </view>
 </view>

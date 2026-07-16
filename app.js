@@ -1,10 +1,15 @@
 // 小程序入口文件
 const { THEMES, getTheme } = require('./utils/theme.js');
+const {
+  getThemeState,
+  applyNavigationBar,
+} = require('./utils/theme-manager.js');
 
 App({
   globalData: {
     themeKey: 'default',
     theme: getTheme('default'),
+    themeStyle: '',
   },
 
   onLaunch() {
@@ -12,12 +17,8 @@ App({
 
     // 读取缓存的主题
     const savedThemeKey = wx.getStorageSync('themeKey');
-    if (savedThemeKey && THEMES[savedThemeKey]) {
-      this.globalData.themeKey = savedThemeKey;
-      this.globalData.theme = getTheme(savedThemeKey);
-    }
-
-    this._applyTheme();
+    const state = getThemeState(savedThemeKey && THEMES[savedThemeKey] ? savedThemeKey : 'default');
+    this._applyThemeState(state);
   },
 
   /**
@@ -26,26 +27,19 @@ App({
    */
   setTheme(themeKey) {
     if (!THEMES[themeKey]) return;
-    this.globalData.themeKey = themeKey;
-    this.globalData.theme = getTheme(themeKey);
-
-    // 保存到本地缓存
+    const state = getThemeState(themeKey);
     wx.setStorageSync('themeKey', themeKey);
-
-    this._applyTheme();
+    this._applyThemeState(state);
   },
 
   /**
-   * 应用主题到导航栏
+   * 应用主题到全局状态和导航栏
    * @private
    */
-  _applyTheme() {
-    const { primary } = this.globalData.theme;
-
-    // 根据主题设置导航栏样式
-    wx.setNavigationBarColor({
-      frontColor: '#000000',
-      backgroundColor: primary,
-    });
+  _applyThemeState(state) {
+    this.globalData.themeKey = state.themeKey;
+    this.globalData.theme = state.theme;
+    this.globalData.themeStyle = state.themeStyle;
+    applyNavigationBar(state.theme);
   },
 });

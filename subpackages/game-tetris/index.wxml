@@ -1,22 +1,28 @@
 <!-- 俄罗斯方块游戏页 -->
-<view class="container" style="background: {{theme.pageBg}};">
+<view class="container" style="{{themeStyle}}">
   <!-- 头部信息 -->
-  <view class="header">
-    <view class="stats">
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <text class="stat-label" style="color: {{theme.headerTextLight}};">分数</text>
-        <text class="stat-value" style="color: {{theme.headerTextWhite}};">{{score}}</text>
+  <view class="header game-topbar">
+    <view class="game-title-block">
+      <text class="game-title">俄罗斯方块</text>
+      <text class="game-subtitle">消行升级，保持节奏</text>
+    </view>
+    <view class="stats game-stats">
+      <view class="stat-box game-stat">
+        <text class="stat-label">分数</text>
+        <text class="stat-value">{{score}}</text>
       </view>
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <text class="stat-label" style="color: {{theme.headerTextLight}};">等级</text>
-        <text class="stat-value" style="color: {{theme.headerTextWhite}};">{{level}}</text>
+      <view class="stat-box game-stat">
+        <text class="stat-label">等级</text>
+        <text class="stat-value">{{level}}</text>
       </view>
-      <view class="stat-box" style="background: {{theme.headerCardBg}};">
-        <text class="stat-label" style="color: {{theme.headerTextLight}};">消除行</text>
-        <text class="stat-value" style="color: {{theme.headerTextWhite}};">{{lines}}</text>
+      <view class="stat-box game-stat">
+        <text class="stat-label">消除行</text>
+        <text class="stat-value">{{lines}}</text>
       </view>
     </view>
   </view>
+
+  <view class="best-record-bar">🏆 {{bestRecordText}}</view>
 
   <!-- 游戏区域 -->
   <view class="game-area">
@@ -55,19 +61,16 @@
       class="btn btn-left"
       catchtouchstart="onBtnLeft"
       catchtouchend="onBtnEnd"
-      style="background: linear-gradient(135deg, {{theme.accentFrom}}, {{theme.accentTo}});"
     >◀</button>
     <button
       class="btn btn-rotate"
       catchtouchstart="onBtnRotate"
       catchtouchend="onBtnEnd"
-      style="background: linear-gradient(135deg, {{theme.primary}} 0%, {{theme.secondary}} 100%);"
     >旋转</button>
     <button
       class="btn btn-right"
       catchtouchstart="onBtnRight"
       catchtouchend="onBtnEnd"
-      style="background: linear-gradient(135deg, {{theme.accentFrom}} 0%, {{theme.accentTo}} 100%);"
     >▶</button>
   </view>
   <view class="btn-down-wrapper">
@@ -75,16 +78,15 @@
       class="btn btn-full"
       catchtouchstart="onBtnDown"
       catchtouchend="onBtnEnd"
-      style="background:{{them.warning}}"
     >下落</button>
   </view>
 </view>
 
 <!-- 游戏结束弹窗 -->
-<view class="game-over" wx:if="{{gameOver}}">
-  <view class="game-over-content">
-    <text class="game-over-title">游戏结束！</text>
-    <text class="game-over-score">最终分数: {{score}}</text>
-    <button class="restart-btn" bindtap="restart">再来一局</button>
+<view class="app-modal show" wx:if="{{gameOver}}">
+  <view class="app-modal-content">
+    <text class="app-modal-title">游戏结束！</text>
+    <text class="app-modal-info">最终分数: {{score}}</text>
+    <button class="btn btn-restart" bindtap="restart">再来一局</button>
   </view>
 </view>

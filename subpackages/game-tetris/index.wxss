@@ -22,7 +22,7 @@
   display: block;
   text-align: center;
   font-size: 40rpx;
-  color: #667eea;
+  color: var(--primary, #667eea);
   font-weight: bold;
   margin-bottom: 20rpx;
 }
@@ -36,31 +36,31 @@
 .stat-box {
   text-align: center;
   padding: 15rpx 25rpx;
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--header-card-bg, rgba(255, 255, 255, 0.2));
   backdrop-filter: blur(10px);
   border-radius: 20rpx;
-  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8rpx 25rpx var(--game-card-shadow, rgba(0, 0, 0, 0.2));
 }
 
 .stat-label {
   display: block;
   font-size: 20rpx;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--header-text-light, rgba(255, 255, 255, 0.8));
 }
 
 .stat-value {
   display: block;
   font-size: 32rpx;
   font-weight: bold;
-  color: white;
+  color: var(--header-text-white, white);
 }
 
 /* 游戏区域 */
 .game-area {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--panel-bg, rgba(255, 255, 255, 0.15));
   border-radius: 24rpx;
   padding: 12rpx;
-  box-shadow: 0 20rpx 80rpx rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20rpx 80rpx var(--game-card-shadow, rgba(0, 0, 0, 0.3));
   width: 100%;
   max-width: 600rpx;
   box-sizing: border-box;
@@ -82,9 +82,9 @@
 }
 
 .game-canvas {
-  border: 6rpx solid #FFD93D;
+  border: 6rpx solid var(--warning, #FFD93D);
   border-radius: 20rpx;
-  background: #2d3436;
+  background: var(--text-primary, #2D3436);
   box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.2);
   flex-shrink: 0;
 }
@@ -94,8 +94,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
+  background: var(--overlay-bg, rgba(0, 0, 0, 0.8));
+  color: var(--header-text-white, #FFFFFF);
   padding: 40rpx 80rpx;
   border-radius: 30rpx;
   font-size: 48rpx;
@@ -115,8 +115,8 @@
   display: flex;
   justify-content: center;
   border-radius: 12rpx;
-  background: #2d3436;
-  border: 3rpx solid #FFD93D;
+  background: var(--text-primary, #2D3436);
+  border: 3rpx solid var(--warning, #FFD93D);
 }
 
 .next-canvas {
@@ -139,14 +139,14 @@
 }
 
 .btn {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
+  background: linear-gradient(135deg, var(--accent-from, #667eea), var(--accent-to, #764ba2));
+  color: var(--button-primary-text, white);
   border: none;
   padding: 0;
   border-radius: 25rpx;
   font-size: 28rpx;
   font-weight: bold;
-  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8rpx 25rpx var(--game-card-shadow, rgba(0, 0, 0, 0.2));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -157,12 +157,12 @@
 
 .btn:active {
   transform: scale(0.95);
-  box-shadow: 0 2rpx 6rpx rgba(102, 126, 234, 0.4);
+  box-shadow: 0 2rpx 6rpx var(--game-card-shadow, rgba(102, 126, 234, 0.4));
 }
 
 .btn-pause {
-  background: linear-gradient(135deg, #FFD93D, #f4c802);
-  color: #FFF;
+  background: var(--warning, #FFD93D);
+  color: var(--text-primary, #FFF);
   font-weight: bold;
   font-size: 32rpx;
   height: 80rpx;
@@ -174,14 +174,15 @@
 }
 
 .btn-rotate{
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, var(--primary, #f093fb) 0%, var(--secondary, #f5576c) 100%);
 }
 
 .btn-full {
   width: 100%;
   font-size: 22rpx;
   height: 80rpx;
-  background: linear-gradient(135deg, #FFD93D, #f4c802);
+  background: var(--warning, #FFD93D);
+  color: var(--text-primary, #2D3436);
 }
 
 .btn-down-wrapper {
@@ -198,7 +199,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: var(--overlay-bg, rgba(0, 0, 0, 0.85));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -206,7 +207,7 @@
 }
 
 .game-over-content {
-  background: white;
+  background: var(--game-card-bg, white);
   padding: 60rpx;
   border-radius: 40rpx;
   text-align: center;
@@ -227,7 +228,7 @@
 .game-over-title {
   display: block;
   font-size: 56rpx;
-  color: #667eea;
+  color: var(--primary, #667EEA);
   margin-bottom: 30rpx;
   font-weight: bold;
 }
@@ -236,12 +237,12 @@
   display: block;
   font-size: 36rpx;
   margin-bottom: 40rpx;
-  color: #636e72;
+  color: var(--text-secondary, #636E72);
 }
 
 .restart-btn {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
+  background: linear-gradient(135deg, var(--accent-from, #667EEA), var(--accent-to, #764BA2));
+  color: var(--button-primary-text, #FFFFFF);
   border: none;
   padding: 30rpx 80rpx;
   border-radius: 50rpx;

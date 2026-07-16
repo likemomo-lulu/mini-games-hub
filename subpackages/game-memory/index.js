@@ -1,5 +1,11 @@
 // 记忆翻牌游戏
-const app = getApp();
+const { withThemePage } = require('../../utils/theme-manager.js');
+const { createTimerManager } = require('../../utils/timer-manager.js');
+const {
+  getGameRecordText,
+  updateGameBestRecord,
+} = require('../../utils/game-records.js');
+const { unlockAchievements } = require('../../utils/achievements.js');
 
 // 关卡配置
 const LEVEL_CONFIG = {
@@ -13,7 +19,7 @@ const LEVEL_CONFIG = {
   8: { pairs: 28, cols: 7, name: '极限' },  // 7x8
 };
 
-Page({
+Page(withThemePage({
   data: {
     // 游戏状态
     cards: [],           // 卡片数组
@@ -22,13 +28,15 @@ Page({
     gameWin: false,      // 是否胜利
     canFlip: true,       // 是否可以翻牌
     currentLevel: 1,     // 当前关卡
+    levelName: '',       // 当前关卡名称
     maxLevel: 8,         // 最大关卡数
     gridCols: 4,         // 网格列数
-    // 主题（从全局获取，支持切换）
-    theme: app.globalData.theme,
+    bestRecordText: '暂无最佳记录',
   },
 
   onLoad() {
+    this.timers = createTimerManager();
+    this.refreshBestRecord();
     // 读取最高关卡记录
     const savedLevel = wx.getStorageSync('memoryGameLevel');
     if (savedLevel) {
@@ -38,15 +46,12 @@ Page({
   },
 
   onShow() {
-    // 同步最新主题
-    this.setData({
-      theme: app.globalData.theme,
-    });
+    this.refreshBestRecord();
   },
 
   onUnload() {
     // 清理计时器
-    this.clearTimer();
+    if (this.timers) this.timers.clearAll();
   },
 
   // ===== 游戏初始化 =====
@@ -56,6 +61,9 @@ Page({
    * @param {number} level - 关卡数
    */
   initGame(level = this.data.currentLevel) {
+    this.clearPendingTimers();
+    this.gameRoundId = (this.gameRoundId || 0) + 1;
+
     // 获取关卡配置
     const config = LEVEL_CONFIG[level] || LEVEL_CONFIG[1];
     const totalPairs = config.pairs;
@@ -80,7 +88,6 @@ Page({
     this.matchedPairs = 0;  // 已配对数量
     this.totalPairs = totalPairs; // 总配对数（根据关卡）
     this.seconds = 0;       // 计时秒数
-    this.timer = null;      // 计时器
     this.gameStarted = false; // 游戏是否开始
 
     // 创建并洗牌
@@ -90,6 +97,7 @@ Page({
     // 更新当前关卡数据
     this.setData({
       currentLevel: level,
+      levelName: config.name,
       gridCols: gridCols,
       cards: this.cards,
       moves: 0,
@@ -196,10 +204,14 @@ Page({
     const card1 = this.flippedCards[0];
     const card2 = this.flippedCards[1];
     const match = card1.card.emoji === card2.card.emoji;
+    const roundId = this.gameRoundId;
 
     if (match) {
       // 配对成功
-      setTimeout(() => {
+      this.timers.setTimeout('matchTimer', () => {
+        if (roundId !== this.gameRoundId) {
+          return;
+        }
         // 标记为已配对
         this.cards[card1.index].isMatched = true;
         this.cards[card2.index].isMatched = true;
@@ -221,7 +233,10 @@ Page({
       }, 500);
     } else {
       // 配对失败，翻回去
-      setTimeout(() => {
+      this.timers.setTimeout('matchTimer', () => {
+        if (roundId !== this.gameRoundId) {
+          return;
+        }
         this.cards[card1.index].isFlipped = false;
         this.cards[card2.index].isFlipped = false;
 
@@ -241,7 +256,8 @@ Page({
    * 启动计时器
    */
   startTimer() {
-    this.timer = setInterval(() => {
+    this.clearTimer();
+    this.timers.setInterval('mainTimer', () => {
       this.seconds++;
       this.updateTimeDisplay();
     }, 1000);
@@ -261,10 +277,13 @@ Page({
    * 清理计时器
    */
   clearTimer() {
-    if (this.timer) {
-      clearInterval(this.timer);
-      this.timer = null;
-    }
+    if (this.timers) this.timers.clear('mainTimer');
+  },
+
+  clearPendingTimers() {
+    if (!this.timers) return;
+    this.timers.clear('matchTimer');
+    this.timers.clear('winTimer');
   },
 
   // ===== 游戏结束 =====
@@ -277,11 +296,30 @@ Page({
 
     // 保存当前关卡进度
     wx.setStorageSync('memoryGameLevel', this.data.currentLevel);
+    updateGameBestRecord('game-memory', {
+      level: this.data.currentLevel,
+      steps: this.data.moves,
+      timeSeconds: this.seconds,
+    });
+    this.refreshBestRecord();
+    if (this.data.currentLevel >= this.data.maxLevel) {
+      unlockAchievements('memory_master');
+    }
 
     // 延迟显示胜利界面
-    setTimeout(() => {
+    const roundId = this.gameRoundId;
+    this.timers.setTimeout('winTimer', () => {
+      if (roundId !== this.gameRoundId) {
+        return;
+      }
       this.setData({ gameWin: true });
     }, 500);
+  },
+
+  refreshBestRecord() {
+    this.setData({
+      bestRecordText: getGameRecordText('game-memory'),
+    });
   },
 
   /**
@@ -292,6 +330,7 @@ Page({
     const finalLevel = Math.min(nextLevel, this.data.maxLevel);
 
     this.clearTimer();
+    this.clearPendingTimers();
     this.flippedCards = [];
     this.matchedPairs = 0;
     this.seconds = 0;
@@ -305,6 +344,7 @@ Page({
    */
   restart() {
     this.clearTimer();
+    this.clearPendingTimers();
     this.flippedCards = [];
     this.matchedPairs = 0;
     this.seconds = 0;
@@ -320,4 +360,4 @@ Page({
     this.setData({ currentLevel: 1 });
     this.restart();
   },
-});
+}));

@@ -4,9 +4,13 @@
 const THEMES = {
   // 默认主题：日落珊瑚系 - 温暖活力
   default: {
+    displayName: '日落珊瑚',
+    description: '温暖活力',
     // 主色调（珊瑚橙渐变）
     primary: '#FF6B6B',
     secondary: '#FF8E53',
+    navFrontColor: '#000000',
+    navBackgroundColor: '#FF6B6B',
 
     // 强调渐变（按钮、重要元素）
     accentFrom: '#FF8E53',
@@ -47,6 +51,7 @@ const THEMES = {
 
     // Canvas 遮罩
     canvasOverlayBg: 'rgba(255, 255, 255, 0.25)',
+    overlayBg: 'rgba(45, 52, 54, 0.78)',
 
     // 卡片背景（首页游戏卡片）
     gameCardBg: '#FFFFFF',
@@ -55,9 +60,13 @@ const THEMES = {
 
   // 清新主题：薄荷迷雾系 - 清新舒适
   fresh: {
+    displayName: '薄荷迷雾',
+    description: '清新舒适',
     // 主色调（薄荷绿）
     primary: '#20B2AA',
     secondary: '#48D1CC',
+    navFrontColor: '#000000',
+    navBackgroundColor: '#20B2AA',
 
     // 强调渐变
     accentFrom: '#48D1CC',
@@ -98,6 +107,7 @@ const THEMES = {
 
     // Canvas 遮罩
     canvasOverlayBg: 'rgba(255, 255, 255, 0.25)',
+    overlayBg: 'rgba(32, 50, 57, 0.78)',
 
     // 卡片背景
     gameCardBg: '#FFFFFF',
@@ -106,9 +116,14 @@ const THEMES = {
 
   // 暖阳主题：蜜糖暖阳系 - 温暖治愈
   warmOrange: {
+    displayName: '蜜糖暖阳',
+    description: '温暖治愈',
     // 主色调（蜜糖橙）
     primary: '#FFA07A',
     secondary: '#FFD700',
+    // 微信小程序导航栏前景色只支持 #000000 / #ffffff，深棕正文色不能直接用于此字段。
+    navFrontColor: '#000000',
+    navBackgroundColor: '#FFA07A',
 
     // 强调渐变
     accentFrom: '#FFD700',
@@ -149,10 +164,70 @@ const THEMES = {
 
     // Canvas 遮罩
     canvasOverlayBg: 'rgba(255, 255, 255, 0.25)',
+    overlayBg: 'rgba(62, 39, 35, 0.72)',
 
     // 卡片背景
     gameCardBg: '#FFFFFF',
     gameCardShadow: 'rgba(255, 160, 122, 0.15)',
+  },
+
+  // 简约主题：雪山留白系 - 淡蓝、留白、轻阴影
+  minimal: {
+    displayName: '雪山留白',
+    description: '淡蓝简约',
+
+    // 主色调（冰川淡蓝）
+    primary: '#60A5FA',
+    secondary: '#BAE6FD',
+    navFrontColor: '#000000',
+    navBackgroundColor: '#E0F2FE',
+
+    // 强调渐变（按钮、重要元素）
+    accentFrom: '#BAE6FD',
+    accentTo: '#60A5FA',
+    buttonPrimaryText: '#0F172A',
+
+    // 高亮/奖励色（淡琥珀）
+    goldFrom: '#FBBF24',
+    goldTo: '#D97706',
+    warning: '#FBBF24',
+
+    // 危险/失败（低饱和红）
+    danger: '#DC2626',
+
+    // 成功/正确（低饱和绿）
+    success: '#059669',
+
+    // 文本颜色
+    textPrimary: '#0F172A',
+    textSecondary: '#3B82A8',
+    textLight: '#93C5FD',
+
+    // 背景色（冰蓝渐变）
+    pageBg: 'linear-gradient(135deg, #EFF6FF 0%, #E0F2FE 100%)',
+    pageBgSolid: '#EFF6FF',
+
+    // Header 统计卡片
+    headerTextWhite: '#0F172A',
+    headerTextLight: 'rgba(15, 23, 42, 0.62)',
+    headerCardBg: 'linear-gradient(135deg, rgba(224, 242, 254, 0.96) 0%, rgba(186, 230, 253, 0.92) 100%)',
+
+    // 操作提示
+    tipsText: '#3B82A8',
+
+    // 翻牌游戏卡片
+    cardBackFrom: '#E0F2FE',
+    cardBackTo: '#BAE6FD',
+    cardFront: 'rgba(255, 255, 255, 0.94)',
+
+    // Canvas 遮罩
+    canvasOverlayBg: 'rgba(224, 242, 254, 0.55)',
+    overlayBg: 'rgba(12, 74, 110, 0.62)',
+
+    // 卡片背景（首页游戏卡片）
+    gameCardBg: '#FFFFFF',
+    gameCardShadow: 'rgba(14, 165, 233, 0.10)',
+    homeCardTintOpacity: 0.22,
   },
 };
 

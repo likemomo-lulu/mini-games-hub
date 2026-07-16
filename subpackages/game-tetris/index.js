@@ -1,13 +1,16 @@
 // 俄罗斯方块游戏页
-const app = getApp();
+const { withThemePage, getCanvasPalette } = require('../../utils/theme-manager.js');
+const { createTimerManager } = require('../../utils/timer-manager.js');
+const {
+  getGameRecordText,
+  updateGameBestRecord,
+} = require('../../utils/game-records.js');
+const { unlockAchievements } = require('../../utils/achievements.js');
 // ==================== 配置 ====================
 const COLS = 10;
 const ROWS = 20;
 const BLOCK_SIZE = 20; // 方块尺寸，会根据实际画布缩放
-const COLORS = {
-  I: '#FF6B9D', O: '#4ECDC4', T: '#FFE66D', S: '#95E1D3',
-  Z: '#F38181', J: '#AA96DA', L: '#FCBAD3', board: '#2d3436'
-};
+const DEFAULT_TETRIS_COLORS = getCanvasPalette('default', 'tetris').colors;
 
 // 7种方块定义（每个方块有4种旋转状态）
 const SHAPES = {
@@ -50,7 +53,7 @@ const SHAPES = {
   ]
 };
 
-Page({
+Page(withThemePage({
   data: {
     score: 0,
     level: 1,
@@ -60,8 +63,7 @@ Page({
     // 画布在视图层的尺寸（px），用于自适应不同机型
     gameCanvasWidth: 0,
     gameCanvasHeight: 0,
-    // 主题（从全局获取，支持切换）
-    theme: app.globalData.theme,
+    bestRecordText: '暂无最佳记录',
   },
 
   // 游戏状态
@@ -72,6 +74,7 @@ Page({
   lastDrop: 0,
   clearingLines: [],
   gameInitialized: false, // 游戏循环初始化标志
+  isClearingLines: false,
 
   // Canvas 相关
   gameCanvas: null,
@@ -84,10 +87,15 @@ Page({
 
   // 长按定时器
   longPressTimer: null,
+  gameLoopTimer: null,
+  clearLineTimer: null,
+  colors: DEFAULT_TETRIS_COLORS,
 
   onLoad() {
+    this.timers = createTimerManager();
+    this.refreshBestRecord();
     // 先根据屏幕宽高计算画布尺寸，保证一屏内放下（canvas 是原生组件，不会随页面滚动，所以必须不出现滚动）
-    const info = wx.getSystemInfoSync();
+    const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
     const windowWidth = info.windowWidth || 375;
     const windowHeight = info.windowHeight || 667;
 
@@ -143,18 +151,25 @@ Page({
     });
   },
 
+  onThemeChange() {
+    const palette = getCanvasPalette(this.data.themeKey, 'tetris');
+    this.colors = palette.colors || DEFAULT_TETRIS_COLORS;
+    if (this.gameCanvas) {
+      this.render();
+    }
+  },
+
   onShow() {
-    // 同步最新主题
-    this.setData({
-      theme: app.globalData.theme,
-    });
+    this.refreshBestRecord();
+  },
+
+  onHide() {
+    this.saveBestRecord();
   },
 
   onUnload() {
-    // 清理定时器
-    if (this.longPressTimer) {
-      clearInterval(this.longPressTimer);
-    }
+    this.saveBestRecord();
+    if (this.timers) this.timers.clearAll();
   },
 
   /**
@@ -235,6 +250,7 @@ Page({
     this.dropInterval = 1000;
     this.gameInitialized = false; // 重置初始化标志
     this.clearingLines = [];
+    this.isClearingLines = false;
   },
 
   /**
@@ -301,7 +317,9 @@ Page({
   /**
    * 消除满行
    */
-  clearLines() {
+  clearLines(onCleared) {
+    if (this.isClearingLines) return true;
+
     const linesToClear = [];
     for (let y = ROWS - 1; y >= 0; y--) {
       if (this.board[y].every(cell => cell !== 0)) {
@@ -311,7 +329,8 @@ Page({
 
     if (linesToClear.length > 0) {
       this.clearingLines = linesToClear;
-      setTimeout(() => {
+      this.isClearingLines = true;
+      this.timers.setTimeout('clearLineTimer', () => {
         for (const y of linesToClear.sort((a, b) => b - a)) {
           this.board.splice(y, 1);
           this.board.unshift(Array(COLS).fill(0));
@@ -328,24 +347,40 @@ Page({
         });
         this.dropInterval = Math.max(100, 1000 - (newLevel - 1) * 100);
         this.clearingLines = [];
+        this.isClearingLines = false;
+        if (typeof onCleared === 'function') {
+          onCleared();
+        }
       }, 300);
+      return true;
     }
+
+    return false;
   },
 
   /**
    * 方块下落
    */
   dropPiece() {
+    if (this.isClearingLines) return;
+
     if (this.isValidMove(this.currentPiece, 0, 1)) {
       this.currentPiece.y++;
     } else {
       this.mergePiece();
-      this.clearLines();
-      this.currentPiece = this.nextPiece;
-      this.nextPiece = this.randomPiece();
-      if (!this.isValidMove(this.currentPiece)) {
-        this.gameOver();
+      if (this.clearLines(() => this.spawnNextPiece())) {
+        this.currentPiece = null;
+      } else {
+        this.spawnNextPiece();
       }
+    }
+  },
+
+  spawnNextPiece() {
+    this.currentPiece = this.nextPiece;
+    this.nextPiece = this.randomPiece();
+    if (!this.isValidMove(this.currentPiece)) {
+      this.gameOver();
     }
   },
 
@@ -353,7 +388,26 @@ Page({
    * 游戏结束
    */
   gameOver() {
+    this.saveBestRecord();
     this.setData({ gameOver: true });
+    this.stopGameLoop();
+  },
+
+  saveBestRecord() {
+    if (this.data.score <= 0 && this.data.level <= 1 && this.data.lines <= 0) return;
+    updateGameBestRecord('game-tetris', {
+      score: this.data.score,
+      level: this.data.level,
+    });
+    this.refreshBestRecord();
+    if (this.data.score >= 1000) unlockAchievements('score_1000');
+    if (this.data.score >= 5000) unlockAchievements('score_5000');
+  },
+
+  refreshBestRecord() {
+    this.setData({
+      bestRecordText: getGameRecordText('game-tetris'),
+    });
   },
 
   /**
@@ -372,15 +426,17 @@ Page({
    * 游戏主循环
    */
   startGameLoop() {
+    this.stopGameLoop();
+
     const gameLoop = () => {
       if (this.data.gameOver) {
-        setTimeout(gameLoop, 16);
+        this.timers.clear('gameLoopTimer');
         return;
       }
 
       if (this.data.isPaused) {
         this.render();
-        setTimeout(gameLoop, 16);
+        this.timers.setTimeout('gameLoopTimer', gameLoop, 16);
         return;
       }
 
@@ -389,7 +445,7 @@ Page({
         this.lastDrop = Date.now();
         this.gameInitialized = true;
         this.render();
-        setTimeout(gameLoop, 16);
+        this.timers.setTimeout('gameLoopTimer', gameLoop, 16);
         return;
       }
 
@@ -401,9 +457,19 @@ Page({
       }
 
       this.render();
-      setTimeout(gameLoop, 16); // 约60fps
+      this.timers.setTimeout('gameLoopTimer', gameLoop, 16); // 约60fps
     };
-    setTimeout(gameLoop, 16);
+    this.timers.setTimeout('gameLoopTimer', gameLoop, 16);
+  },
+
+  stopGameLoop() {
+    if (this.timers) this.timers.clear('gameLoopTimer');
+  },
+
+  clearPendingLineTimer() {
+    if (this.timers) this.timers.clear('clearLineTimer');
+    this.clearingLines = [];
+    this.isClearingLines = false;
   },
 
   /**
@@ -457,9 +523,10 @@ Page({
   drawBoard() {
     const ctx = this.gameCtx;
     const scale = this.canvasWidth / (COLS * BLOCK_SIZE);
+    const colors = this.colors || DEFAULT_TETRIS_COLORS;
 
     // 背景
-    ctx.fillStyle = COLORS.board;
+    ctx.fillStyle = colors.board;
     ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     // 网格线
@@ -482,7 +549,7 @@ Page({
     for (let y = 0; y < ROWS; y++) {
       for (let x = 0; x < COLS; x++) {
         if (this.board[y][x]) {
-          this.drawBlock(ctx, x, y, COLORS[this.board[y][x]], scale);
+          this.drawBlock(ctx, x, y, colors[this.board[y][x]], scale);
         }
       }
     }
@@ -496,6 +563,7 @@ Page({
     const ctx = this.gameCtx;
     const scale = this.canvasWidth / (COLS * BLOCK_SIZE);
     const shape = SHAPES[this.currentPiece.type][this.currentPiece.rotation];
+    const colors = this.colors || DEFAULT_TETRIS_COLORS;
 
     for (let y = 0; y < shape.length; y++) {
       for (let x = 0; x < shape[y].length; x++) {
@@ -504,7 +572,7 @@ Page({
             ctx,
             this.currentPiece.x + x,
             this.currentPiece.y + y,
-            COLORS[this.currentPiece.type],
+            colors[this.currentPiece.type],
             scale
           );
         }
@@ -545,8 +613,9 @@ Page({
     const ctx = this.nextCtx;
     const width = this.nextCanvas.width / this.pixelRatio;
     const height = this.nextCanvas.height / this.pixelRatio;
+    const colors = this.colors || DEFAULT_TETRIS_COLORS;
 
-    ctx.fillStyle = COLORS.board;
+    ctx.fillStyle = colors.board;
     ctx.fillRect(0, 0, width, height);
 
     const shape = SHAPES[this.nextPiece.type][0];
@@ -560,7 +629,7 @@ Page({
           const size = blockSize;
           const drawX = Math.floor((x + offsetX) * size);
           const drawY = Math.floor((y + offsetY) * size);
-          const color = COLORS[this.nextPiece.type];
+          const color = colors[this.nextPiece.type];
 
           const gradient = ctx.createLinearGradient(drawX, drawY, drawX + size, drawY + size);
           gradient.addColorStop(0, color);
@@ -599,7 +668,7 @@ Page({
    * 按钮控制
    */
   onBtnLeft() {
-    if (this.data.gameOver || this.data.isPaused) return;
+    if (this.data.gameOver || this.data.isPaused || this.isClearingLines) return;
     if (this.isValidMove(this.currentPiece, -1, 0)) {
       this.currentPiece.x--;
     }
@@ -607,7 +676,7 @@ Page({
   },
 
   onBtnRight() {
-    if (this.data.gameOver || this.data.isPaused) return;
+    if (this.data.gameOver || this.data.isPaused || this.isClearingLines) return;
     if (this.isValidMove(this.currentPiece, 1, 0)) {
       this.currentPiece.x++;
     }
@@ -615,7 +684,7 @@ Page({
   },
 
   onBtnRotate() {
-    if (this.data.gameOver || this.data.isPaused) return;
+    if (this.data.gameOver || this.data.isPaused || this.isClearingLines) return;
     const newRotation = (this.currentPiece.rotation + 1) % 4;
     if (this.isValidMove(this.currentPiece, 0, 0, newRotation)) {
       this.currentPiece.rotation = newRotation;
@@ -624,7 +693,7 @@ Page({
   },
 
   onBtnDown() {
-    if (this.data.gameOver || this.data.isPaused) return;
+    if (this.data.gameOver || this.data.isPaused || this.isClearingLines) return;
     // 瞬间下落
     let dropDistance = 0;
     while (this.isValidMove(this.currentPiece, 0, dropDistance + 1)) {
@@ -635,11 +704,10 @@ Page({
       this.setData({ score: this.data.score + dropDistance * 2 });
     }
     this.mergePiece();
-    this.clearLines();
-    this.currentPiece = this.nextPiece;
-    this.nextPiece = this.randomPiece();
-    if (!this.isValidMove(this.currentPiece)) {
-      this.gameOver();
+    if (this.clearLines(() => this.spawnNextPiece())) {
+      this.currentPiece = null;
+    } else {
+      this.spawnNextPiece();
     }
     this.render();
   },
@@ -652,8 +720,13 @@ Page({
    * 重新开始
    */
   restart() {
+    this.clearPendingLineTimer();
     this.initGame();
     this.lastDrop = Date.now();
     this.gameInitialized = false;
+    this.render();
+    if (!this.timers.has('gameLoopTimer')) {
+      this.startGameLoop();
+    }
   },
-});
+}));

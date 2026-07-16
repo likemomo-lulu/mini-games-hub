@@ -28,10 +28,6 @@
 .stat-box {
   min-width: 120rpx;
   padding: 16rpx 20rpx;
-  border-radius: 20rpx;
-  text-align: center;
-  backdrop-filter: blur(20rpx);
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
 }
 
 .stat-label {
@@ -60,12 +56,6 @@
   position: relative;
   width: 552rpx;
   aspect-ratio: 1;
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(20rpx);
-  border-radius: 32rpx;
-  padding: 20rpx;
-  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.15),
-              inset 0 1rpx 1rpx rgba(255, 255, 255, 0.3);
 }
 
 .game-canvas {
@@ -76,31 +66,9 @@
 
 /* 覆盖层 */
 .overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 32rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 10;
-}
-
-.overlay.show {
-  opacity: 1;
-  pointer-events: auto;
 }
 
 .overlay-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -121,8 +89,6 @@
 .tips {
   margin-top: 30rpx;
   font-size: 26rpx;
-  opacity: 0.8;
-  text-align: center;
 }
 
 /* 动画 */

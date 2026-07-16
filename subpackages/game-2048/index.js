@@ -1,6 +1,13 @@
 // 2048 游戏页
 const GAME_SIZE = 4;
 const CELL_GAP = 12;
+const { withThemePage, getCanvasPalette } = require('../../utils/theme-manager.js');
+const { createTimerManager } = require('../../utils/timer-manager.js');
+const {
+  getGameRecordText,
+  updateGameBestRecord,
+} = require('../../utils/game-records.js');
+const { unlockAchievements } = require('../../utils/achievements.js');
 
 /**
  * 兼容性：绘制圆角矩形（部分真机不支持 roundRect）
@@ -26,56 +33,15 @@ function drawRoundRect(ctx, x, y, width, height, radius) {
   ctx.closePath();
 }
 
-// 渐变配色方案 [起始色, 结束色]
-const CELL_COLORS = {
-  2: ['#ffeaa7', '#fdcb6e'],
-  4: ['#fab1a0', '#e17055'],
-  8: ['#fd79a8', '#e84393'],
-  16: ['#a29bfe', '#6c5ce7'],
-  32: ['#74b9ff', '#0984e3'],
-  64: ['#81ecec', '#00cec9'],
-  128: ['#55efc4', '#00b894'],
-  256: ['#ff7675', '#d63031'],
-  512: ['#fdcb6e', '#e17055'],
-  1024: ['#e17055', '#d63031'],
-  2048: ['#ffd700', '#ff8c00'],
-  4096: ['#2d3436', '#000000'],
-  8192: ['#2d3436', '#000000'],
-  16384: ['#2d3436', '#000000'],
-  32768: ['#2d3436', '#000000'],
-  0: ['#cdc1b4', '#cdc1b4']
-};
+const DEFAULT_2048_PALETTE = getCanvasPalette('default', 'game2048');
 
-// 数字颜色
-const TEXT_COLORS = {
-  2: '#2d3436',
-  4: '#ffffff',
-  8: '#ffffff',
-  16: '#ffffff',
-  32: '#ffffff',
-  64: '#ffffff',
-  128: '#ffffff',
-  256: '#ffffff',
-  512: '#ffffff',
-  1024: '#ffffff',
-  2048: '#ffffff',
-  4096: '#ffd700',
-  8192: '#ffd700',
-  16384: '#ffd700',
-  32768: '#ffd700',
-  0: '#ffffff'
-};
-
-const app = getApp();
-
-Page({
+Page(withThemePage({
   data: {
     score: 0,
     gameOver: false,
     showWin: false,
     steps: 0, // 已操作步数
-    // 主题（从全局获取，支持切换）
-    theme: app.globalData.theme,
+    bestRecordText: '暂无最佳记录',
   },
 
   // 游戏状态
@@ -89,15 +55,28 @@ Page({
   pixelRatio: 1,
 
   onLoad() {
+    this.timers = createTimerManager();
+    this.refreshBestRecord();
     this.initCanvas();
     this.initGame();
   },
 
+  onUnload() {
+    this.saveBestRecord();
+    if (this.timers) this.timers.clearAll();
+  },
+
+  onHide() {
+    this.saveBestRecord();
+  },
+
   onShow() {
-    // 同步最新主题
-    this.setData({
-      theme: app.globalData.theme,
-    });
+    this.refreshBestRecord();
+    this.render();
+  },
+
+  onThemeChange() {
+    this.render();
   },
 
   initCanvas() {
@@ -119,12 +98,13 @@ Page({
         this.canvasHeight = res[0].height;
         const totalGap = this.cellGap * (GAME_SIZE + 1);
         this.cellSize = (this.canvasWidth - totalGap) / GAME_SIZE;
-        setTimeout(() => this.render(), 100);
+        this.timers.setTimeout('initialRender', () => this.render(), 100);
       });
   },
 
   initGame() {
     this.grid = Array(GAME_SIZE).fill(null).map(() => Array(GAME_SIZE).fill(0));
+    this.hasWon = false;
     this.setData({ score: 0, gameOver: false, showWin: false, steps: 0 });
     this.addRandomTile();
     this.addRandomTile();
@@ -155,7 +135,7 @@ Page({
   },
 
   onTouchEnd(e) {
-    if (this.data.gameOver || !this.startX) return;
+    if (this.data.gameOver || this.startX === null || this.startX === undefined) return;
     const endX = e.changedTouches[0].clientX;
     const endY = e.changedTouches[0].clientY;
     const dx = endX - this.startX;
@@ -171,6 +151,7 @@ Page({
       }
     }
     this.startX = null;
+    this.startY = null;
   },
 
   move(direction) {
@@ -192,11 +173,12 @@ Page({
 
     if (direction === 'left' || direction === 'right') {
       for (let y = 0; y < GAME_SIZE; y++) {
-        let row = newGrid[y];
+        const originalRow = [...newGrid[y]];
+        let row = [...newGrid[y]];
         if (direction === 'right') row.reverse();
         const newRow = slideRow(row);
         if (direction === 'right') newRow.reverse();
-        if (newRow.join(',') !== newGrid[y].join(',')) moved = true;
+        if (newRow.join(',') !== originalRow.join(',')) moved = true;
         newGrid[y] = newRow;
       }
     } else {
@@ -218,7 +200,19 @@ Page({
       this.setData({ steps: this.data.steps + 1 });
       this.addRandomTile();
       this.render();
+      this.checkWin();
       this.checkGameOver();
+    }
+  },
+
+  checkWin() {
+    if (this.hasWon) return;
+    const has2048 = this.grid.some(row => row.some(value => value >= 2048));
+    if (has2048) {
+      this.hasWon = true;
+      this.saveBestRecord();
+      unlockAchievements(['tile_2048']);
+      this.setData({ showWin: true });
     }
   },
 
@@ -237,7 +231,25 @@ Page({
         if (y < GAME_SIZE - 1 && this.grid[y + 1][x] === val) return;
       }
     }
+    this.saveBestRecord();
     this.setData({ gameOver: true });
+  },
+
+  saveBestRecord() {
+    if (this.data.score <= 0) return;
+    updateGameBestRecord('game-2048', {
+      score: this.data.score,
+      steps: this.data.steps,
+    });
+    this.refreshBestRecord();
+    if (this.data.score >= 1000) unlockAchievements('score_1000');
+    if (this.data.score >= 5000) unlockAchievements('score_5000');
+  },
+
+  refreshBestRecord() {
+    this.setData({
+      bestRecordText: getGameRecordText('game-2048'),
+    });
   },
 
   getFontSize(value) {
@@ -251,9 +263,12 @@ Page({
   render() {
     if (!this.ctx) return;
     const ctx = this.ctx;
+    const palette = getCanvasPalette(this.data.themeKey, 'game2048');
+    const cellColors = palette.cellColors || DEFAULT_2048_PALETTE.cellColors;
+    const textColors = palette.textColors || DEFAULT_2048_PALETTE.textColors;
 
     // 背景
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = palette.boardBg || DEFAULT_2048_PALETTE.boardBg || '#fff';
     ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     // 绘制格子
@@ -264,7 +279,7 @@ Page({
         const posY = this.cellGap + y * (this.cellSize + this.cellGap);
 
         // 格子背景 - 使用渐变
-        const colors = CELL_COLORS[value] || CELL_COLORS[0];
+        const colors = cellColors[value] || cellColors[0];
         const gradient = ctx.createLinearGradient(posX, posY, posX + this.cellSize, posY + this.cellSize);
         gradient.addColorStop(0, colors[0]);
         gradient.addColorStop(1, colors[1]);
@@ -283,7 +298,7 @@ Page({
 
         // 数字
         if (value !== 0) {
-          ctx.fillStyle = TEXT_COLORS[value] || '#ffffff';
+          ctx.fillStyle = textColors[value] || '#ffffff';
           ctx.font = this.getFontSize(value);
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
@@ -300,4 +315,4 @@ Page({
   continueGame() {
     this.setData({ showWin: false });
   },
-});
+}));
